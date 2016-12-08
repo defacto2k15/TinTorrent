@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.6)
+project(TinTorrent)
+
+set(CMAKE_CXX_STANDARD 11)
+
+set(SOURCE_FILES main.cpp TinProtocolLib/TinProtocolCommunicationSocket.cpp TinProtocolLib/TinProtocolCommunicationSocket.h TinProtocolLib/Messages/MessageResourceRequest.cpp TinProtocolLib/Messages/MessageResourceRequest.h TinProtocolLib/Messages/MessageStartSendingRequest.cpp TinProtocolLib/Messages/MessageStartSendingRequest.h TinProtocolLib/Messages/MessageEnum.cpp TinProtocolLib/Messages/MessageEnum.h TinProtocolLib/SegmentInfo.cpp TinProtocolLib/SegmentInfo.h TinProtocolLib/Messages/MessageClose.cpp TinProtocolLib/Messages/MessageClose.h TinProtocolLib/Messages/MessageResourceResponse.cpp TinProtocolLib/Messages/MessageResourceResponse.h Assertions/Assertions.cpp Assertions/Assertions.h Common/Typedefs.h TinProtocolLib/TinConnectedServerSocket.cpp TinProtocolLib/TinConnectedServerSocket.h Common/Buffer.cpp Common/Buffer.h Common/InMemoryBuffer.cpp Common/InMemoryBuffer.h TinProtocolLib/Messages/SegmentResponse.cpp TinProtocolLib/Messages/SegmentResponse.h TinProtocolLib/SocketWrapper.cpp TinProtocolLib/SocketWrapper.h TinProtocolLib/Messages/Message.cpp TinProtocolLib/Messages/Message.h)
+add_executable(TinTorrent ${SOURCE_FILES})
