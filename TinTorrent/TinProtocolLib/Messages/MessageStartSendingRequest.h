@@ -11,7 +11,7 @@
 #include "Message.h"
 
 class MessageStartSendingRequest : public Message{
-
+public:
     class Type : MessageEnum {
     public:
         Type(const std::string &value) : MessageEnum(value){};
@@ -22,7 +22,6 @@ class MessageStartSendingRequest : public Message{
         static Type WRONG_SIZE;
     };
 
-public:
     MessageStartSendingRequest(InMemoryBuffer buffer);
 };
 

@@ -11,36 +11,36 @@
 #include "Messages/MessageResourceRequest.h"
 #include "Messages/MessageStartSendingRequest.h"
 #include "SegmentInfo.h"
-#include "Messages/MessageClose.h"
 #include "../Common/Typedefs.h"
 #include "../Assertions/Assertions.h"
 #include "../Common/InMemoryBuffer.h"
 #include "Messages/SegmentResponse.h"
 #include "SocketWrapper.h"
+#include "TinConnectedSocket.h"
 
-class TinConnectedServerSocket  : public SocketWrapper{
+class TinConnectedServerSocket  : public TinConnectedSocket {
 	sockaddr_in clientAddress;
-	InMemoryBuffer buffer;
-	// TODO buffer size from configuration
-	// todo destruction of socket
 public:
 	TinConnectedServerSocket(socket_descriptor_t socket, sockaddr_in clientAddress)
-			: socket(socket), clientAddress(clientAddress), buffer( new char[5000], 5000){
+			: TinConnectedSocket(socket), clientAddress(clientAddress){
 	}
 
-	MessageResourceRequest acceptConnections(){
-		return MessageResourceRequest( buffer );
+	Resource listenForResourceRequest(){
+		readToBuffer();
+		MessageResourceRequest request( buffer );
+		return request.getResource();
 	}
 
-	void respondToResourceRequest( MessageResourceResponse::ResourceResponseValue responseValue ){
+	void sendResourceResponse( MessageResourceResponse::ResourceResponseValue responseValue ){
 		MessageResourceResponse response(responseValue);
 		response.serializeTo(buffer);
 		sendBuffer();
 	};
 
-	MessageStartSendingRequest listenForStartSendingRequest(){
+	std::pair<SegmentInfo, MessageStartSendingRequest::Type> listenForStartSendingRequest(){
 		readToBuffer();
-		return MessageStartSendingRequest(buffer);
+		MessageStartSendingRequest request(buffer);
+		return request.getInfoPair();
 	}
 	void sendSegmentResponse( SegmentInfo info ){
 		SegmentResponse *UNUSED_response
@@ -50,22 +50,6 @@ public:
 		sendBuffer();
 	}
 
-	void closeConnection( MessageClose::CloseReason closeReason ){
-		MessageClose messageClose(closeReason);
-		messageClose.serializeTo(buffer);
-		sendBuffer();
-	}
-private:
-	void sendBuffer(){
-		ssize_t sendBytes = send(socket, buffer.getData(), buffer.getSize(), 0);
-		Assertions::check([sendBytes, &buffer]{return sendBytes == buffer.getSize();}, "Sending failed");
-	}
-
-	void readToBuffer(){
-		ssize_t readSize = recv( socket, buffer.getData(), buffer.getMaxSize(), 0);
-		Assertions::check([readSize](){ return readSize != -1;}, "Recieving message failed");
-		buffer.setSize((size_t )readSize);
-	}
 };
 
 

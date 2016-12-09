@@ -4,9 +4,9 @@
 
 #include "Buffer.h"
 
-Buffer::Buffer(char *data, size_t size) : data(data), size(size) {}
+Buffer::Buffer(uint8_t *data, size_t size) : data(data), size(size) {}
 
-char *Buffer::getData() const {
+uint8_t *Buffer::getData() const {
 	return data;
 }
 

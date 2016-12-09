@@ -6,7 +6,6 @@
 #define TINTORRENT_TINPROTOCOLCOMMUNICATIONSOCKET_H
 
 
-#include <netinet/in.h>
 #include "Messages/MessageResourceRequest.h"
 #include "Messages/MessageEnum.h"
 #include "Messages/MessageStartSendingRequest.h"
@@ -18,11 +17,9 @@
 #include "TinConnectedServerSocket.h"
 #include <string>
 
-// todo change file name
 class TinServerSocket : public SocketWrapper{
 private:
     uint16_t portNumber;
-    socket_descriptor_t socket;
 //    const ConfigurationProvider configurationProvider;
     // TODO configurationProvider
     // TODO zwalnianie gniazda przy wyjatkach... (::check)

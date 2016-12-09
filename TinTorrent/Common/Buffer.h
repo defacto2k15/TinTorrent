@@ -10,13 +10,13 @@
 
 class Buffer  {
 protected:
-	char * data;
+	uint8_t * data;
 	size_t size;
 	size_t maxSize;
 public:
-	Buffer(char *data, size_t maxSize);
+	Buffer(uint8_t *data, size_t maxSize);
 
-	char *getData() const;
+	uint8_t *getData() const;
 
 	size_t getMaxSize() const;
 

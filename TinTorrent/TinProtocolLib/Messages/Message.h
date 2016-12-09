@@ -9,9 +9,9 @@
 #include "../../Common/Buffer.h"
 
 class Message {
-protected:
-	virtual void serializeTo( Buffer &buffer)=0;
 
+public:
+	virtual void serializeTo(Buffer &buffer)=0;
 };
 
 
