@@ -6,6 +6,10 @@
 #define TINTORRENT_RESOURCE_H
 
 #include <string>
+#include "json.hpp"
+#include "../Common/StringHelp.h"
+
+using json = nlohmann::json;
 
 class Resource {
 	std::wstring resourceName;
@@ -17,6 +21,23 @@ public:
 	const std::wstring &getResourceName() const;
 
 	size_t getResourceSize() const;
+
+	bool operator==(const Resource &other) const {
+		return resourceName == other.resourceName &&
+	           resourceSize == other.resourceSize;
+	}
+
+	json toJson(){
+		json j;
+		j["Name"] = StringHelp::toUtf8(resourceName);
+		j["Size"] = resourceSize;
+		return j;
+	}
+
+	void parseJson(json j){
+		resourceName = StringHelp::toUtf16(j["Name"]);
+		resourceSize = j["Size"];
+	}
 };
 
 

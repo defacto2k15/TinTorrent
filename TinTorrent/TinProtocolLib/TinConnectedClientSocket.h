@@ -12,33 +12,33 @@
 #include "SegmentInfo.h"
 #include "Messages/SegmentResponse.h"
 
-class TinConnectedClientSocket : TinConnectedSocket{
+class TinConnectedClientSocket : public TinConnectedSocket{
 
 public:
 	TinConnectedClientSocket(socket_descriptor_t socket);
 
 	void sendResourceRequest(Resource resource ){
 		MessageResourceRequest request(resource);
-		request.serializeTo(buffer);
+		serializeToBuffer(request);
 		sendBuffer();
 	}
 
 	MessageResourceResponse::ResourceResponseValue listenForResourceResponse(){
 		readToBuffer();
-		MessageResourceResponse response(buffer);
+		auto response = deserializeFromBuffer<MessageResourceResponse >();
 		return response.getValue();
 	}
 
-	void sendStartSendingRequest( SegmentInfo segment ){
+	void sendStartSendingRequest( SegmentInfo segment, uint8_t *payload){
 		MessageStartSendingRequest request(segment);
-		request.serializeTo(buffer);
+		serializeToBuffer(request);
 		sendBuffer();
 	}
 
-	std::pair<SegmentInfo, uint8_t*> listenForSegmentResponse(){
+	SegmentInfo listenForSegmentResponse(){
 		readToBuffer();
-		SegmentResponse response(buffer);
-		return std::make_pair(response.getSegmentInfo(), response.getDataPointer());
+		auto response = deserializeFromBuffer<SegmentResponse >();
+		return response.getSegmentInfo();
 	};
 };
 

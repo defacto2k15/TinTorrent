@@ -25,22 +25,22 @@ private:
     // TODO zwalnianie gniazda przy wyjatkach... (::check)
 	// TODO add state of serverSocket Inited, Listening itd
 public:
-    TinServerSocket(int portNumber) : portNumber(portNumber) {}
+    TinServerSocket(uint16_t portNumber) : portNumber(portNumber) {}
 
 	void initSocket(){
-		socket = socket(AF_INET, SOCK_STREAM, 0);
-		Assertions::check( [socket](){ return socket != -1;}, "Opening socket failed");
+		socketDescriptor = socket(AF_INET, SOCK_STREAM, 0);
+		Assertions::check( [this](){ return socketDescriptor != -1;}, "Opening socketDescriptor failed");
 
 		sockaddr_in serverAddr;
 		serverAddr.sin_family = AF_INET;
 		serverAddr.sin_addr.s_addr = INADDR_ANY;
 		serverAddr.sin_port = htons(portNumber);
 
-		int bindResult = bind(socket, (struct sockaddr*)&serverAddr, sizeof(serverAddr ) );
-		Assertions::check( [bindResult](){ return bindResult == 0 ;}, "Bindoing socket failed");
+		int bindResult = bind(socketDescriptor, (struct sockaddr*)&serverAddr, sizeof(serverAddr ) );
+		Assertions::check( [bindResult](){ return bindResult == 0 ;}, "Binding socketDescriptor failed");
 
 		// todo configure backlog
-		int listenResult = listen( socket, 10);
+		int listenResult = listen( socketDescriptor, 10);
 		Assertions::check( [listenResult](){ return listenResult == 0; }, "Listen method failed");
 	}
 
@@ -48,8 +48,8 @@ public:
 		struct sockaddr_in client;
 		socklen_t socklen = sizeof(struct sockaddr_in);
 		socket_descriptor_t associatedDescriptor
-				= accept( socket, (struct sockaddr *)&client,  &socklen);
-		Assertions::check([associatedDescriptor]() { return associatedDescriptor != -1}, "Funkcja accept nie powiadla sie");
+				= accept( socketDescriptor, (struct sockaddr *)&client,  &socklen);
+		Assertions::check([associatedDescriptor]() { return associatedDescriptor != -1;}, "Funkcja accept nie powiadla sie");
 		return TinConnectedServerSocket(associatedDescriptor, client);
 	}
 };

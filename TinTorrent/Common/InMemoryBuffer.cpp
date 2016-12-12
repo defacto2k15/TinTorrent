@@ -4,8 +4,8 @@
 
 #include "InMemoryBuffer.h"
 
-InMemoryBuffer::InMemoryBuffer(char *data, int size) : Buffer(data, size) {}
+InMemoryBuffer::InMemoryBuffer(size_t size) : Buffer(new uint8_t[size], size) {}
 
 InMemoryBuffer::~InMemoryBuffer() {
-	delete data;
+	delete []data;
 }

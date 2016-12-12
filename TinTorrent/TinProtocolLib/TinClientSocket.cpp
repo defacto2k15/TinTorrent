@@ -4,6 +4,4 @@
 
 #include "TinClientSocket.h"
 
-TinClientSocket::TinClientSocket(socket_descriptor_t socket, const TinAddress &addressToConnect) : socket(socket),
-                                                                                                   addressToConnect(
-		                                                                                                   addressToConnect) {}
+TinClientSocket::TinClientSocket( const TinAddress &addressToConnect) : addressToConnect( addressToConnect) {}

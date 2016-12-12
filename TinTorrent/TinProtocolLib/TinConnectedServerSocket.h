@@ -27,26 +27,24 @@ public:
 
 	Resource listenForResourceRequest(){
 		readToBuffer();
-		MessageResourceRequest request( buffer );
+		auto request = deserializeFromBuffer<MessageResourceRequest>();
 		return request.getResource();
 	}
 
 	void sendResourceResponse( MessageResourceResponse::ResourceResponseValue responseValue ){
 		MessageResourceResponse response(responseValue);
-		response.serializeTo(buffer);
+		serializeToBuffer(response);
 		sendBuffer();
 	};
 
 	std::pair<SegmentInfo, MessageStartSendingRequest::Type> listenForStartSendingRequest(){
 		readToBuffer();
-		MessageStartSendingRequest request(buffer);
+		auto request = deserializeFromBuffer<MessageStartSendingRequest >();
 		return request.getInfoPair();
 	}
 	void sendSegmentResponse( SegmentInfo info ){
-		SegmentResponse *UNUSED_response
-				          = new( buffer.getData)SegmentResponse(info.getSegmentIndex(),
-				                                                info.getPayloadLength(), (uint8_t *)info.getPayload());
-		//todo is it working???????
+		SegmentResponse response(info);
+		serializeToBuffer(response);
 		sendBuffer();
 	}
 

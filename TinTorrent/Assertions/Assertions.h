@@ -7,14 +7,19 @@
 
 
 #include <functional>
+#include <cstring>
 
 class Assertions {
 public:
     static void check( std::function<bool()> funcToCheck, std::string errMessage ){
-       if( !funcToCheck()){
-           throw new AssertionException(errMessage);
-       }
+	    check(funcToCheck(), errMessage);
     }
+	static void check( bool value, std::string errMessage ){
+		if(!value){
+			errMessage.append( std::string(" Errno is ")+std::string(strerror(errno)));
+			throw AssertionException(errMessage);
+		}
+	}
 
     class AssertionException : public std::runtime_error{
     public:

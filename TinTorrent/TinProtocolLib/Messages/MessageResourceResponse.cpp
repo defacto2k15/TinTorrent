@@ -4,6 +4,6 @@
 
 #include "MessageResourceResponse.h"
 
-MessageResourceResponse::MessageResourceResponse(MessageResourceResponse::ResourceResponseValue value) {
-
+void MessageResourceResponse::serializeTo(Buffer &buffer) {
+	//todo
 }

@@ -13,24 +13,23 @@
 #include "SocketWrapper.h"
 #include "TinConnectedClientSocket.h"
 
-class TinClientSocket : SocketWrapper{
-	socket_descriptor_t  socket;
+class TinClientSocket : public SocketWrapper{
 	TinAddress addressToConnect;
 public:
-	TinClientSocket(socket_descriptor_t socket, const TinAddress &addressToConnect);
+	TinClientSocket( const TinAddress &addressToConnect);
 
-	void init(){
-		socket = socket(AF_INET, SOCK_STREAM, 0);
-		Assertions::check( [socket](){ return socket != -1;}, "Opening socket failed");
+	void initSocket(){
+		socketDescriptor = socket(AF_INET, SOCK_STREAM, 0);
+		Assertions::check( [this](){ return socketDescriptor != -1;}, "Opening socketDescriptor failed");
 	}
 
-	void connect(){
-		Assertions::check( [socket](){return socket != 0}, "Socket not initialized");
+	TinConnectedClientSocket connect(){
+		Assertions::check( [this](){return socketDescriptor != 0;}, "Socket not initialized");
 		sockaddr_in server = addressToConnect.getSockaddr();
-		int connectResult = connect(socket, (struct sockaddr *)&server, sizeof(server));
-		Assertions::check( [connectResult](){ return socket == 0;}, "Connect failed");
-		socket_descriptor_t  tempSocket = socket;
-		socket = 0;
+		int connectResult = ::connect(socketDescriptor, (struct sockaddr *)&server, sizeof(server));
+		Assertions::check( [connectResult](){ return connectResult == 0;}, "Connect failed");
+		socket_descriptor_t  tempSocket = socketDescriptor;
+		socketDescriptor = 0;
 		return  TinConnectedClientSocket( tempSocket);
 	}
 };

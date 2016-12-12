@@ -4,11 +4,11 @@
 
 #include "SegmentInfo.h"
 
-SegmentInfo::SegmentInfo(char *Payload, uint16_t segmentIndex, uint16_t payloadLength) : Payload(Payload),
+SegmentInfo::SegmentInfo(uint8_t *Payload, uint16_t segmentIndex, uint16_t payloadLength) : Payload(Payload),
                                                                                          segmentIndex(segmentIndex),
                                                                                          payloadLength(payloadLength) {}
 
-char *SegmentInfo::getPayload() const {
+uint8_t *SegmentInfo::getPayload() const {
     return Payload;
 }
 

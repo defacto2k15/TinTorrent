@@ -12,13 +12,15 @@
 class MessageClose  : public Message{
 
 public:
-    MessageClose(CloseReason reason);
-
     class CloseReason : MessageEnum{
     public:
         static CloseReason OK;
         CloseReason(const std::string &value);
     };
+
+    MessageClose(CloseReason reason);
+
+    void serializeTo(Buffer &buffer) override;
 };
 
 

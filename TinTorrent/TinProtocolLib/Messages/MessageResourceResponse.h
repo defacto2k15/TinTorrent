@@ -11,17 +11,22 @@
 
 class MessageResourceResponse : public Message{
 public:
+	class ResourceResponseValue : MessageEnum{
+	public:
+		static ResourceResponseValue OK;
+		static ResourceResponseValue MISSING;
+		static ResourceResponseValue REVERTED;
+	private:
+		ResourceResponseValue( std::string value) : MessageEnum(value){};
+	};
+
 	MessageResourceResponse(ResourceResponseValue value);
 
-	class ResourceResponseValue : MessageEnum{
-    public:
-        static ResourceResponseValue OK;
-        static ResourceResponseValue MISSING;
-        static ResourceResponseValue REVERTED;
-    private:
-        ResourceResponseValue( std::string value) : MessageEnum(value){};
-    };
+	MessageResourceResponse(Buffer &buffer);
 
+	ResourceResponseValue getValue();
+
+	void serializeTo(Buffer &buffer) override;
 };
 
 

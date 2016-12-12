@@ -9,3 +9,7 @@ MessageClose::CloseReason::CloseReason(const std::string &value) : MessageEnum(v
 MessageClose::MessageClose(MessageClose::CloseReason reason) {
 
 }
+
+void MessageClose::serializeTo(Buffer &buffer) {
+	//todo
+}

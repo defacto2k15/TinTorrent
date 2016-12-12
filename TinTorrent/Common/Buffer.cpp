@@ -3,8 +3,7 @@
 //
 
 #include "Buffer.h"
-
-Buffer::Buffer(uint8_t *data, size_t size) : data(data), size(size) {}
+Buffer::Buffer(uint8_t *data, size_t maxSize) : data(data), size(0), maxSize(maxSize) {}
 
 uint8_t *Buffer::getData() const {
 	return data;
@@ -19,7 +18,8 @@ Buffer::~Buffer() {
 }
 
 void Buffer::setSize(size_t newSize) {
-	Assertions::check([newSize, maxSize](){return newSize >= 0 && newSize < maxSize;},
+	auto varMaxSize = maxSize;
+	Assertions::check([newSize, varMaxSize](){return newSize >= 0 && newSize <= varMaxSize;},
 	                  "Blad. Zly rozmiar");
 	size = newSize;
 }

@@ -11,20 +11,20 @@
 #include "../Assertions/Assertions.h"
 
 class SocketWrapper {
+	const socket_descriptor_t INVALID = -1;
 protected:
-	socket_descriptor_t  socket;
-	SocketWrapper() : socket(nullptr){
+	socket_descriptor_t  socketDescriptor;
+	SocketWrapper() : socketDescriptor(INVALID){
 	};
-
+public:
 	void closeSocket(){
-		if( socket != nullptr){
-			int closeRes = close(socket);
-			Assertions::check([closeRes](){return closeRes == 0;}, "Closing of socket failed");
-			socket = nullptr;
+		if( socketDescriptor != INVALID){
+			int closeRes = close(socketDescriptor);
+			Assertions::check([closeRes](){return closeRes == 0;}, "Closing of socketDescriptor failed");
+			socketDescriptor = INVALID;
 		}
 	}
 
-public:
 	virtual ~SocketWrapper() {
 		closeSocket();
 	}

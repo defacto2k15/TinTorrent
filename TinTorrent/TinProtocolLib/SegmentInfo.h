@@ -9,13 +9,13 @@
 #include <stdint-gcc.h>
 
 class SegmentInfo {
-    char *Payload;
+    uint8_t *Payload;
     uint16_t  segmentIndex;
     uint16_t  payloadLength;
 public:
-    SegmentInfo(char *Payload, uint16_t segmentIndex, uint16_t payloadLength);
+    SegmentInfo(uint8_t *Payload, uint16_t segmentIndex, uint16_t payloadLength);
 
-    char *getPayload() const;
+    uint8_t *getPayload() const;
 
     uint16_t getSegmentIndex() const;
 
