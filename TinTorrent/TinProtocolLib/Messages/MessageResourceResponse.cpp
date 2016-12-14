@@ -4,6 +4,7 @@
 
 #include "MessageResourceResponse.h"
 
-void MessageResourceResponse::serializeTo(Buffer &buffer) {
-	//todo
-}
+
+MessageResourceResponse::ResourceResponseValue MessageResourceResponse::ResourceResponseValue::OK("Ok");
+MessageResourceResponse::ResourceResponseValue MessageResourceResponse::ResourceResponseValue::MISSING("Missing");
+MessageResourceResponse::ResourceResponseValue MessageResourceResponse::ResourceResponseValue::REVERTED("Reverted");

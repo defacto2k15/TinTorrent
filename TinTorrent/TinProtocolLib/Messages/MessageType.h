@@ -14,9 +14,12 @@ private:
 public:
 	MessageType(){}
 	static MessageType RESOURCE_REQUEST;
+	static MessageType RESOURCE_RESPONSE;
+	static MessageType START_SENDING_REQUEST;
+	static MessageType CLOSE;
 
 	void parseJson(std::string value){
-		MessageEnum::parseJson(value, {RESOURCE_REQUEST});
+		MessageEnum::parseJson(value, {RESOURCE_RESPONSE, RESOURCE_REQUEST, START_SENDING_REQUEST, CLOSE});
 	}
 };
 

@@ -17,7 +17,7 @@ set(SOURCE_FILES main.cpp TinProtocolLib/TinServerSocket.cpp TinProtocolLib/TinS
         TinProtocolLib/TinClientSocket.cpp
         TinProtocolLib/TinClientSocket.h ModelEntities/TinAddress.cpp ModelEntities/TinAddress.h
         TinProtocolLib/TinConnectedClientSocket.cpp TinProtocolLib/TinConnectedClientSocket.h TinProtocolLib/TinConnectedSocket.cpp
-        TinProtocolLib/TinConnectedSocket.h Common/ExHelp.cpp Common/ExHelp.h Multithreading/BlockingElement.cpp Multithreading/BlockingElement.h Multithreading/MultithreadingSequence.cpp Multithreading/MultithreadingSequence.h Test/MessagesTest/MessageResourceRequestTest.cpp TinProtocolLib/Messages/MessageType.cpp TinProtocolLib/Messages/MessageType.h Common/StringHelp.cpp Common/StringHelp.h)
+        TinProtocolLib/TinConnectedSocket.h Common/ExHelp.cpp Common/ExHelp.h Multithreading/BlockingElement.cpp Multithreading/BlockingElement.h Multithreading/MultithreadingSequence.cpp Multithreading/MultithreadingSequence.h Test/MessagesTest/MessageResourceRequestTest.cpp TinProtocolLib/Messages/MessageType.cpp TinProtocolLib/Messages/MessageType.h Common/StringHelp.cpp Common/StringHelp.h TinProtocolLib/Segment.cpp TinProtocolLib/Segment.h TinProtocolLib/MessageCloseException.cpp TinProtocolLib/MessageCloseException.h)
 add_executable(TinTorrent ${SOURCE_FILES})
 
 find_package (Threads)

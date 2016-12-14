@@ -8,23 +8,26 @@
 #include <stdexcept>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 class MessageEnum {
 private:
     std::string value;
 protected:
-    MessageEnum ( std::string value ) : value(value){}
-    MessageEnum (){}
+    MessageEnum ( const std::string &value ) :value(value){
+    }
+    MessageEnum (){
+    }
 public:
-    std::string getValue(){
+    std::string getValue() const{
         if( value.length()==0){
             throw std::logic_error("Message enum zainicjowany domyslnym konstruktorem, uzytecznym tylko do parsowania");
         }
         return value;
     }
 
-    bool operator==( MessageEnum &other){
-        return getValue() == other.getValue();
+    bool operator==( const MessageEnum &other)const{
+	    return value == other.value;
     }
 
     void parseJson(std::string jsonValue, std::vector<MessageEnum> possibleValues ){
@@ -34,6 +37,10 @@ public:
             throw std::logic_error(std::string("Blad przy parsowaniu MessageEnum. Nie ma takiego o wartosci: ")+jsonValue);
         }
         value = jsonValue;
+    }
+
+    ~MessageEnum(){
+        int z = 33;//todo
     }
 };
 

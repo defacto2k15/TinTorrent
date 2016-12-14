@@ -17,6 +17,7 @@
 #include "Messages/SegmentResponse.h"
 #include "SocketWrapper.h"
 #include "TinConnectedSocket.h"
+#include "Segment.h"
 
 class TinConnectedServerSocket  : public TinConnectedSocket {
 	sockaddr_in clientAddress;
@@ -37,17 +38,14 @@ public:
 		sendBuffer();
 	};
 
-	std::pair<SegmentInfo, MessageStartSendingRequest::Type> listenForStartSendingRequest(){
+	MessageStartSendingRequest listenForStartSendingRequest(){
 		readToBuffer();
-		auto request = deserializeFromBuffer<MessageStartSendingRequest >();
-		return request.getInfoPair();
+		return deserializeFromBuffer<MessageStartSendingRequest >();
 	}
-	void sendSegmentResponse( SegmentInfo info ){
-		SegmentResponse response(info);
-		serializeToBuffer(response);
+	void sendSegmentResponse( SegmentInfo segmentInfo, uint8_t * payload){
+		SegmentResponse::writeSegmentResponseToBuffer( segmentInfo, payload, buffer);
 		sendBuffer();
 	}
-
 };
 
 

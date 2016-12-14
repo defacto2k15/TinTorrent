@@ -5,21 +5,36 @@
 #ifndef TINTORRENT_SEGMENTINFO_H
 #define TINTORRENT_SEGMENTINFO_H
 
-
 #include <stdint-gcc.h>
+#include <json.hpp>
+
+using json = nlohmann::json;
 
 class SegmentInfo {
-    uint8_t *Payload;
     uint16_t  segmentIndex;
     uint16_t  payloadLength;
 public:
-    SegmentInfo(uint8_t *Payload, uint16_t segmentIndex, uint16_t payloadLength);
+    SegmentInfo( uint16_t segmentIndex, uint16_t payloadLength);
 
-    uint8_t *getPayload() const;
+	SegmentInfo(json j) :
+			  segmentIndex( j["SegmentIndex"]),
+			  payloadLength(j["PayloadLength"]){
+	}
 
     uint16_t getSegmentIndex() const;
 
     uint16_t getPayloadLength() const;
+
+	json toJson(){
+		return json{
+				{"SegmentIndex", segmentIndex},
+				{"PayloadLength", payloadLength}
+		};
+	}
+
+	bool operator==(const SegmentInfo &rhs) const;
+
+	bool operator!=(const SegmentInfo &rhs) const;
 };
 
 

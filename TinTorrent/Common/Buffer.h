@@ -29,6 +29,10 @@ public:
 		setSize(size);
 		memcpy(data, inData, size );
 	}
+	void setData( size_t  offset, const uint8_t *inData, size_t size){
+		setSize(size+offset);
+		memcpy(data+offset, inData, size );
+	}
 
 	Buffer getBufferWithOffset(size_t offset){
 		return Buffer(data+offset, maxSize-offset, size-offset);

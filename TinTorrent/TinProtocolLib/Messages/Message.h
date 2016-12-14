@@ -6,12 +6,16 @@
 #define TINTORRENT_MESSAGE_H
 
 
+#include <json.hpp>
 #include "../../Common/Buffer.h"
+using json = nlohmann::json;
 
 class Message {
 
 public:
-	virtual void serializeTo(Buffer &buffer)=0;
+	virtual json toJson()=0;
+	Message(){
+	}
 };
 
 

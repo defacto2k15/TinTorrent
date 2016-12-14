@@ -4,13 +4,8 @@
 
 #include "SegmentInfo.h"
 
-SegmentInfo::SegmentInfo(uint8_t *Payload, uint16_t segmentIndex, uint16_t payloadLength) : Payload(Payload),
-                                                                                         segmentIndex(segmentIndex),
-                                                                                         payloadLength(payloadLength) {}
-
-uint8_t *SegmentInfo::getPayload() const {
-    return Payload;
-}
+SegmentInfo::SegmentInfo( uint16_t segmentIndex, uint16_t payloadLength) : segmentIndex(segmentIndex),
+                                                                           payloadLength(payloadLength) {}
 
 uint16_t SegmentInfo::getSegmentIndex() const {
     return segmentIndex;
@@ -18,4 +13,13 @@ uint16_t SegmentInfo::getSegmentIndex() const {
 
 uint16_t SegmentInfo::getPayloadLength() const {
     return payloadLength;
+}
+
+bool SegmentInfo::operator==(const SegmentInfo &rhs) const {
+	return segmentIndex == rhs.segmentIndex &&
+	       payloadLength == rhs.payloadLength;
+}
+
+bool SegmentInfo::operator!=(const SegmentInfo &rhs) const {
+	return !(rhs == *this);
 }

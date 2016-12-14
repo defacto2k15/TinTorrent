@@ -10,32 +10,66 @@
 #include "../../Common/InMemoryBuffer.h"
 #include "Message.h"
 #include "../SegmentInfo.h"
+#include "MessageType.h"
+
+using json = nlohmann::json;
 
 class MessageStartSendingRequest : public Message{
 public:
-    class Type : MessageEnum {
+    class PreviousStatus : public MessageEnum {
     public:
-        Type(const std::string &value) : MessageEnum(value){};
-        static Type OK;
-        static Type FIRST;
-        static Type WRONG_SEGMENT;
-        static Type WRONG_SIZE;
+        PreviousStatus(const std::string &value) : MessageEnum(value){};
+        explicit PreviousStatus(json jsonValue)  {
+            parseJson(jsonValue);
+        }
+        static PreviousStatus OK;
+        static PreviousStatus FIRST;
+        static PreviousStatus WRONG_SEGMENT;
+        static PreviousStatus WRONG_SIZE;
+
+        void parseJson(std::string value){
+            MessageEnum::parseJson(value, {OK, FIRST, WRONG_SEGMENT, WRONG_SIZE});
+        }
     };
 
-    MessageStartSendingRequest( Buffer &buffer){
-        //todo
+private:
+    PreviousStatus previous;
+    SegmentInfo segmentInfo;
+public:
+
+    explicit  MessageStartSendingRequest( json &j) : previous(j["Previous"]), segmentInfo(j["SegmentInfo"]){
+        MessageType type;
+        type.parseJson(j["Type"]);
+        Assertions::check([&](){ return type==MessageType::START_SENDING_REQUEST;}, "StartSendingRequest deserialization. Type in wrong");
     }
 
-    MessageStartSendingRequest( SegmentInfo segment ){
-        //todo
+    MessageStartSendingRequest( SegmentInfo segment, PreviousStatus status ) : segmentInfo(segment), previous(status){
     }
 
-    std::pair<SegmentInfo, Type> getInfoPair() {
-	    //todo
+    json toJson() override {
+        json j  = {
+                {"Type", MessageType::START_SENDING_REQUEST.getValue()},
+                {"Previous", previous.getValue()},
+                {"SegmentInfo", segmentInfo.toJson()}
+        };
+        return j;
     }
 
-    void serializeTo(Buffer &buffer) override {
-        //todo
+    PreviousStatus getPreviousStatus() {
+        return previous;
+    }
+
+    SegmentInfo getSegmentInfo() {
+        return segmentInfo;
+    }
+
+    bool operator==(const MessageStartSendingRequest &other) const {
+        return this->segmentInfo == other.segmentInfo &&
+               this->previous == other.previous;
+    }
+
+    static MessageType getMessageType(){
+        return MessageType::START_SENDING_REQUEST;
     }
 
 };
