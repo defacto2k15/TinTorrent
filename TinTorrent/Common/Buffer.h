@@ -15,7 +15,7 @@ protected:
 	size_t maxSize;
 public:
 	Buffer(uint8_t *data, size_t maxSize);
-	Buffer(uint8_t *data, size_t maxSize, size_t size) : data(data), maxSize(maxSize), size(size){};
+	Buffer(uint8_t *data, size_t maxSize, size_t size) : data(data),   size(size), maxSize(maxSize){};
 
 	uint8_t *getData() const;
 

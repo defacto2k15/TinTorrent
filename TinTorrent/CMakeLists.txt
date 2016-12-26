@@ -4,6 +4,7 @@ project(TinTorrent)
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(lib)
+include_directories(.)
 
 set(SOURCE_FILES main.cpp TinProtocolLib/TinServerSocket.cpp TinProtocolLib/TinServerSocket.h TinProtocolLib/Messages/MessageResourceRequest.cpp
         TinProtocolLib/Messages/MessageResourceRequest.h TinProtocolLib/Messages/MessageStartSendingRequest.cpp
@@ -17,9 +18,10 @@ set(SOURCE_FILES main.cpp TinProtocolLib/TinServerSocket.cpp TinProtocolLib/TinS
         TinProtocolLib/TinClientSocket.cpp
         TinProtocolLib/TinClientSocket.h ModelEntities/TinAddress.cpp ModelEntities/TinAddress.h
         TinProtocolLib/TinConnectedClientSocket.cpp TinProtocolLib/TinConnectedClientSocket.h TinProtocolLib/TinConnectedSocket.cpp
-        TinProtocolLib/TinConnectedSocket.h Common/ExHelp.cpp Common/ExHelp.h Multithreading/BlockingElement.cpp Multithreading/BlockingElement.h Multithreading/MultithreadingSequence.cpp Multithreading/MultithreadingSequence.h Test/MessagesTest/MessageResourceRequestTest.cpp TinProtocolLib/Messages/MessageType.cpp TinProtocolLib/Messages/MessageType.h Common/StringHelp.cpp Common/StringHelp.h TinProtocolLib/Segment.cpp TinProtocolLib/Segment.h TinProtocolLib/MessageCloseException.cpp TinProtocolLib/MessageCloseException.h)
+        TinProtocolLib/TinConnectedSocket.h Common/ExHelp.cpp Common/ExHelp.h Multithreading/BlockingElement.cpp Multithreading/BlockingElement.h Multithreading/MultithreadingSequence.cpp Multithreading/MultithreadingSequence.h Test/MessagesTest/MessageResourceRequestTest.cpp TinProtocolLib/Messages/MessageType.cpp TinProtocolLib/Messages/MessageType.h Common/StringHelp.cpp Common/StringHelp.h TinProtocolLib/Segment.cpp TinProtocolLib/Segment.h TinProtocolLib/MessageCloseException.cpp TinProtocolLib/MessageCloseException.h FileManager/FileInformationConsumer.h FileManager/FileManager.cpp FileManager/FileManager.h FileManager/ModelEntities/FileInfo.cpp FileManager/ModelEntities/FileInfo.h FileManager/ModelEntities/FileSegmentsInfo.cpp FileManager/ModelEntities/FileSegmentsInfo.h Test/Mocks/MockFileInformationConsumer.h Utils/MyString.cpp Utils/MyString.h Common/Constants.cpp Common/Constants.h Utils/ContainerUtils.cpp Utils/ContainerUtils.h Utils/StreamUtils.cpp Utils/StreamUtils.h Utils/BitUtils.cpp Utils/BitUtils.h Utils/SegmentUtils.cpp Utils/SegmentUtils.h Utils/FileUtils.cpp Utils/FileUtils.h FileManager/UpdateInfo.cpp FileManager/UpdateInfo.h)
 add_executable(TinTorrent ${SOURCE_FILES})
 
+target_compile_options( TinTorrent PRIVATE -Wall -Wextra )
 find_package (Threads)
 target_link_libraries (TinTorrent ${CMAKE_THREAD_LIBS_INIT})
 
@@ -27,10 +29,13 @@ option(BuildTests "BuildTests" OFF)
 if(BuildTests)
 
     set(TEST_EXECUTABLE_NAME "tests")
-    set(TEST_FILES   Test/TinProtocolLib/TinSocketTest.cpp Test/TinProtocolLib/TinSocketTest.h Test/testMain.cpp)
+    set(TEST_FILES   Test/TinProtocolLib/TinSocketTest.cpp Test/TinProtocolLib/TinSocketTest.h Test/testMain.cpp Test/FileManager/FileManagerTest.cpp)
     # remove main.cpp file
     list(REMOVE_ITEM SOURCE_FILES "main.cpp")
+
     add_executable("${TEST_EXECUTABLE_NAME}" ${TEST_FILES} ${SOURCE_FILES} )
+    target_compile_options( "${TEST_EXECUTABLE_NAME}" PRIVATE -Wall -Wextra )
     target_link_libraries("${TEST_EXECUTABLE_NAME}" ${CMAKE_SOURCE_DIR}/lib/libgtest.a)
+    target_link_libraries("${TEST_EXECUTABLE_NAME}" ${CMAKE_SOURCE_DIR}/lib/libgmock.a)
     target_link_libraries ("${TEST_EXECUTABLE_NAME}" ${CMAKE_THREAD_LIBS_INIT})
 endif()

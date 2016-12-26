@@ -43,7 +43,7 @@ public:
         Assertions::check([&](){ return type==MessageType::START_SENDING_REQUEST;}, "StartSendingRequest deserialization. Type in wrong");
     }
 
-    MessageStartSendingRequest( SegmentInfo segment, PreviousStatus status ) : segmentInfo(segment), previous(status){
+    MessageStartSendingRequest( SegmentInfo segment, PreviousStatus status ) :previous(status), segmentInfo(segment) {
     }
 
     json toJson() override {

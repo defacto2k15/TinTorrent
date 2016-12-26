@@ -40,7 +40,6 @@ public:
     }
 
     ~MessageEnum(){
-        int z = 33;//todo
     }
 };
 
