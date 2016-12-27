@@ -13,7 +13,11 @@
 class SegmentUtils {
 public:
 	static size_t SegmentCount( size_t fileSize ){
-		return ceil(double(fileSize) / double( Constants::segmentSize));
+		return (size_t)ceil(double(fileSize) / double( Constants::segmentSize));
+	}
+
+	static size_t SegmentBytesCount( size_t fileSize ){
+		return (size_t)ceil( SegmentCount(fileSize) / 8 );
 	}
 };
 

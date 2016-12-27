@@ -6,6 +6,7 @@
 #define TINTORRENT_RESOURCE_H
 
 #include <string>
+#include <Common/Constants.h>
 #include "json.hpp"
 #include "../Common/StringHelp.h"
 
@@ -15,12 +16,16 @@ class Resource {
 	std::wstring resourceName;
 	size_t  resourceSize;
 public:
-	Resource(){}
+	Resource() : resourceName(L"UNSET"), resourceSize(0) {}
 	Resource(const std::wstring &resourceName, size_t resourceSize);
 
 	const std::wstring &getResourceName() const;
 
 	size_t getResourceSize() const;
+
+	size_t getSegmentCount() {
+		return (size_t) ceil( double(resourceSize) / double(Constants::segmentSize));
+	}
 
 	bool operator==(const Resource &other) const {
 		return resourceName == other.resourceName &&

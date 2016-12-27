@@ -27,3 +27,13 @@ void Buffer::setSize(size_t newSize) {
 size_t Buffer::getSize() {
 	return  size;
 }
+
+bool Buffer::operator==(const Buffer &rhs) const {
+	return (size == rhs.size) &&
+	       maxSize == rhs.maxSize,
+			memcmp(data, rhs.data,size) == 0;
+}
+
+bool Buffer::operator!=(const Buffer &rhs) const {
+	return !(rhs == *this);
+}

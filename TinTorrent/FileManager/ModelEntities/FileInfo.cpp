@@ -9,7 +9,7 @@ const Resource FileInfo::getResource() const {
 	return resource;
 }
 
-const FileSegmentsInfo FileInfo::getFileSegmentsInfo() const {
+FileSegmentsInfo &FileInfo::getFileSegmentsInfo() {
 	return fileSegmentsInfo;
 }
 

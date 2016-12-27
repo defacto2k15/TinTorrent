@@ -10,12 +10,12 @@
 #include "SegmentInfo.h"
 
 class Segment {
-	Buffer payload;
+	std::shared_ptr<Buffer> payload;
 	SegmentInfo segmentInfo;
 public:
-	Segment(const Buffer &payload, const SegmentInfo &segmentInfo);
+	Segment(std::shared_ptr<Buffer> payload, const SegmentInfo &segmentInfo);
 
-	const Buffer getPayload() const;
+	 Buffer &getPayload() ;
 
 	const SegmentInfo getSegmentInfo() const;
 };

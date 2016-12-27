@@ -19,7 +19,8 @@ class FileSegmentsInfo {
 	std::vector<bool> segmentPresence;
 public:
 	FileSegmentsInfo(const std::vector<bool, std::allocator<bool>> &segmentPresence);
-
+	FileSegmentsInfo ( size_t segmentCount ) : segmentPresence(segmentCount, false){ }
+	FileSegmentsInfo(){};
 	FileSegmentsInfo(size_t segmentCount, std::string metadataFilePath){
 		std::ifstream source(metadataFilePath.c_str(), std::ios_base::binary);
 
@@ -49,6 +50,14 @@ public:
 	bool operator==(const FileSegmentsInfo &rhs) const;
 
 	bool operator!=(const FileSegmentsInfo &rhs) const;
+
+	bool getSegmentPresence( size_t segmentIndex ){
+		return segmentPresence[segmentIndex];
+	}
+
+	void setSegmentPresence( size_t segmentIndex, bool newValue ){
+		segmentPresence[segmentIndex] = newValue;
+	}
 };
 
 

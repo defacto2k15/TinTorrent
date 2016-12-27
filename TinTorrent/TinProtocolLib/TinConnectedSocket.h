@@ -45,7 +45,7 @@ protected:
 	void sendBuffer(){
 		ssize_t sendBytes = send(socket, buffer.getData(), buffer.getSize(), 0);
 		auto &varBuffer = buffer;
-		Assertions::check([sendBytes, &varBuffer]{return sendBytes == varBuffer.getSize();}, "Sending failed");
+		Assertions::check([sendBytes, &varBuffer]{return sendBytes == (ssize_t)varBuffer.getSize();}, "Sending failed");
 		Assertions::check(sendBytes != 0 , "Has sent 0 bytes, as were in buffer. Propably a mistake as there was 0 in buffer");
 	}
 

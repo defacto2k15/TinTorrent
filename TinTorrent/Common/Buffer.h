@@ -29,14 +29,30 @@ public:
 		setSize(size);
 		memcpy(data, inData, size );
 	}
+
 	void setData( size_t  offset, const uint8_t *inData, size_t size){
 		setSize(size+offset);
 		memcpy(data+offset, inData, size );
 	}
 
+	void setData( Buffer &other, size_t offset){
+		setSize( std::max( size, other.getSize()+offset));
+		memcpy(data+offset, other.getData(), other.getSize() );
+	}
+
 	Buffer getBufferWithOffset(size_t offset){
 		return Buffer(data+offset, maxSize-offset, size-offset);
 	}
+
+	Buffer getSubset( size_t start, size_t end){
+		auto length = end - start;
+		Assertions::check(end <=size, "Error: end is bigger than size of buffer");
+		return Buffer( getData() + start, length, length);
+	}
+
+	bool operator==(const Buffer &rhs) const;
+
+	bool operator!=(const Buffer &rhs) const;
 
 	virtual ~Buffer();
 };

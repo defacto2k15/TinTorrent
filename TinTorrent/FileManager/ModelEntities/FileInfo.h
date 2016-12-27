@@ -15,9 +15,11 @@ class FileInfo {
 public:
 	FileInfo(const Resource &resource, const FileSegmentsInfo &fileSegmentsInfo);
 
+	FileInfo(){}
+
 	const Resource getResource() const;
 
-	const FileSegmentsInfo getFileSegmentsInfo() const;
+	FileSegmentsInfo &getFileSegmentsInfo();
 
 	bool operator==(const FileInfo &rhs) const;
 

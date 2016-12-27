@@ -4,10 +4,10 @@
 
 #include "Segment.h"
 
-Segment::Segment(const Buffer &payload, const SegmentInfo &segmentInfo) : payload(payload), segmentInfo(segmentInfo) {}
+Segment::Segment(const std::shared_ptr<Buffer> payload, const SegmentInfo &segmentInfo) : payload(payload), segmentInfo(segmentInfo) {}
 
-const Buffer Segment::getPayload() const {
-	return payload;
+ Buffer &Segment::getPayload()  {
+	return *payload;
 }
 
 const SegmentInfo Segment::getSegmentInfo() const {

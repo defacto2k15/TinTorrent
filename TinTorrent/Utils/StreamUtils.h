@@ -14,6 +14,7 @@
 #include "SegmentUtils.h"
 #include <ostream>
 #include <fstream>
+#include <Common/Buffer.h>
 
 class StreamUtils {
 public:
@@ -31,6 +32,10 @@ public:
 		}
 		ofs.write(buffer.get(), bytesCount);
 		return bytesCount;
+	}
+
+	static void writeToStream( std::ofstream &ofs, Buffer &buffer){
+		ofs.write((const char*)(buffer.getData()), buffer.getSize());
 	}
 };
 
