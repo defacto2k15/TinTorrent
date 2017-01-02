@@ -6,8 +6,45 @@
 #define TINTORRENT_TINNETWORKSTATE_H
 
 
-class TinNetworkState {
+#include <ModelEntities/TinAddress.h>
+#include <TinProtocolLib/Messages/BroadcastMessage.h>
+#include <Utils/ContainerUtils.h>
 
+class TinNetworkState {
+	std::map<TinAddress, std::vector<Resource>, TinAddressCompare > resourceMap;
+public:
+
+	void addFiles(TinAddress address, std::vector<Resource> resources){
+		for( auto &resource : resources){
+			if( !ContainerUtils::Contains(resourceMap[address], resource)){
+				resourceMap[address].push_back(resource);
+			}
+		}
+	}
+
+	void removeResourceFromClient(TinAddress address, Resource resource) {
+		ContainerUtils::remove(resourceMap[address], resource);
+	}
+
+	void removeClient(TinAddress &address) {
+		resourceMap.erase(address);
+	}
+
+	void removeResource(Resource &resource) {
+		for( auto &pair : resourceMap){
+			ContainerUtils::remove(pair.second, resource);
+		}
+	}
+
+	std::vector<TinAddress> avalibleClientsForDownload(Resource &resource) {
+		std::vector<TinAddress> outVec;
+		for( auto & pair : resourceMap){
+			if( ContainerUtils::Contains(pair.second, resource)){
+				outVec.push_back(pair.first);
+			}
+		}
+		return outVec;
+	}
 };
 
 

@@ -15,3 +15,4 @@ std::string Constants::broadcastingAddress = "127.0.0.1";
 uint16_t Constants::communicationPort = 9998;
 unsigned Constants::maxBadRecievedSegmentsBeforeDisconnect = 3;
 unsigned Constants::secondsBetweenWorkingDirectoryUpdated = 30;
+unsigned Constants::maxSegmentChunkSize = 2;

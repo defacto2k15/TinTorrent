@@ -18,6 +18,8 @@
 #include "WorkingDirectoryState.h"
 #include "TinNetworkState.h"
 #include "ClientThreadsCollection.h"
+#include "ServerThreadsCollection.h"
+#include <Kernel/Kernel.h>
 
 class Kernel : public ActionQueue<Kernel> {
 	std::vector<FileInfo> currentFiles;
@@ -64,7 +66,7 @@ public:
 		threadUdpListening = std::make_unique<ThreadTinUdpListeningSocket>(*this);
 		threadUdpListening->startThread();
 
-		serverSocketThread = std::make_unique<TinServerSocketThread>();
+		serverSocketThread = std::make_unique<TinServerSocketThread>(*this);
 		serverSocketThread->startThread();
 
 		/// start listener of udp
@@ -115,18 +117,27 @@ public:
 /// STORY : TinClientThread recieved broadcast //////////////////////////
 	void recievedBroadcast(std::pair<BroadcastMessage, TinAddress> pair){
 		std::cout << Help::Str("Kernel: RecievedBroadcast of ",pair) << std::endl;
-		tinNetworkState.addFiles( pair.second, pair.first);
-		for( Resource &resource : pair.first.getResources()){
-			if( ContainerUtils::Contains(revertedResources, resource)){
-				std::cout << Help::Str("Kernel: resource  ",resource.toJson().dump(), " is reverted will not download") << std::endl;
-			} else if( workingDirectoryState.resourceIsDownloaded(resource)){
-				std::cout << Help::Str("Kernel: resource  ",resource.toJson().dump(), " is arleady downloaded") << std::endl;
-			} else	if( !workingDirectoryState.contains(resource)){
-				std::cout << Help::Str("Kernel: i want to start download of  ",resource.toJson().dump()) << std::endl;
-				resourcesToDownload.push_back(resource);
+		if( pair.first.getType() == BroadcastMessage::BroadcastType::ANNOUNCE) {
+			tinNetworkState.addFiles(pair.second, pair.first.getResources());
+			for (Resource &resource : pair.first.getResources()) {
+				if (ContainerUtils::Contains(revertedResources, resource)) {
+					std::cout << Help::Str("Kernel: resource  ", resource.toJson().dump(),
+					                       " is reverted will not download") << std::endl;
+				} else if (workingDirectoryState.isDownloaded(resource)) {
+					std::cout << Help::Str("Kernel: resource  ", resource.toJson().dump(), " is arleady downloaded")
+					          << std::endl;
+				} else if (!workingDirectoryState.contains(resource)) {
+					std::cout << Help::Str("Kernel: i want to start download of  ", resource.toJson().dump())
+					          << std::endl;
+					resourcesToDownload.push_back(resource);
+				}
+			}
+			tryToDownloadResources();
+		} else {
+			for( auto &resource : pair.first.getResources()){
+				removeRevertedResource(resource);
 			}
 		}
-		tryToDownloadResources();
 	}
 
 	void connectingToClientFailed(TinAddress address){
@@ -135,11 +146,11 @@ public:
 	}
 
 	void gotBadResourceResponse( TinAddress addressToConnect, MessageResourceResponse::ResourceResponseValue responseValue ){
-		std::cout << Help::Str("Kernel: gotBadResourceResponse Address: ",addressToConnect," response value ",responseValue) << std::endl;
+		std::cout << Help::Str("Kernel: gotBadResourceResponse Address: ",addressToConnect," response value ",responseValue.getValue()) << std::endl;
 		std::shared_ptr<TinClientThread> clientThread = clientThreads.get(addressToConnect);
 		auto resource =  clientThread->getRequestedResource();
 		if( responseValue == MessageResourceResponse::ResourceResponseValue::REVERTED ){
-			clientThreads.clearThread(address);
+			clientThreads.clearThread(addressToConnect);
 			removeRevertedResource(resource);
 		} else if ( responseValue == MessageResourceResponse::ResourceResponseValue::MISSING ){
 			workingDirectoryState.deallocateSegmentRange( resource, clientThread->getRequestedSegments() );
@@ -164,15 +175,15 @@ public:
 		fileManagerThread->add([&resource, &segmentsSet]( FileManagerThread &f){ f.setSegments(resource, segmentsSet);} );
 		workingDirectoryState.setSegmentsAsDownloaded( resource, segmentsSet.getRange());
 
-		std::shared_ptr<TinClientThread> clientThread = tinNetworkState.get(address);
+		std::shared_ptr<TinClientThread> clientThread = clientThreads.get(address);
 		SegmentRange segmentsToDownload = workingDirectoryState.allocateSegmentsToDownload(resource);
 		if( segmentsToDownload.empty()){
 			std::cout << Help::Str("Kernel: no segments to download for client ",address," will now close it" ) << std::endl;
 			clientThread->add( [](TinClientThread &t){ t.closeConnection(MessageClose::CloseReason::OK);});
-			clientThreads.clear(address);
+			clientThreads.clearThread(address);
 		} else {
 			std::cout << Help::Str("Kernel: telling ",address," to download ",segmentsToDownload ) << std::endl;
-			clientThread->add( [](TinClientThread &t){ t.recieveSegments(segmentsToDownload, MessageStartSendingRequest::PreviousStatus::OK);});
+			clientThread->add( [segmentsToDownload](TinClientThread &t){ t.recieveSegments(segmentsToDownload, MessageStartSendingRequest::PreviousStatus::OK);});
 		}
 	}
 
@@ -206,15 +217,17 @@ public:
 		auto resource = connectedThread->getRequestedResource();
 		if( ContainerUtils::Contains(revertedResources, resource)){
 			std::cout << Help::Str("Kernel: resource is reverted, will respond accordingly ") << std::endl;
-			connectedThread->add( [](TinConnectedServerThread &t ){ t.sendCloseMessage(MessageClose::CloseReason::RESOURCE_REVERTED)} );
+			connectedThread->add( [](TinConnectedServerThread &t ){ t.sendCloseMessage(MessageClose::CloseReason::RESOURCE_REVERTED);} );
 			serverThreads.closeThread(threadId);
 		} else if (!workingDirectoryState.isDownloaded(resource)){
 			std::cout << Help::Str("Kernel: resource is missing ") << std::endl;
 			connectedThread->add( [](TinConnectedServerThread &t){ t.sendCloseMessage( MessageClose::CloseReason::RESOURCE_MISSING);});
 			serverThreads.closeThread(threadId);
 		}else {
-			fileManagerThread->add( [threadId, resource, startSendingRequest]( FileManagerThread &t){
-				t.requestSegments(threadId, resource, startSendingRequest.getSegmentInfo());
+			auto segmentInfo = startSendingRequest.getSegmentInfo();
+			fileManagerThread->add( [threadId, &resource, segmentInfo]( FileManagerThread &t){
+				Resource res = resource;
+				t.requestSegments(threadId, res, segmentInfo);
 			});
 		}
 	}
@@ -222,7 +235,7 @@ public:
 	void requestedSegmentProvided(int threadId, SegmentsSet segmentsSet ){
 		std::cout << Help::Str("Kernel: requestedSegmentProvided of thread ",threadId, " segmentsSet is ",segmentsSet) << std::endl;
 		std::shared_ptr<TinConnectedServerThread> connectedThread = serverThreads.get(threadId);
-		connectedThread->add( [threadId, segmentsSet]( TinConnectedServerThread &t ){
+		connectedThread->add( [=]( TinConnectedServerThread &t ){
 			t.sendSegments(segmentsSet);
 		});
 	}
@@ -245,6 +258,34 @@ public:
 		serverThreads.closeThread(threadId);
 	}
 
+/// FileProblems
+
+	void resourceMissing( Resource resource ){
+		std::cout << Help::Str("Kernel: resourceMissing: ",resource) << std::endl;
+		workingDirectoryState.removeResource(resource);
+		clientThreads.closeThoseWorkingWith(resource);
+		serverThreads.closeThoseWorkingWith(resource);
+		ContainerUtils::remove( resourcesToDownload, resource);
+	}
+
+	void workingDirectoryChanged( UpdateInfo updateInfo){
+		std::cout << Help::Str("Kernel: workingDirectoryChanged: ",updateInfo) << std::endl;
+		for( FileInfo &info : updateInfo.getNewFiles()){
+			Resource res = info.getResource();
+			if( ContainerUtils::Contains(revertedResources, res)){
+				std::cout << Help::Str("Kernel: : ", res, " is in reverted resources. Will be removed") << std::endl;
+				fileManagerThread->add([res](FileManagerThread &t ){
+					t.removeResource(res);
+				});
+			} else {
+				workingDirectoryState.addResource(res);
+			}
+		}
+		for( FileInfo &info : updateInfo.getDeletedFiles() ){
+			resourceMissing(info.getResource());
+		}
+		tryToDownloadResources();
+	}
 private:
 	void loadConfiguration(std::string configurationDirectory){
 		if(configurationDirectory.empty()){

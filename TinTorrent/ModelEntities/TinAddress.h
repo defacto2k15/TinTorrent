@@ -25,16 +25,24 @@ public:
 
 	}
 
-	sockaddr_in getSockaddr(){
+	sockaddr_in getSockaddr() const{
 		return sockaddr;
 	}
 
 	friend std::ostream &operator<<(std::ostream &os, const TinAddress &address) {
 		char str[INET_ADDRSTRLEN];
-		inet_ntop(AF_INET, &(sockaddr.sin_addr), str, INET_ADDRSTRLEN);
+		inet_ntop(AF_INET, &(address.sockaddr.sin_addr), str, INET_ADDRSTRLEN);
 		os << "sockaddr: " << str;
+		return os;
 	}
 };
 
+struct TinAddressCompare
+{
+	bool operator() (const TinAddress& lhs, const TinAddress& rhs) const
+	{
+		return lhs.getSockaddr().sin_addr.s_addr < rhs.getSockaddr().sin_addr.s_addr;
+	}
+};
 
 #endif //TINTORRENT_TINADDRESS_H

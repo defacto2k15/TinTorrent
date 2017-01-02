@@ -7,6 +7,7 @@
 
 #include <stdint-gcc.h>
 #include <json.hpp>
+#include <ostream>
 
 using json = nlohmann::json;
 
@@ -35,6 +36,8 @@ public:
 	bool operator==(const SegmentInfo &rhs) const;
 
 	bool operator!=(const SegmentInfo &rhs) const;
+
+	friend std::ostream &operator<<(std::ostream &os, const SegmentInfo &info);
 };
 
 

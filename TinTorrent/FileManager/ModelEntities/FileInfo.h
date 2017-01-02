@@ -18,7 +18,7 @@ public:
 
 	FileInfo(){}
 
-	const Resource getResource() const;
+	Resource getResource();
 
 	FileSegmentsInfo &getFileSegmentsInfo();
 

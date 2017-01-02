@@ -46,9 +46,9 @@ public:
 		sequence[currentSequenceName]->unlockAfter(400);
 		auto connectedSocket = serverSocket.listenForConnections();
 
-		T result = action(connectedSocket);
+		T result = action(*connectedSocket);
 
-		connectedSocket.closeSocket();
+		connectedSocket->closeSocket();
 		serverSocket.closeSocket();
 		return result;
 	}
@@ -78,7 +78,7 @@ TEST_F(TinSocketTest, SocketsCanGetConnected) {
 		serverSocket.initSocket();
 		sequence[currentSequenceName]->unlockAfter(400);
 		auto connectedSocket = serverSocket.listenForConnections();
-		connectedSocket.closeSocket();
+		connectedSocket->closeSocket();
 		serverSocket.closeSocket();
 		return true;
 	} );

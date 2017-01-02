@@ -7,6 +7,7 @@
 
 
 #include <ModelEntities/Resource.h>
+#include <ostream>
 #include "MessageEnum.h"
 
 class BroadcastMessage {
@@ -83,6 +84,15 @@ public:
 
 	std::vector<Resource> getResources(){
 		return resources;
+	}
+
+	BroadcastType getType(){
+		return type;
+	}
+
+	friend std::ostream &operator<<(std::ostream &os, const BroadcastMessage &message) {
+		os << "resources: " << Help::writeVecContents(message.resources).str() << " type: " << message.type.getValue();
+		return os;
 	}
 };
 

@@ -48,5 +48,14 @@ public:
 	friend std::ostream &operator<<(std::ostream &os, const Resource &resource);
 };
 
+struct ResourceCompare
+{
+	bool operator() (const Resource& lhs, const Resource& rhs) const
+	{
+		return lhs.getResourceName() < rhs.getResourceName() && lhs.getResourceSize() < rhs.getResourceSize();
+	}
+};
+
+
 
 #endif //TINTORRENT_RESOURCE_H

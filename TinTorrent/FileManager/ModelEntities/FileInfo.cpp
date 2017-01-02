@@ -5,7 +5,7 @@
 #include "FileInfo.h"
 
 
-const Resource FileInfo::getResource() const {
+Resource FileInfo::getResource() {
 	return resource;
 }
 

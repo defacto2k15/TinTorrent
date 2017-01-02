@@ -9,6 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <ostream>
 
 class MessageEnum {
 private:
@@ -40,6 +41,11 @@ public:
     }
 
     ~MessageEnum(){
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const MessageEnum &anEnum) {
+        os << "value: " << anEnum.value;
+        return os;
     }
 };
 

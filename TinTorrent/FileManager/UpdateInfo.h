@@ -15,9 +15,9 @@ class UpdateInfo {
 public:
 	UpdateInfo(const std::vector<FileInfo> &newFiles, const std::vector<FileInfo> &deletedFiles);
 
-	const std::vector<FileInfo> &getNewFiles() const;
+	std::vector<FileInfo> getNewFiles();
 
-	const std::vector<FileInfo> &getDeletedFiles() const;
+	std::vector<FileInfo> getDeletedFiles();
 
 	friend std::ostream &operator<<(std::ostream &os, const UpdateInfo &info);
 

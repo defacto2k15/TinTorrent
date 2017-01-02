@@ -6,6 +6,7 @@
 #define TINTORRENT_SEGMENT_H
 
 
+#include <ostream>
 #include "../Common/Buffer.h"
 #include "SegmentInfo.h"
 
@@ -18,6 +19,8 @@ public:
 	 Buffer &getPayload() ;
 
 	const SegmentInfo getSegmentInfo() const;
+
+	friend std::ostream &operator<<(std::ostream &os, const Segment &segment);
 };
 
 

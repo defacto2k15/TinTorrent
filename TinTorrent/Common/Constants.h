@@ -22,6 +22,7 @@ public:
 	static uint16_t communicationPort;
 	static unsigned maxBadRecievedSegmentsBeforeDisconnect;
 	static unsigned secondsBetweenWorkingDirectoryUpdated;
+	static unsigned maxSegmentChunkSize;
 
 	static bool parseConstants( std::string &filePayload){
 		try{
@@ -33,6 +34,7 @@ public:
 			std::cout << " Loading configuration failed: "<<ex.what() << std::endl;
 			return false;
 		}
+		return true;
 	}
 private:
 	template<typename T>

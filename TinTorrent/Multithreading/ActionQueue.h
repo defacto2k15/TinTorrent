@@ -32,7 +32,8 @@ public:
 	}
 
 	void performAction( T& consumer){
-		pop()(consumer);
+		std::function<void(T&)> a = pop();
+		a(consumer);
 	}
 
 	void startThread(){
@@ -44,10 +45,10 @@ public:
 	}
 
 private:
-	T pop() {
+	std::function<void(T&)> pop() {
 		std::unique_lock<std::mutex> lock(this->mutex);
 		this->notEmptyActionQueue.wait(lock, [=]{ return !this->actionQueue.empty(); });
-		T rc(std::move(this->actionQueue.back()));
+		auto rc(std::move(this->actionQueue.back()));
 		this->actionQueue.pop_back();
 		return rc;
 	}

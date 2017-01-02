@@ -44,11 +44,21 @@ private:
 		ss << onlyElem;
 	}
 
+	template< typename T1, typename T2>
+	static void addToStream( std::stringstream &ss, std::pair<T1, T2> &pair, identity<std::pair<T1, T2>> ){
+		ss << "<";
+		addToStream(ss, pair.first, identity<T1>());
+		ss << " , ";
+		addToStream(ss, pair.second, identity<T2>());
+		ss << " >";
+
+	}
+
 public:
 	template<typename T>
 	static std::stringstream writeVecContents( std::vector<T> vec){
 		std::stringstream ss;
-		for(int i = 0; i < vec.size(); i++ ){
+		for(auto i = 0u; i < vec.size(); i++ ){
 			ss <<"["<<i<<"] : " << vec[i] << std::endl;
 		}
 		return ss;

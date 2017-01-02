@@ -23,3 +23,8 @@ bool SegmentInfo::operator==(const SegmentInfo &rhs) const {
 bool SegmentInfo::operator!=(const SegmentInfo &rhs) const {
 	return !(rhs == *this);
 }
+
+std::ostream &operator<<(std::ostream &os, const SegmentInfo &info) {
+	os << "segmentIndex: " << info.segmentIndex << " payloadLength: " << info.payloadLength;
+	return os;
+}

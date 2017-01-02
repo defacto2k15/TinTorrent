@@ -9,11 +9,11 @@ UpdateInfo::UpdateInfo(const std::vector<FileInfo> &newFiles, const std::vector<
 
 }
 
-const std::vector<FileInfo> &UpdateInfo::getNewFiles() const {
+std::vector<FileInfo> UpdateInfo::getNewFiles() {
 	return newFiles;
 }
 
-const std::vector<FileInfo> &UpdateInfo::getDeletedFiles() const {
+std::vector<FileInfo> UpdateInfo::getDeletedFiles() {
 	return deletedFiles;
 }
 

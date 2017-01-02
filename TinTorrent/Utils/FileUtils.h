@@ -73,7 +73,7 @@ public:
 		std::ofstream ofs(path.c_str(),  std::ios::out | std::ios::binary);
 		Assertions::check( !(!ofs), Help::Str("Opening of file with path ",path," failed."));
 
-		for (int i = 0; i < size; ++i)
+		for (auto i = 0u; i < size; ++i)
 		{
 			char zero = 0;
 			ofs.write(&zero, sizeof(char));
