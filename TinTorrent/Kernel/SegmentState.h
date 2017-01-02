@@ -1,0 +1,10 @@
+//
+// Created by defacto on 01.01.17.
+//
+
+#ifndef TINTORRENT_SEGMENTSTATE_H
+#define TINTORRENT_SEGMENTSTATE_H
+enum SegmentState{
+	MISSING, PRESENT, BEING_DOWNLOADED
+};
+#endif //TINTORRENT_SEGMENTSTATE_H

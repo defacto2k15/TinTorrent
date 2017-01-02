@@ -7,6 +7,7 @@
 
 
 #include <netinet/in.h>
+#include <ModelEntities/TinAddress.h>
 #include "Messages/MessageResourceResponse.h"
 #include "Messages/MessageResourceRequest.h"
 #include "Messages/MessageStartSendingRequest.h"
@@ -46,6 +47,11 @@ public:
 		SegmentResponse::writeSegmentResponseToBuffer( segmentInfo, payload, buffer);
 		sendBuffer();
 	}
+
+	TinAddress getClientAddress(){
+		return TinAddress(clientAddress);
+	}
+
 };
 
 

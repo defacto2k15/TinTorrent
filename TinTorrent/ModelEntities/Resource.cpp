@@ -14,3 +14,8 @@ const std::wstring &Resource::getResourceName() const {
 size_t Resource::getResourceSize() const {
 	return resourceSize;
 }
+
+std::ostream &operator<<(std::ostream &os, const Resource &resource) {
+	os << resource.toJson().dump();
+	return os;
+}

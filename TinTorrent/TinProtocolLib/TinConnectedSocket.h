@@ -95,7 +95,7 @@ private:
 		Buffer bufferToDeserialize = buffer.getBufferWithOffset(serializedMessageSizeOffset);
 		std::string jsonString((const char*) (buffer.getData()+serializedMessageSizeOffset));
 		Assertions::check([&jsonString, this](){ return jsonString.length() < buffer.getSize();}, //todo change to equal
-		                  "MessageResourceRequest deserialization. InString bigger than buffer");
+		                  "Message deserialization. InString bigger than buffer");
 		// todo throw other exception - something like Model logic exception
 		json j = json::parse(jsonString);
 		return j;

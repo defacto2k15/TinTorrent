@@ -13,6 +13,7 @@
 #include <fstream>
 #include <memory>
 #include <Utils/BitUtils.h>
+#include <ostream>
 #include "Common/Constants.h"
 
 class FileSegmentsInfo {
@@ -58,6 +59,8 @@ public:
 	void setSegmentPresence( size_t segmentIndex, bool newValue ){
 		segmentPresence[segmentIndex] = newValue;
 	}
+
+	friend std::ostream &operator<<(std::ostream &os, const FileSegmentsInfo &info);
 };
 
 

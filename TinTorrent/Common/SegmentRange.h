@@ -13,6 +13,8 @@ class SegmentRange {
 	unsigned max;
 public:
 	SegmentRange(unsigned int min, unsigned int max);
+	SegmentRange() : min(0), max(0){
+	}
 
 	unsigned int getMin() const;
 
@@ -24,9 +26,15 @@ public:
 		return segmentIndex >= min && segmentIndex < max;
 	}
 
+	bool empty(){
+		return min == max;
+	}
+
 	bool operator==(const SegmentRange &rhs) const;
 
 	bool operator!=(const SegmentRange &rhs) const;
+
+
 };
 
 

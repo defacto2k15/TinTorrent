@@ -8,6 +8,7 @@
 
 #include <TinProtocolLib/Segment.h>
 #include <Utils/MyString.h>
+#include <ostream>
 #include "SegmentRange.h"
 
 class SegmentsSet {
@@ -23,6 +24,11 @@ public:
 	Segment getSegment(unsigned segmentIndex){
 		assertIndexInRange(segmentIndex);
 		return segments[ segmentIndex - range.getMin()];
+	}
+
+	friend std::ostream &operator<<(std::ostream &os, const SegmentsSet &set) {
+		os << "range: " << set.range << " segments: " << Help::writeVecContents(set.segments).str();
+		return os;
 	}
 
 private:

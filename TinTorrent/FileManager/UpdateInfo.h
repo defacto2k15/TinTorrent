@@ -7,6 +7,7 @@
 
 
 #include <FileManager/ModelEntities/FileInfo.h>
+#include <ostream>
 
 class UpdateInfo {
 	std::vector<FileInfo> newFiles;
@@ -17,6 +18,12 @@ public:
 	const std::vector<FileInfo> &getNewFiles() const;
 
 	const std::vector<FileInfo> &getDeletedFiles() const;
+
+	friend std::ostream &operator<<(std::ostream &os, const UpdateInfo &info);
+
+	bool empty(){
+		return newFiles.empty() && deletedFiles.empty();
+	}
 };
 
 

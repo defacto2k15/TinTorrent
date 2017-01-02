@@ -27,3 +27,8 @@ bool FileInfo::operator!=(const FileInfo &rhs) const {
 	return !(rhs == *this);
 }
 
+std::ostream &operator<<(std::ostream &os, const FileInfo &info) {
+	os << "resource: " << info.resource << " fileSegmentsInfo: " << info.fileSegmentsInfo;
+	return os;
+}
+

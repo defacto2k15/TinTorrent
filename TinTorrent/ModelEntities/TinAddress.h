@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <string>
 #include <netinet/in.h>
+#include <ostream>
 #include "../Assertions/Assertions.h"
 
 class TinAddress {
@@ -20,8 +21,18 @@ public:
 		sockaddr.sin_port = htons(portNumber);
 	}
 
+	TinAddress( sockaddr_in sockaddr) : sockaddr(sockaddr){
+
+	}
+
 	sockaddr_in getSockaddr(){
 		return sockaddr;
+	}
+
+	friend std::ostream &operator<<(std::ostream &os, const TinAddress &address) {
+		char str[INET_ADDRSTRLEN];
+		inet_ntop(AF_INET, &(sockaddr.sin_addr), str, INET_ADDRSTRLEN);
+		os << "sockaddr: " << str;
 	}
 };
 

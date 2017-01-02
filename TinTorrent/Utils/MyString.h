@@ -7,6 +7,8 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
+#include <iostream>
 
 class Help {
 	template<typename T>
@@ -42,6 +44,15 @@ private:
 		ss << onlyElem;
 	}
 
+public:
+	template<typename T>
+	static std::stringstream writeVecContents( std::vector<T> vec){
+		std::stringstream ss;
+		for(int i = 0; i < vec.size(); i++ ){
+			ss <<"["<<i<<"] : " << vec[i] << std::endl;
+		}
+		return ss;
+	}
 
 };
 

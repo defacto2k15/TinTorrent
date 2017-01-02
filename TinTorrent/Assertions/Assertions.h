@@ -21,6 +21,10 @@ public:
 		}
 	}
 
+	static void fail(std::string errMessage ){
+		check(false, errMessage);
+	}
+
     class AssertionException : public std::runtime_error{
     public:
         AssertionException(std::string message ) : std::runtime_error(message){

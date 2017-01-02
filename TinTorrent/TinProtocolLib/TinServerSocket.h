@@ -20,9 +20,7 @@
 class TinServerSocket : public SocketWrapper{
 private:
     uint16_t portNumber;
-//    const ConfigurationProvider configurationProvider;
     // TODO configurationProvider
-    // TODO zwalnianie gniazda przy wyjatkach... (::check)
 	// TODO add state of serverSocket Inited, Listening itd
 public:
     TinServerSocket(uint16_t portNumber) : portNumber(portNumber) {}
@@ -44,13 +42,13 @@ public:
 		Assertions::check( [listenResult](){ return listenResult == 0; }, "Listen method failed");
 	}
 
-	TinConnectedServerSocket listenForConnections(){
+	std::shared_ptr<TinConnectedServerSocket> listenForConnections(){
 		struct sockaddr_in client;
 		socklen_t socklen = sizeof(struct sockaddr_in);
 		socket_descriptor_t associatedDescriptor
 				= accept( socketDescriptor, (struct sockaddr *)&client,  &socklen);
 		Assertions::check([associatedDescriptor]() { return associatedDescriptor != -1;}, "Funkcja accept nie powiadla sie");
-		return TinConnectedServerSocket(associatedDescriptor, client);
+		return std::make_shared<TinConnectedServerSocket>(associatedDescriptor, client);
 	}
 };
 

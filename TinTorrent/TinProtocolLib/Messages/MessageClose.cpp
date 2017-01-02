@@ -5,6 +5,10 @@
 #include "MessageClose.h"
 
 MessageClose::CloseReason MessageClose::CloseReason::OK("Ok");
+MessageClose::CloseReason MessageClose::CloseReason::JSON_DESERIALIZATION("JsonDeserialization");
+MessageClose::CloseReason MessageClose::CloseReason::WRONG_SEGMENT("WrongSegment");
+MessageClose::CloseReason MessageClose::CloseReason::RESOURCE_REVERTED("ResourceReverted");
+MessageClose::CloseReason MessageClose::CloseReason::RESOURCE_MISSING("ResourceMissing");
 
 MessageClose::CloseReason::CloseReason(const std::string &value) : MessageEnum(value) {}
 

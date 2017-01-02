@@ -28,6 +28,11 @@ public:
 	}
 
 	template<typename T>
+	static bool Contains( std::vector<T> &inVec, T &elem ){
+		return std::find_if( begin(inVec), end(inVec), [&elem](T &other){ return elem == other;}) != end(inVec);
+	}
+
+	template<typename T>
 	static std::vector<T> getDifference( std::vector<T> &firstVec, std::vector<T> &secondVec, std::function<bool(T&, T&)> checkingFunc){
 		std::vector<T> outVec;
 		std::copy_if(begin(firstVec), end(firstVec), std::back_inserter(outVec),
@@ -37,6 +42,11 @@ public:
 			             });
 		             });
 		return outVec;
+	}
+
+	template< typename T>
+	static void remove( std::vector<T> &vec, T &elemToRemove){
+		vec.erase(std::remove(vec.begin(), vec.end(), elemToRemove), vec.end());
 	}
 };
 

@@ -17,6 +17,10 @@ public:
     public:
         CloseReason();;
         static CloseReason OK;
+        static CloseReason JSON_DESERIALIZATION;
+        static CloseReason WRONG_SEGMENT;
+        static CloseReason RESOURCE_REVERTED;
+        static CloseReason RESOURCE_MISSING;
 
         bool operator==( const CloseReason& other)const{
             return MessageEnum::operator==(other);
@@ -42,6 +46,10 @@ public:
 
     static MessageType getMessageType(){
         return MessageType::CLOSE;
+    }
+
+    CloseReason getReason(){
+        return  reason;
     }
 };
 

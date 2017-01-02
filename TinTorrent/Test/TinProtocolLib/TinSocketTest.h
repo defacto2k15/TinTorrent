@@ -13,6 +13,9 @@
 #include "../../TinProtocolLib/MessageCloseException.h"
 #include <thread>
 #include <future>
+#include <Test/ThreadInTest.h>
+
+static bool testWasInitialized = false;
 
 class TinSocketTest : public ::testing::Test {
 public:
@@ -21,7 +24,10 @@ public:
 	uint16_t portNumber;
 
 	TinSocketTest() : ::testing::Test(){
-		srand (time(NULL));
+		if( !testWasInitialized ){
+			srand (time(NULL));
+			testWasInitialized = true;
+		}
 	}
 
 	virtual void SetUp() {
@@ -60,35 +66,7 @@ public:
 	}
 
 };
-template<typename T>
-class ThreadInTest{
-	std::function<T()> funcToRun;
-	std::shared_ptr<std::thread> testThread;
-public:
-	ThreadInTest(std::function<T()> funcToRun ) : funcToRun(funcToRun){
-	}
 
-	std::future<T> run(){
-		std::promise< T> testPromise;
-		auto testFuture = testPromise.get_future();
-		testThread = std::make_shared<std::thread>(std::bind([ this](std::promise<T> &testPromise){
-			try {
-				testPromise.set_value( funcToRun());
-			} catch( Assertions::AssertionException &e){
-				ExHelp::writeException(e, "serverThread");
-				testPromise.set_exception(std::current_exception());
-			} catch( ...){
-				std::cerr<<" Unexpected exception caught " << std::endl;
-				testPromise.set_exception(std::current_exception());
-			}
-		}, std::move(testPromise)));
-		return testFuture;
-	}
-
-	~ThreadInTest(){
-		testThread->join();
-	}
-};
 
 
 TEST_F(TinSocketTest, SocketsCanGetConnected) {

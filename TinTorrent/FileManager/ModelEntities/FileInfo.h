@@ -6,6 +6,7 @@
 #define TINTORRENT_FILEINFO_H
 
 
+#include <ostream>
 #include "../../ModelEntities/Resource.h"
 #include "FileSegmentsInfo.h"
 
@@ -24,6 +25,8 @@ public:
 	bool operator==(const FileInfo &rhs) const;
 
 	bool operator!=(const FileInfo &rhs) const;
+
+	friend std::ostream &operator<<(std::ostream &os, const FileInfo &info);
 };
 
 

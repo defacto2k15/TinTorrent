@@ -14,7 +14,7 @@
 //todo check if it works
 class StringHelp {
 public:
-	static std::string toUtf8(std::wstring utf16 ){
+	static std::string toUtf8( const std::wstring utf16 ){
 		std::string outString;
 		utf8::utf16to8(utf16.begin(), utf16.end(), std::back_inserter(outString));
 		return outString;

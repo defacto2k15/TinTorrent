@@ -7,6 +7,7 @@
 
 #include <string>
 #include <Common/Constants.h>
+#include <ostream>
 #include "json.hpp"
 #include "../Common/StringHelp.h"
 
@@ -23,7 +24,7 @@ public:
 
 	size_t getResourceSize() const;
 
-	size_t getSegmentCount() {
+	size_t getSegmentCount() const{
 		return (size_t) ceil( double(resourceSize) / double(Constants::segmentSize));
 	}
 
@@ -32,7 +33,7 @@ public:
 	           resourceSize == other.resourceSize;
 	}
 
-	json toJson(){
+	json toJson() const{
 		json j;
 		j["Name"] = StringHelp::toUtf8(resourceName);
 		j["Size"] = resourceSize;
@@ -43,6 +44,8 @@ public:
 		resourceName = StringHelp::toUtf16(j["Name"]);
 		resourceSize = j["Size"];
 	}
+
+	friend std::ostream &operator<<(std::ostream &os, const Resource &resource);
 };
 
 
