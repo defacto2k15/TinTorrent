@@ -17,6 +17,8 @@ class KernelTest : public ::testing::Test{
 TEST_F( KernelTest, KernelInit){
 	Kernel kernel;
 	kernel.startApp( StringHelp::toUtf8(std::wstring(TEST_WORKING_DIRECTORY)), "");
+	kernel.join();
+	int x = 24;
 }
 
 

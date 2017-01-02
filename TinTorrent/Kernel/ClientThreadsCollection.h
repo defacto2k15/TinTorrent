@@ -17,6 +17,16 @@ public:
 		clientThreads[address]->add( []( TinClientThread &t){
 			t.genericCloseConnection();
 		});
+
+	}
+
+	void removeThread (TinAddress &address){
+		clientThreads[address]->add( []( TinClientThread &t){
+			t.genericCloseConnection();
+		});
+		clientThreads[address]->add( []( TinClientThread &t){
+			t.killYourself();
+		});
 		clientThreads.erase(address);
 	}
 

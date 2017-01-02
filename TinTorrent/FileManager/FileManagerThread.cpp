@@ -6,7 +6,7 @@
 #include <Kernel/Kernel.h>
 
 FileManagerThread::FileManagerThread(Kernel &kernel, std::string workingDirectory)
-		: ActionQueue(this), kernel(kernel), fileManager(workingDirectory){
+		: ActionQueue(this),  fileManager(workingDirectory), kernel(kernel){
 }
 
 std::vector<FileInfo> FileManagerThread::initialCheck() {

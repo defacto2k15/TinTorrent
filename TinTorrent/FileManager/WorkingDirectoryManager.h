@@ -62,7 +62,7 @@ class WorkingDirectoryManager {
 
 		void renameFileToProperResourceName(){
 			std::string newFullPath = Help::Str(fullPath, ".", size);
-			std::cout << Help::Str("Renaming file to proper resource name. From: ",fullPath, " to ", newFullPath) << std::endl;
+			std::cout << Help::Str("WorkingDirectoryManager: Renaming file to proper resource name. From: ",fullPath, " to ", newFullPath) << std::endl;
 			FileUtils::renameFile(fullPath, newFullPath);
 			fullPath = newFullPath;
 			name = Help::Str(name, ".", size);
@@ -103,28 +103,28 @@ public:
 		std::vector< std::pair<File, File> > outVec;
 		for( auto &file : files ){
 			if( !file.isMetadata()){
-				std::cout << Help::Str("We see ",file.name," as resource file") << std::endl;
+				std::cout << Help::Str("WorkingDirectoryManager: We see ",file.name," as resource file") << std::endl;
 				std::string metadataName = file.getMetadataName();
 				std::experimental::optional<File> metadataFile
 						= ContainerUtils::GetElem<File>(files, [metadataName](File &file){ return file.name == metadataName;} );
 				if(metadataFile){
 					outVec.push_back(std::make_pair(file, metadataFile.value()));
-					std::cout << Help::Str("Found ", metadataFile->name," as metadata file") << std::endl;
+					std::cout << Help::Str("WorkingDirectoryManager: Found ", metadataFile->name," as metadata file") << std::endl;
 				} else {
 					File mf = createMetadataFile(file);
 					outVec.push_back(std::make_pair(file, mf));
-					std::cout << Help::Str("Created metadata file") << std::endl;
+					std::cout << Help::Str("WorkingDirectoryManager: Created metadata file") << std::endl;
 				}
 			} else {
-				std::cout << Help::Str("We see ",file.name," as metadata file") << std::endl;
+				std::cout << Help::Str("WorkingDirectoryManager:: We see ",file.name," as metadata file") << std::endl;
 				std::string resourceFileName = file.getResourceName();
 				std::experimental::optional<File> resourceFile
 						= ContainerUtils::GetElem<File>(files,[resourceFileName](File &file){ return file.name == resourceFileName;});
 				if( resourceFile ){
-					std::cout << Help::Str("There is resource file for it") << std::endl;
+					std::cout << Help::Str("WorkingDirectoryManager: There is resource file for it") << std::endl;
 					//do nothing, is ok
 				} else {
-					std::cout << Help::Str("There is no resource file for it, removing metadata") << std::endl;
+					std::cout << Help::Str("WorkingDirectoryManager: There is no resource file for it, removing metadata") << std::endl;
 					removeFile( file);
 				}
 			}
@@ -174,13 +174,13 @@ private:
 		Assertions::check(dir != NULL, Help::Str("Working directory of'",workingDirectory,"' cannot be opened"));
 		std::vector<File> outVec;
 		while( (ent = readdir(dir)) != NULL){
-			std::cout << Help::Str("Found file of name ", ent->d_name, " type ", ent->d_type) << std::endl;
+			std::cout << Help::Str("WorkingDirectoryManager: Found file of name ", ent->d_name, " type ", ent->d_type) << std::endl;
 			if( ent ->d_type == DT_REG ){
 				std::string fullPath = workingDirectory+"/"+ent->d_name;
 				struct stat st;
 				stat(fullPath.c_str(), &st);
 				outVec.push_back(File(ent->d_name, fullPath, st.st_size));
-				std::cout << Help::Str("It is regular file, can process, size is ",st.st_size) << std::endl;
+				std::cout << Help::Str("WorkingDirectoryManager: It is regular file, can process, size is ",st.st_size) << std::endl;
 			}
 		}
 		closedir(dir);

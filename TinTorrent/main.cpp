@@ -1,6 +1,11 @@
 #include <iostream>
+#include <Kernel/Kernel.h>
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+int main(int argc, const char **argv) {
+	if( argc != 2 ){
+		std::cout << "Arguments: [workingDirecory]" <<std::endl;
+	}
+	Kernel kernel;
+	kernel.startApp(std::string(argv[1]), std::string());
+	kernel.join();
 }

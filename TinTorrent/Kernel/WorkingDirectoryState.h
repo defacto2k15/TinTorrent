@@ -28,8 +28,7 @@ public:
 		}
 	}
 
-
-	bool isDownloaded(Resource &resource) {
+	bool isDownloaded( const Resource &resource) {
 		for( auto &state : resources[resource]){
 			if(!(state == SegmentState::PRESENT)){
 				return false;
@@ -100,6 +99,16 @@ public:
 			segmentStateVec[i] =  SegmentState::PRESENT;
 		}
 		resources[resource] = segmentStateVec;
+	}
+
+	std::vector<Resource> getDownloadedResources(){
+		std::vector<Resource> outVec;
+		for( auto &pair : resources){
+			if( isDownloaded(pair.first)){
+				outVec.push_back(pair.first);
+			}
+		}
+		return outVec;
 	}
 };
 

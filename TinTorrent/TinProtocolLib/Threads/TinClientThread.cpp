@@ -100,6 +100,7 @@ SegmentRange TinClientThread::getRequestedSegments() const {
 void TinClientThread::genericCloseConnection() {
 	try{
 		connectedSocket->closeConnection(MessageClose::CloseReason::OK);
+
 	} catch (...){
 		// swallowing exception
 	}

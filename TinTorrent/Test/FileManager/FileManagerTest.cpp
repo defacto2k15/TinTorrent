@@ -66,14 +66,14 @@ public:
 
 	void setBufferContentToIndex( Buffer &buffer ){
 		buffer.setSize(buffer.getMaxSize());
-		for( int i = 0; i < buffer.getSize(); i++){
+		for( auto i = 0u; i < buffer.getSize(); i++){
 			*(buffer.getData()+i) = (uint8_t)i;
 		}
 	}
 
 	void setBufferToConstant( Buffer &buffer, uint8_t value ){
 		buffer.setSize(buffer.getMaxSize());
-		for( int i = 0; i < buffer.getSize(); i++){
+		for( auto i = 0u; i < buffer.getSize(); i++){
 			*(buffer.getData()+i) = value;
 		}
 	}

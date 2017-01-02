@@ -11,6 +11,7 @@
 #include <condition_variable>
 #include <deque>
 #include <thread>
+#include <iostream>
 
 template<typename T>
 class ActionQueue {
@@ -19,6 +20,7 @@ class ActionQueue {
 	std::condition_variable notEmptyActionQueue;
 	std::thread workingThread;
 	T *castedThis;
+	bool threadShouldRun = true;
 protected:
 	ActionQueue( T* castedThis ) : castedThis(castedThis){
 	}
@@ -37,11 +39,35 @@ public:
 	}
 
 	void startThread(){
+		threadShouldRun = true;
 		workingThread = std::thread([this](){
-			while(true){ //todo create some thread closing
-				performAction(*castedThis);
+			try {
+				while (threadShouldRun) { //todo create some thread closing
+					performAction(*castedThis);
+				}
+			} catch( std::exception e){
+				std::cout << "ActionQueue caught exception " << e.what() << std::endl;
 			}
+			std::cout << "ActionQueue terminates thread " << std::endl;
 		});
+	}
+
+	void join(){
+		workingThread.join();
+	}
+
+	void killYourself(){
+		std::cout << "ActionQueue: got kill yourself request" << std::endl;
+		threadShouldRun = false;
+	}
+
+	virtual ~ActionQueue(){
+		std::cout <<"ActionQueue: Destructor called " << std::endl;
+		if(threadShouldRun){
+			std::cout <<"ActionQueue: threadShouldRun is still true. Should have told me to kill myself. Ending myself " << std::endl;
+		}
+		killYourself();
+		join();
 	}
 
 private:

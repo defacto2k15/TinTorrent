@@ -23,6 +23,8 @@ public:
 	static unsigned maxBadRecievedSegmentsBeforeDisconnect;
 	static unsigned secondsBetweenWorkingDirectoryUpdated;
 	static unsigned maxSegmentChunkSize;
+	static unsigned secondsBetweenBroadcasts;
+	static unsigned secondsBetweenStartingDownloads;
 
 	static bool parseConstants( std::string &filePayload){
 		try{

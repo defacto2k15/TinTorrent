@@ -22,6 +22,9 @@ public:
 		threads[threadId]->add( [](TinConnectedServerThread &c ){
 			c.genericClose();
 		});
+		threads[threadId]->add( [](TinConnectedServerThread &c ){
+			c.killYourself();
+		});
 		threads.erase(threadId);
 	}
 

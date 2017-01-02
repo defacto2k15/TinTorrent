@@ -35,6 +35,9 @@ class Kernel : public ActionQueue<Kernel> {
 
 	std::vector<Resource> resourcesToDownload;
 	std::vector<Resource> revertedResources;
+
+	std::thread broadcastingThread;
+	std::thread downloadStartingThread;
 public:
 	Kernel() : ActionQueue(this){
 	}
@@ -54,6 +57,7 @@ public:
 
 		/// start of initialization
 		std::cout << "Kernel: initialize working directory" << std::endl;
+		fileManagerThread = std::make_unique<FileManagerThread>(*this, workingDirectory);
 		auto initialState = fileManagerThread->initialCheck();
 		workingDirectoryState.init(initialState );
 		fileManagerThread->startThread();
@@ -72,7 +76,8 @@ public:
 		/// start listener of udp
 		std::cout << "Kernel: init threadTinBroadcast " <<std::endl;
 		threadTinBroadcast->add( [](ThreadTinBroadcast & b){ b.init();});
-		/// start listener of files
+		///  start thread
+		this->startThread();
 	}
 // INIT 1.5 /////////////////////////////////
 	void broadcastThreadStartOk(){
@@ -110,8 +115,22 @@ public:
 
 	void applicationInit2(){
 		std::cout << "Kernel: Told threads to listen for conenctions" <<std::endl;
-		threadUdpListening->listenForBroadcasts();
-		serverSocketThread->listenForConnections();
+		threadUdpListening->add( []( ThreadTinUdpListeningSocket &t){  t.listenForBroadcasts();} );
+		serverSocketThread->add( [] (TinServerSocketThread &t){ t.listenForConnections(); } );
+		broadcastingThread = std::thread( [this](){
+			while(true){ //todo stop method
+				this->add([](Kernel &k) {k.broadcastResources();});
+				std::this_thread::sleep_for(std::chrono::seconds(Constants::secondsBetweenBroadcasts));
+			}
+		});
+		downloadStartingThread = std::thread ([this](){
+			while(true){
+				this->add( [](Kernel &k){
+					k.tryToDownloadResources();
+				});
+				std::this_thread::sleep_for(std::chrono::seconds(Constants::secondsBetweenStartingDownloads));
+			}
+		});
 	}
 
 /// STORY : TinClientThread recieved broadcast //////////////////////////
@@ -258,6 +277,21 @@ public:
 		serverThreads.closeThread(threadId);
 	}
 
+/// broadcasting
+	void broadcastResources(){
+		auto downloadedResources = workingDirectoryState.getDownloadedResources();
+		if( !downloadedResources.empty()){
+			threadTinBroadcast->add( [this, downloadedResources]( ThreadTinBroadcast &b ){
+				b.sendAnnounceMessage(downloadedResources);
+			});
+		}
+		if( !revertedResources.empty()){
+			threadTinBroadcast->add( [this] ( ThreadTinBroadcast &b){
+				b.sendRevertMessage(revertedResources);
+			});
+		}
+	}
+
 /// FileProblems
 
 	void resourceMissing( Resource resource ){
@@ -266,6 +300,8 @@ public:
 		clientThreads.closeThoseWorkingWith(resource);
 		serverThreads.closeThoseWorkingWith(resource);
 		ContainerUtils::remove( resourcesToDownload, resource);
+		//todo this is temporary
+		ContainerUtils::remove( revertedResources, resource);
 	}
 
 	void workingDirectoryChanged( UpdateInfo updateInfo){
@@ -342,7 +378,7 @@ private:
 		tinNetworkState.removeClient(address);
 		std::shared_ptr<TinClientThread> clientThread = clientThreads.get(address);
 		workingDirectoryState.deallocateSegmentRange( clientThread->getRequestedResource(), clientThread->getRequestedSegments() );
-		clientThreads.clearThread(address);
+		clientThreads.removeThread(address);
 	}
 
 	void killApplication(){
