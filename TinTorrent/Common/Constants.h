@@ -25,7 +25,7 @@ public:
 	static unsigned maxSegmentChunkSize;
 	static unsigned secondsBetweenBroadcasts;
 	static unsigned secondsBetweenStartingDownloads;
-	static bool advancedLoggingToggled
+	static bool advancedLoggingActive;
 
 	static bool parseConstants( std::string &filePayload){
 		try{
@@ -45,7 +45,7 @@ public:
 			maxSegmentChunkSize = getElement<unsigned >(j, "maxSegmentChunkSize", maxSegmentChunkSize);
 			secondsBetweenBroadcasts = getElement<unsigned >(j, "secondsBetweenBroadcasts", secondsBetweenBroadcasts);
 			secondsBetweenStartingDownloads = getElement<unsigned >(j, "secondsBetweenStartingDownloads", secondsBetweenStartingDownloads);
-			advancedLoggingToggled = getElement<bool >(j, "advancedLoggingToggled", advancedLoggingToggled);
+			advancedLoggingActive = getElement<bool >(j, "advancedLoggingActive", advancedLoggingActive);
 		} catch( std::exception &ex){
 			std::cout << " Loading configuration failed: "<<ex.what() << std::endl;
 			return false;
