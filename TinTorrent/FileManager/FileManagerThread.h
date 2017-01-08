@@ -8,11 +8,13 @@
 
 #include <Multithreading/ActionQueue.h>
 #include <Multithreading/ActionThread.h>
+#include <Logging/LogBase.h>
 #include "WorkingDirectoryManager.h"
 #include "FileManager.h"
 class Kernel;
 
-class FileManagerThread : public ActionQueue<FileManagerThread> {
+class FileManagerThread : public ActionQueue<FileManagerThread>{
+	LogBase log;
 	FileManager fileManager;
 	Kernel &kernel;
 	std::unique_ptr<ActionThread> scheduledCheckThread;
@@ -33,16 +35,9 @@ public:
 
 	void removeResource( Resource resource );
 
-	virtual void internalKillYourself() override {
-		std::cout << "FileManagerThread. Dying. killing scheduledCheckThread " << std::endl;
-		scheduledCheckThread->killYourself();
+	virtual void internalKillYourself() override;
 
-	}
-
-	virtual void internalJoin() override {
-		std::cout << "FileManagerThread. Joining scheduledCheckThread " << std::endl;
-		scheduledCheckThread->join();
-	}
+	virtual void internalJoin() override;
 };
 
 

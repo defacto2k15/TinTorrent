@@ -25,6 +25,7 @@ public:
 	static unsigned maxSegmentChunkSize;
 	static unsigned secondsBetweenBroadcasts;
 	static unsigned secondsBetweenStartingDownloads;
+	static bool advancedLoggingActive;
 
 	static bool parseConstants( std::string &filePayload){
 		try{

@@ -6,16 +6,16 @@
 #include <Kernel/Kernel.h>
 
 FileManagerThread::FileManagerThread(Kernel &kernel, std::string workingDirectory)
-		: ActionQueue(this),  fileManager(workingDirectory), kernel(kernel){
+		: ActionQueue(this), log("FileManagerThread"),  fileManager(workingDirectory), kernel(kernel){
 }
 
 std::vector<FileInfo> FileManagerThread::initialCheck() {
-	std::cout<<"FileManagerThread: initialCheck "<<std::endl;
+	log.debug(" initialCheck ");
 	return fileManager.initialCheck();
 }
 
 void FileManagerThread::startScheduledCheckings(unsigned timeBetweenChecks) {
-	std::cout<<"FileManagerThread: startScheduledCheckings "<<std::endl;
+	log.debug(" startScheduledCheckings ");
 	scheduledCheckThread = std::make_unique<ActionThread>( [timeBetweenChecks, this](){
 			add( [this]( FileManagerThread &th){ th.checkChanges();});
 		}, timeBetweenChecks);
@@ -27,9 +27,9 @@ void FileManagerThread::createEmptyResource(Resource resource) {
 }
 
 void FileManagerThread::checkChanges() {
-	std::cout<<"FileManagerThread: checkChanges "<<std::endl;
+	log.debug(" checkChanges ");
 	UpdateInfo update = fileManager.update();
-	std::cout<<"FileManagerThread: updateInfo " << update <<std::endl;
+	log.debug(" updateInfo ", update );
 	if(!update.empty() ){
 		kernel.add([update]( Kernel &k ){
 			k.workingDirectoryChanged(update);
@@ -38,30 +38,41 @@ void FileManagerThread::checkChanges() {
 }
 
 void FileManagerThread::requestSegments(int threadId, Resource &resource, SegmentInfo segmentInfo) {
-	std::cout<<Help::Str("FileManagerThread: requestSegments threadId: ",threadId," resource ",resource, " segment info ",segmentInfo) <<std::endl;
+	log.debug(" requestSegments threadId: ",threadId," resource ",resource, " segment info ",segmentInfo) ;
 	try{
 		auto segmentIndex = segmentInfo.getSegmentIndex();
 		SegmentsSet resultSet = fileManager.getSegments(resource,  SegmentRange(segmentIndex,segmentIndex+1 ));
-		std::cout<<Help::Str("FileManagerThread: segment was present") << std::endl;
+		log.debug(" segment was present");
 		kernel.add( [resultSet, threadId]( Kernel &k){
 			k.requestedSegmentProvided( threadId, resultSet);
 		});
 	} catch( MissingRequiredFile ex ){
-		std::cout<<Help::Str("FileManagerThread: segment was missing") << std::endl;
+		log.warn(" segment was missing");
 		kernel.add( [threadId, resource]( Kernel &k){ k.requestedResourceMissing(threadId, resource);});
 	}
 }
 
 void FileManagerThread::setSegments(Resource &resource, SegmentsSet segmentsSet) {
-	std::cout<<Help::Str("FileManagerThread: setSegments  resource: ",resource, " segmentsSet ",segmentsSet) <<std::endl;
+	log.debug(" setSegments  resource: ",resource, " segmentsSet ",segmentsSet) ;
 	try{
 		fileManager.setSegments(resource, segmentsSet);
 	} catch (MissingRequiredFile ex ){
-		std::cout<<Help::Str("FileManagerThread: segment was missing") << std::endl;
+		log.warn(" segment was missing");
 		kernel.add( [ resource]( Kernel &k){ k.resourceMissing( resource);});
 	}
 }
 
 void FileManagerThread::removeResource(Resource resource) {
 	fileManager.removeResource(resource);
+}
+
+void FileManagerThread::internalKillYourself() {
+	log.debug(" Dying. killing scheduledCheckThread ");
+	scheduledCheckThread->killYourself();
+
+}
+
+void FileManagerThread::internalJoin() {
+	log.debug(" Joining scheduledCheckThread ");
+	scheduledCheckThread->join();
 }

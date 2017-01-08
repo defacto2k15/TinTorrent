@@ -5,39 +5,45 @@
 #include "ThreadTinBroadcast.h"
 #include "Kernel/Kernel.h"
 
-ThreadTinBroadcast::ThreadTinBroadcast(TinAddress broadcastAddress, Kernel &kernel) : ActionQueue(this),
+ThreadTinBroadcast::ThreadTinBroadcast(TinAddress broadcastAddress, Kernel &kernel) : ActionQueue(this), log("BroadcastThread"),
                                                                                       broadcastSocket(broadcastAddress), kernel(kernel){
 
 }
 
 void ThreadTinBroadcast::init() {
-	std::cout << "BroadcastingThread init start " << std::endl;
+	log.debug("init start");
 	try{
 		broadcastSocket.initSocket();
-		std::cout << " BroadcastingThread init OK " << std::endl;
+		log.debug("init OK");
 		kernel.add( [](Kernel &k){ k.broadcastThreadStartOk();});
 	} catch( std::exception &e){
-		std::cout << Help::Str("BroadcastingThread. Init failed. Exception ", e.what()) << std::endl;
+		log.warn("Init failed Exception ", e.what());
 		kernel.add( [](Kernel &k){ k.broadcastThreadStartFailure();});
 	}
 }
 
 void ThreadTinBroadcast::sendAnnounceMessage(std::vector<Resource> resources) {
-	std::cout << "BroadcastingThread: sendAnnounceMessage with " << Help::writeVecContents(resources).str() << std::endl;
+	log.debug("sendAnnounceMessage with ", Help::writeVecContents(resources).str());
 	try{
 		broadcastSocket.sendAnnounceMessage(resources);
-		std::cout << "BroadcastingThread: sendAnnounceMessage ok"<< std::endl;
+		log.debug("sendAnnounceMessage ok" );
 	}catch ( std::exception &e){
-		std::cout << "BroadcastingThread: sendAnnounceMessage failed"<< std::endl;
+		log.warn("sendAnnounceMessage failed. Exception ",e.what());
 	}
 }
 
 void ThreadTinBroadcast::sendRevertMessage(std::vector<Resource> resources) {
-	std::cout << "BroadcastingThread: sendRevertMessage with " << Help::writeVecContents(resources).str() << std::endl;
+	log.debug("sendRevertMessage with ",  Help::writeVecContents(resources).str());
+
 	try{
 		broadcastSocket.sendRevertMessage(resources);
-		std::cout << "BroadcastingThread: sendRevertMessage ok"<< std::endl;
+		log.debug("sendRevertMessage ok");
 	}catch ( std::exception &e){
-		std::cout << "BroadcastingThread: sendRevertMessage failed"<< std::endl;
+		log.warn("sendRevertMessage failed. Exception is ",e.what());
 	}
+}
+
+void ThreadTinBroadcast::internalKillYourself() {
+	log.debug("got internalKillYourself. Telling broadcastSocket to shut down");
+	broadcastSocket.shutdownSocket();
 }

@@ -4,36 +4,42 @@
 #include <Kernel/Kernel.h>
 #include "ThreadTinUdpListeningSocket.h"
 
-ThreadTinUdpListeningSocket::ThreadTinUdpListeningSocket(Kernel &kernel) : ActionQueue(this), kernel(kernel){
+ThreadTinUdpListeningSocket::ThreadTinUdpListeningSocket(Kernel &kernel) 
+		: ActionQueue(this), log("TinUdpListeningSocket"), kernel(kernel){
 }
 
 void ThreadTinUdpListeningSocket::init() {
 	try{
-		std::cout << "TinUdpListeningSocket init start "<< std::endl;
+		log.debug(" init start ");
 		udpSocket.initSocket();
-		std::cout << "TinUdpListeningSocket init OK"<< std::endl;
+		log.debug(" init OK");
 		kernel.add([](Kernel &k){ k.udpListeningSocketInitOk();});
 	} catch( std::exception &e){
-		std::cout << Help::Str("TinUdpListeningSocket init failure ", e.what())<< std::endl;
+		log.debug(" init failure ", e.what());
 		kernel.add([](Kernel &k){ k.udpListeningSocketInitFailure();});
 	}
 }
 
 void ThreadTinUdpListeningSocket::listenForBroadcasts() {
-	std::cout << "TinUdpListeningSocket. Starting listening for broadcasts "<< std::endl;
+	log.debug(". Starting listening for broadcasts ");
 	while(true){
 		try{
 			auto pair = udpSocket.listenForMessages();
-			std::cout << Help::Str("TinUdpListeningSocket. Got broadcastMessage ", pair ) <<std::endl;
+			log.debug(" Got broadcastMessage ", pair ) ;
 			kernel.add( [pair](Kernel &k){ k.recievedBroadcast(pair);});
 		} catch(SocketCommunicationException &ex){
-			std::cout << Help::Str("TinUdpListeningSocket. Listening failed. Got SCE", ex.what()) << std::endl;
+			log.warn(" Listening failed. Got SCE", ex.what()) ;
 			if( !threadShouldRun){
-				std::cout <<"TinUdpListeningSocket: thread should stop, I am stopping loop" << std::endl;
+				log.info(" thread should stop, I am stopping loop" );
 				break;
 			}
 		} catch(std::exception &e ){
-			std::cout << Help::Str("TinUdpListeningSocket. Listening failed ", e.what()) << std::endl;
+			log.warn(" Listening failed ", e.what()) ;
 		}
 	}
+}
+
+void ThreadTinUdpListeningSocket::internalKillYourself() {
+	log.debug(" Got internal kill yourself message. Shutdown of socket");
+	udpSocket.shutdownSocket();
 }

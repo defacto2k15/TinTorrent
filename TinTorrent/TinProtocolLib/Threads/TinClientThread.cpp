@@ -5,23 +5,24 @@
 #include "TinClientThread.h"
 #include <Kernel/Kernel.h>
 
-TinClientThread::TinClientThread(TinAddress &addressToConnect, Kernel &kernel) : ActionQueue(this), clientSocket(addressToConnect),
-                                                                                 addressToConnect(addressToConnect), kernel(kernel){
+TinClientThread::TinClientThread(TinAddress &addressToConnect, Kernel &kernel) : ActionQueue(this), 
+                                                                                 log(Help::Str("TinClientThread of ",addressToConnect)), 
+                                                 clientSocket(addressToConnect), addressToConnect(addressToConnect), kernel(kernel){
 }
 
 void TinClientThread::startDownloadingProcess(Resource resource, SegmentRange segmentsToDownload) {
-	std::cout << Help::Str("TinClientThread of ", addressToConnect," connect() ") << std::endl;
+	log.debug(" connect() ");
 	try {
 		clientSocket.initSocket();
-		std::cout << Help::Str("TinClientThread of ", addressToConnect," done init") << std::endl;
+		log.debug(" done init");
 		connectedSocket = std::make_unique<TinConnectedClientSocket>(clientSocket.connect());
-		std::cout << Help::Str("TinClientThread of ", addressToConnect," done connect") << std::endl;
+		log.debug(" done connect");
 		isConnectionOpen = true;
 		requestedResource = resource;
 		requestedSegments = segmentsToDownload;
 		sendResourceRequest( );
 	} catch (std::exception &e ){
-		std::cout << Help::Str("TinClientThread of ", addressToConnect," connecting failure: ",e.what()) << std::endl;
+		log.debug(" connecting failure: ",e.what());
 		kernel.add([this](Kernel &k){ k.connectingToClientFailed(addressToConnect);});
 		isConnectionOpen = false;
 		return;
@@ -30,11 +31,11 @@ void TinClientThread::startDownloadingProcess(Resource resource, SegmentRange se
 
 void TinClientThread::sendResourceRequest() {
 	handleException([this](){
-		std::cout << Help::Str("TinClientThread of ", addressToConnect," sending resource request: ", requestedResource.toJson().dump()) << std::endl;
+		log.debug(" sending resource request: ", requestedResource.toJson().dump());
 		connectedSocket->sendResourceRequest(requestedResource);
-		std::cout << Help::Str("TinClientThread of ", addressToConnect," listening for response") << std::endl;
+		log.debug(" listening for response");
 		MessageResourceResponse::ResourceResponseValue responseValue = connectedSocket->listenForResourceResponse();
-		std::cout << Help::Str("TinClientThread of ", addressToConnect," got response ",responseValue.getValue()) << std::endl;
+		log.debug(" got response ",responseValue.getValue());
 		if( responseValue.getValue() != MessageResourceResponse::ResourceResponseValue::OK.getValue()){
 			kernel.add([responseValue, this](Kernel &k){
 				k.gotBadResourceResponse(addressToConnect, responseValue);
@@ -48,26 +49,26 @@ void TinClientThread::sendResourceRequest() {
 void TinClientThread::recieveSegments(SegmentRange segmentRange, MessageStartSendingRequest::PreviousStatus prevStatus) {
 	requestedSegments = segmentRange;
 	handleException([segmentRange, this, prevStatus](){
-		std::cout << Help::Str("TinClientThread of ", addressToConnect," start recieving segments:  ", segmentRange ) << std::endl;
+		log.debug(" start recieving segments:  ", segmentRange );
 
 		std::vector<Segment> outSegmentsVec;
 		unsigned badRecievedSegmentsCount = 0;
 		for(unsigned segmentIndex = segmentRange.getMin(); segmentIndex < segmentRange.getMax(); segmentIndex++){
 			SegmentInfo requestedInfo((uint16_t)segmentIndex, SegmentUtils::SegmentSize(requestedResource.getResourceSize(), (uint16_t )segmentIndex));
 			connectedSocket->sendStartSendingRequest(requestedInfo, prevStatus);
-			std::cout << Help::Str("TinClientThread of ", addressToConnect," sent segment: ", segmentRange," waiting for response" ) << std::endl;
+			log.debug(" sent segment: ", segmentRange," waiting for response" );
 			SegmentResponse *segmentResponse = connectedSocket->listenForSegmentResponse();
-			std::cout << Help::Str("TinClientThread of ", addressToConnect," got response. Info: ",
-			                       segmentResponse->getSegmentInfo().toJson().dump() ) << std::endl;
+			log.debug(" got response. Info: ",
+			                       segmentResponse->getSegmentInfo().toJson().dump() );
 
 			auto recievedSegmentInfo = segmentResponse->getSegmentInfo();
 			if( recievedSegmentInfo != requestedInfo ){
 				badRecievedSegmentsCount++;
-				std::cout << Help::Str("TinClientThread of ", addressToConnect," response segment info was not equal to expected: ",
-				                       requestedInfo.toJson().dump(), " It is done for ",badRecievedSegmentsCount," time" ) << std::endl;
+				log.debug(" response segment info was not equal to expected: ",
+				                       requestedInfo.toJson().dump(), " It is done for ",badRecievedSegmentsCount," time" );
 				if( badRecievedSegmentsCount > Constants::maxBadRecievedSegmentsBeforeDisconnect ){
 					kernel.add([this](Kernel &k){ k.clientCommunicationFailure(addressToConnect);});
-					std::cout << Help::Str("TinClientThread of ", addressToConnect," Closing connection") << std::endl;
+					log.debug(" Closing connection");
 					connectedSocket->closeConnection( MessageClose::CloseReason::WRONG_SEGMENT);
 					break;
 				}
@@ -85,7 +86,7 @@ void TinClientThread::recieveSegments(SegmentRange segmentRange, MessageStartSen
 }
 
 void TinClientThread::closeConnection(MessageClose::CloseReason closeReason) {
-	std::cout << Help::Str("TinClientThread ",addressToConnect," closing connection with reason ", closeReason.getValue() ) << std::endl;
+	log.debug(" closing connection with reason ", closeReason.getValue() );
 	handleException([closeReason, this](){
 		connectedSocket->closeConnection(closeReason);
 	});
@@ -113,11 +114,11 @@ void TinClientThread::handleException(std::function<void()> func) { //ugly code 
 	try{
 		func();
 	} catch( MessageCloseException &closeException){
-		std::cout << Help::Str("TinClientThread ",addressToConnect," recieved close message ", closeException.getMessageClose().toJson().dump()) << std::endl;
+		log.debug(" recieved close message ", closeException.getMessageClose().toJson().dump());
 		MessageClose::CloseReason reason = closeException.getMessageClose().getReason();
 		kernel.add([this, reason](Kernel &k){ k.clientCommunicationClosed(addressToConnect, reason);});
 	} catch( std::exception &e){
-		std::cout << Help::Str("TinClientThread ",addressToConnect," listening resource request failed: ", e.what()) << std::endl;
+		log.debug(" listening resource request failed: ", e.what());
 		kernel.add([this](Kernel &k){ k.clientCommunicationFailure(addressToConnect);});
 		connectedSocket->closeConnection( MessageClose::CloseReason::JSON_DESERIALIZATION);
 		isConnectionOpen = false;

@@ -12,6 +12,7 @@
 class Kernel;
 
 class TinServerSocketThread : public ActionQueue<TinServerSocketThread>{
+	LogBase log;
 	TinServerSocket serverSocket;
 	Kernel &kernel;
 public:
@@ -21,10 +22,7 @@ public:
 
 	void listenForConnections();
 
-	void internalKillYourself() override{
-		std::cout << "ServerSocketThread. Got message internalKillYourself" <<  std::endl;
-		serverSocket.shutdownSocket();
-	}
+	void internalKillYourself() override;
 };
 
 

@@ -18,3 +18,4 @@ unsigned Constants::secondsBetweenWorkingDirectoryUpdated = 30;
 unsigned Constants::maxSegmentChunkSize = 2;
 unsigned Constants::secondsBetweenBroadcasts = 60;
 unsigned Constants::secondsBetweenStartingDownloads = 30;
+bool Constants::advancedLoggingActive = false;

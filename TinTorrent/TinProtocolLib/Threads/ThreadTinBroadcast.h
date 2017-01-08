@@ -8,10 +8,12 @@
 
 #include <TinProtocolLib/TinBroadcastSocket.h>
 #include <Multithreading/ActionQueue.h>
+#include <Logging/LogBase.h>
 
 class Kernel;
 
 class ThreadTinBroadcast : public ActionQueue<ThreadTinBroadcast>{
+	LogBase log;
 	TinBroadcastSocket broadcastSocket;
 	Kernel &kernel;
 public:
@@ -23,10 +25,7 @@ public:
 
 	void sendRevertMessage( std::vector<Resource> resources );
 
-	virtual  void internalKillYourself() override {
-		std::cout << "BroadcastingThread: got internalKillYourself. Telling broadcastSocket to shut down"<< std::endl;
-		broadcastSocket.shutdownSocket();
-	}
+	virtual  void internalKillYourself() override;
 
 };
 

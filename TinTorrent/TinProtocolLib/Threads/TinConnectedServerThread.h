@@ -13,6 +13,7 @@ class Kernel;
 #include <Common/SegmentsSet.h>
 
 class TinConnectedServerThread : public ActionQueue<TinConnectedServerThread> {
+	LogBase log;
 	Kernel &kernel;
 	std::shared_ptr<TinConnectedServerSocket> connectedServerSocket;
 	int threadId;
@@ -38,20 +39,11 @@ public:
 
 	Resource getRequestedResource();
 
-	TinAddress getConnectedAddress(){
-		return connectedServerSocket->getClientAddress();
-	}
+	TinAddress getConnectedAddress();
 
-	virtual void internalKillYourself(){
-		std::cout << "ConnectedServerThread. Got message internalKillYourself" <<  std::endl;
-		if( connectedServerSocket ){
-			connectedServerSocket->shutdownSocket();
-		}
-	}
+	virtual void internalKillYourself();
 
-	bool getIsConnectionOpen(){
-		return isConnectionOpen;
-	}
+	bool getIsConnectionOpen();
 private:
 	void handleException( std::function<void()> func );
 };

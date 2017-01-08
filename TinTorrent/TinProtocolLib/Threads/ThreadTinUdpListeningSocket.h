@@ -10,6 +10,7 @@
 class Kernel;
 
 class ThreadTinUdpListeningSocket : public ActionQueue<ThreadTinUdpListeningSocket>{
+	LogBase log;
 	TinListeningUdpSocket udpSocket;
 	Kernel &kernel;
 public:
@@ -19,10 +20,7 @@ public:
 
 	void listenForBroadcasts();
 
-	void internalKillYourself() override {
-		std::cout <<"TinUdpListeningSocket: Got internal kill yourself message. Shutdown of socket" << std::endl;
-		udpSocket.shutdownSocket();
-	}
+	void internalKillYourself() override;
 };
 
 

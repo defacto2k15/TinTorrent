@@ -5,40 +5,46 @@
 #include "TinServerSocketThread.h"
 #include <Kernel/Kernel.h>
 
-TinServerSocketThread::TinServerSocketThread(Kernel &kernel) : ActionQueue(this), serverSocket( Constants::communicationPort), kernel(kernel){
+TinServerSocketThread::TinServerSocketThread(Kernel &kernel) : 
+		ActionQueue(this), log("ServerSocketThread"), serverSocket( Constants::communicationPort), kernel(kernel){
 }
 
 void TinServerSocketThread::init() {
-	std::cout << "ServerSocketThread: init started " <<std::endl;
+	log.debug("init started ");
 	try{
 		serverSocket.initSocket();
-		std::cout << "ServerSocketThread: init OK" <<std::endl;
+		log.debug("init OK");
 		kernel.add([](Kernel &k){ k.serverSocketInitOK();});
 	} catch( std::exception &e){
-		std::cout << Help::Str("ServerSocketThread: init FAILED ", e.what());
+		log.debug("init FAILED ", e.what());
 		kernel.add([](Kernel &k){ k.serverSocketInitFailed();});
 	}
 }
 
 void TinServerSocketThread::listenForConnections() {
-	std::cout << "ServerSocketThread: listening for connections "<<std::endl;
+	log.debug("listening for connections ");
 	while(true) {
 		try{
 			try {
 				auto connectedSocket = serverSocket.listenForConnections();
-				std::cout << Help::Str("ServerSocketThread: got connection from ", connectedSocket->getClientAddress())
-				          << std::endl;
+				log.debug("got connection from ", connectedSocket->getClientAddress());
+				        
 				kernel.add([connectedSocket](Kernel &k) { k.recievedConnection(connectedSocket); });
 			} catch( SocketCommunicationException &ex ) {
 				if (!threadShouldRun) {
-					std::cout << "ServerSocketThread: Got SCE but thread is exiting " << std::endl;
+					log.warn("Got SCE but thread is exiting ");
 					break;
 				} else {
 					throw ex;
 				}
 			}
 		} catch (std::exception &e) {
-			std::cout << Help::Str("ServerSocketThread: listening for connections failed ", e.what()) << std::endl;
+			log.warn("listening for connections failed ", e.what());
 		}
 	}
+}
+
+void TinServerSocketThread::internalKillYourself() {
+	log.debug(" Got message internalKillYourself");
+	serverSocket.shutdownSocket();
 }

@@ -12,18 +12,20 @@
 #include <deque>
 #include <thread>
 #include <iostream>
+#include <Logging/LogBase.h>
 
 #define UNUSED(x) (void)(x)
 
 template<typename T>
-class ActionQueue {
+class ActionQueue  {
+	LogBase log;
 	std::deque<std::function<void(T& )> > actionQueue;
 	std::mutex mutex;
 	std::condition_variable notEmptyActionQueue;
 	T *castedThis;
 	std::thread workingThread;
 protected:
-	ActionQueue( T* castedThis ) : castedThis(castedThis){
+	ActionQueue( T* castedThis ) : log("ActionQueue"), castedThis(castedThis){
 	}
 
 	bool threadShouldRun = true;
@@ -54,9 +56,9 @@ public:
 					performAction(*castedThis);
 				}
 			} catch( std::exception e){
-				std::cout << "ActionQueue caught exception " << e.what() << std::endl;
+				log.warn( " caught exception " , e.what() );
 			}
-			std::cout << "ActionQueue terminates thread " << std::endl;
+			log.debug(" terminates thread " );
 		});
 	}
 
@@ -68,7 +70,7 @@ public:
 	}
 
 	void killYourself(){
-		std::cout << "ActionQueue: got kill yourself request" << std::endl;
+		log.debug(" got kill yourself request");
 		threadShouldRun = false;
 		clearQueue();
 		internalKillYourself();
@@ -77,9 +79,9 @@ public:
 	}
 
 	virtual ~ActionQueue(){
-		std::cout <<"ActionQueue: Destructor called " << std::endl;
+		log.debug(" Destructor called ");
 		if(threadShouldRun){
-			std::cout <<"ActionQueue: threadShouldRun is still true. Should have told me to kill myself. Ending myself " << std::endl;
+			log.debug(" threadShouldRun is still true. Should have told me to kill myself. Ending myself ");
 		}
 		killYourself();
 		join();

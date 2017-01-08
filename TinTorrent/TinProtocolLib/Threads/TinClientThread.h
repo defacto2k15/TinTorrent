@@ -13,6 +13,7 @@
 class Kernel;
 
 class TinClientThread : public ActionQueue<TinClientThread>{
+	LogBase log;
 	TinClientSocket clientSocket;
 	TinAddress addressToConnect;
 	Kernel &kernel;
