@@ -25,14 +25,27 @@ public:
 	static unsigned maxSegmentChunkSize;
 	static unsigned secondsBetweenBroadcasts;
 	static unsigned secondsBetweenStartingDownloads;
-	static bool advancedLoggingActive;
+	static bool advancedLoggingToggled
 
 	static bool parseConstants( std::string &filePayload){
 		try{
 			json j(filePayload);
 
 			metadataFileSuffix = getElement<std::string>(j, "metadataFileSuffix", metadataFileSuffix);
-			// todo rest of settings
+			segmentSize = getElement<uint16_t  >(j, "segmentSize", segmentSize);
+			metadataFileReadingBlockSize = getElement<size_t  >(j, "metadataFileReadingBlockSize", metadataFileReadingBlockSize);
+			metadataNameRegexp  = getElement<std::string >(j, "metadataNameRegexp ", metadataNameRegexp );
+			resourceNameRegexp = getElement<std::string >(j, "resourceNameRegexp", resourceNameRegexp);
+			maxBroadcastMessageSize = getElement<size_t >(j, "maxBroadcastMessageSize", maxBroadcastMessageSize);
+			broadcastPort = getElement<uint16_t  >(j, "broadcastPort", broadcastPort);
+			broadcastingAddress = getElement<std::string >(j, "broadcastingAddress", broadcastingAddress);
+			communicationPort = getElement<uint16_t >(j, "communicationPort", communicationPort);
+			maxBadRecievedSegmentsBeforeDisconnect = getElement<unsigned >(j, "maxBadRecievedSegmentsBeforeDisconnect", maxBadRecievedSegmentsBeforeDisconnect);
+			secondsBetweenWorkingDirectoryUpdated = getElement<unsigned >(j, "secondsBetweenWorkingDirectoryUpdated", secondsBetweenWorkingDirectoryUpdated);
+			maxSegmentChunkSize = getElement<unsigned >(j, "maxSegmentChunkSize", maxSegmentChunkSize);
+			secondsBetweenBroadcasts = getElement<unsigned >(j, "secondsBetweenBroadcasts", secondsBetweenBroadcasts);
+			secondsBetweenStartingDownloads = getElement<unsigned >(j, "secondsBetweenStartingDownloads", secondsBetweenStartingDownloads);
+			advancedLoggingToggled = getElement<bool >(j, "advancedLoggingToggled", advancedLoggingToggled);
 		} catch( std::exception &ex){
 			std::cout << " Loading configuration failed: "<<ex.what() << std::endl;
 			return false;
