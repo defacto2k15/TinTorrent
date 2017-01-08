@@ -19,10 +19,13 @@ public:
 
 	void runOneLoop(){
 		std::unique_lock<std::mutex> lk(mutex);
+		funcToRunInLoop();
 		bool wasTimeouted = !waitingConditionVariable.wait_for(lk, std::chrono::operator""s(secondsBetweenLoops),
 		                                                       [this]{return !threadShouldRun;});
 		if( wasTimeouted ){
-			start();
+			add( [](ActionThread &t ){
+				t.runOneLoop();
+			});
 		}
 	}
 

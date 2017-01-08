@@ -56,7 +56,8 @@ public:
 					performAction(*castedThis);
 				}
 			} catch( std::exception e){
-				log.warn( " caught exception " , e.what() );
+				std::string descr = e.what();
+				log.warn( " caught exception " , descr );
 			}
 			log.debug(" terminates thread " );
 		});
