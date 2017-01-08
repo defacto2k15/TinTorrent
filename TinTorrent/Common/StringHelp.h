@@ -52,6 +52,11 @@ public:
 		}
 	}
 
+	static std::string removeSuffixAfter( std::string value, std::string suffixStart ){
+		size_t lastindex = value.find_last_of(suffixStart);
+		return value.substr(0, lastindex);
+	}
+
 };
 
 

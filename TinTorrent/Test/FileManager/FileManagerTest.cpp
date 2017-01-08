@@ -30,8 +30,8 @@ TEST_F(FileMangerTest, InitialFilesWithFullMetadataAndSegments){
 	auto result = manager.initialCheck();
 
 	ASSERT_EQ( result.size(), 2u );
-	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file1.txt.9000", 9000), FileSegmentsInfo( { true, true, true} ) ) ));
-	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file2.txt.7000", 7000), FileSegmentsInfo( { true, true} ) ) ));
+	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file1.txt", 9000), FileSegmentsInfo( { true, true, true} ) ) ));
+	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file2.txt", 7000), FileSegmentsInfo( { true, true} ) ) ));
 }
 
 TEST_F(FileMangerTest, InitialFilesWithFullMetadataAndNotAllSegments){
@@ -44,8 +44,8 @@ TEST_F(FileMangerTest, InitialFilesWithFullMetadataAndNotAllSegments){
 	auto result = manager.initialCheck();
 
 	ASSERT_EQ( result.size(), 2u );
-	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file1.txt.9000", 9000), FileSegmentsInfo( { true, false, true} ) ) ));
-	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file2.txt.7000", 7000), FileSegmentsInfo( { false, true} ) ) ));
+	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file1.txt", 9000), FileSegmentsInfo( { true, false, true} ) ) ));
+	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file2.txt", 7000), FileSegmentsInfo( { false, true} ) ) ));
 }
 
 TEST_F(FileMangerTest, InitialFilesWithoutMetadataHaveSegmentsSetAsFull){
@@ -56,8 +56,8 @@ TEST_F(FileMangerTest, InitialFilesWithoutMetadataHaveSegmentsSetAsFull){
 	auto result = manager.initialCheck();
 
 	ASSERT_EQ( result.size(), 2u );
-	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file1.txt.9000", 9000), FileSegmentsInfo( { true, true, true} ) ) ));
-	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file2.txt.7000", 7000), FileSegmentsInfo( { true, true} ) ) ));
+	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file1.txt", 9000), FileSegmentsInfo( { true, true, true} ) ) ));
+	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file2.txt", 7000), FileSegmentsInfo( { true, true} ) ) ));
 	ASSERT_TRUE( fileExists(L"file1.txt.9000.metadata"));
 	ASSERT_TRUE( fileExists(L"file2.txt.7000.metadata"));
 }
@@ -79,7 +79,7 @@ TEST_F(FileMangerTest, ResourceWithoutSizeInNameIsGivenSize){
 
 	FileManager manager(workingDirectory);
 	auto result = manager.initialCheck();
-	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file1.txt.9000", 9000), FileSegmentsInfo( { true, true, true} ) ) ));
+	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file1.txt", 9000), FileSegmentsInfo( { true, true, true} ) ) ));
 
 	ASSERT_TRUE( fileExists(L"file1.txt.9000.metadata"));
 	ASSERT_FALSE( fileExists(L"file1.txt"));
@@ -94,7 +94,7 @@ TEST_F(FileMangerTest, TwoBytesSegmentDataWorks){
 	FileManager manager(workingDirectory);
 
 	auto result = manager.initialCheck();
-	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file1.txt.40960", 40960), FileSegmentsInfo( segmentPresence ) )));
+	ASSERT_THAT( result, ::testing::Contains(   FileInfo( Resource(L"file1.txt", 40960), FileSegmentsInfo( segmentPresence ) )));
 }
 
 TEST_F(FileMangerTest, UpdateSeesNewFileCreated){
@@ -108,7 +108,7 @@ TEST_F(FileMangerTest, UpdateSeesNewFileCreated){
 	auto updateInfo = manager.update();
 
 	ASSERT_THAT( updateInfo.getNewFiles(), ::testing::Contains(
-		FileInfo( Resource(L"file3.txt.10000", 10000), FileSegmentsInfo( { false, true, false} ) ) )
+		FileInfo( Resource(L"file3.txt", 10000), FileSegmentsInfo( { false, true, false} ) ) )
 	);
 }
 
@@ -122,7 +122,7 @@ TEST_F(FileMangerTest, UpdateSeesFileRemoved){
 	auto updateInfo = manager.update();
 
 	ASSERT_THAT( updateInfo.getDeletedFiles(), ::testing::Contains(
-			FileInfo( Resource(L"file1.txt.9000", 9000), FileSegmentsInfo( { true, true, true} ) ) )
+			FileInfo( Resource(L"file1.txt", 9000), FileSegmentsInfo( { true, true, true} ) ) )
 	);
 }
 
@@ -136,7 +136,7 @@ TEST_F(FileMangerTest, AskingForSegmentWorks){
 	FileManager manager(workingDirectory);
 	manager.initialCheck();
 
-	SegmentsSet outSet = manager.getSegments( Resource(L"file1.txt.9000", 9000), SegmentRange(0, 3));
+	SegmentsSet outSet = manager.getSegments( Resource(L"file1.txt", 9000), SegmentRange(0, 3));
 
 	ASSERT_EQ( outSet.getRange(), SegmentRange(0,3));
 	ASSERT_EQ( outSet.getSegment(0).getPayload(), fileContents.getSubset(0, Constants::segmentSize) );
@@ -162,7 +162,7 @@ TEST_F(FileMangerTest, SavingSegmentWorks){
 
 	FileManager manager(workingDirectory);
 	manager.initialCheck();
-	manager.setSegments( Resource(L"file1.txt.9000", 9000),
+	manager.setSegments( Resource(L"file1.txt", 9000),
 	                     SegmentsSet(SegmentRange(1,3),
 	                                 {Segment(segment1, SegmentInfo(1, Constants::segmentSize)),
 	                                  Segment(segment2, SegmentInfo(2, uint16_t( 9000u - Constants::segmentSize*2) ))}));
@@ -184,7 +184,7 @@ TEST_F(FileMangerTest, FileRemovalIsWorking){
 
 	ASSERT_TRUE(fileExists(L"file1.txt.9000"));
 	ASSERT_TRUE(fileExists(L"file1.txt.9000.metadata"));
-	Resource resource(L"file1.txt.9000", 9000);
+	Resource resource(L"file1.txt", 9000);
 	manager.removeResource( resource );
 
 	ASSERT_FALSE(fileExists(L"file1.txt.9000"));
@@ -201,7 +201,7 @@ TEST_F(FileMangerTest, FileCreationIsWorking){
 	ASSERT_FALSE(fileExists(L"file3.txt.11000"));
 	ASSERT_FALSE(fileExists(L"file3.txt.11000.metadata"));
 
-	Resource resource(L"file3.txt.11000", 11000);
+	Resource resource(L"file3.txt", 11000);
 	manager.createEmptyResource( resource );
 
 	ASSERT_TRUE(fileExists(L"file3.txt.11000"));

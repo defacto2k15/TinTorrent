@@ -84,6 +84,11 @@ class WorkingDirectoryManager {
 			return size == (size_t)sizeInName;
 		}
 
+		std::string getResourceNameWithoutSizeSuffix(){
+			//Assertions::check( hasProperFileSuffix(), Help::Str("File of name ", name, " dont have proper filesize suffix"));
+			return StringHelp::removeSuffixAfter( name, ".");
+		}
+
 		~File(){
 		}
 	private:
@@ -133,7 +138,8 @@ public:
 	}
 
 	SegmentsSet getSegments(Resource resource, SegmentRange range){
-		std::string fileName = Help::Str(workingDirectory, "/", StringHelp::toUtf8(resource.getResourceName()));
+		auto resourceFile = createFileFromResource(resource);
+		std::string fileName = resourceFile.fullPath;
 		std::vector<Segment> segmentsVec;
 		for( auto segmentIndex = range.getMin(); segmentIndex < range.getMax(); segmentIndex++){
 			auto buffer = std::make_shared<InMemoryBuffer>(Constants::segmentSize);
@@ -145,7 +151,8 @@ public:
 	}
 
 	void setSegments( Resource resource, SegmentsSet segmentsSet ){
-		std::string fileName = Help::Str(workingDirectory, "/", StringHelp::toUtf8(resource.getResourceName()));
+		auto resourceFile = createFileFromResource(resource);
+		std::string fileName = resourceFile.fullPath;
 		for( auto segmentIndex = segmentsSet.getRange().getMin(); segmentIndex < segmentsSet.getRange().getMax(); segmentIndex++){
 			Segment segment = segmentsSet.getSegment(segmentIndex);
 			FileUtils::writeContent(fileName, segment.getPayload(), segmentIndex*Constants::segmentSize);
@@ -209,7 +216,8 @@ private:
 	}
 
 	FileInfo createFileInfo( File &resourceFile, File &metadataFile ){
-		Resource resource( StringHelp::toUtf16(resourceFile.name), resourceFile.size);
+		std::string resourceNameWithoutSizeSuffix = resourceFile.getResourceNameWithoutSizeSuffix();
+		Resource resource( StringHelp::toUtf16(resourceNameWithoutSizeSuffix), resourceFile.size);
 		FileSegmentsInfo segmentsInfo( SegmentUtils::SegmentCount( resourceFile.size), metadataFile.fullPath);
 		return FileInfo(resource, segmentsInfo);
 	}
@@ -225,8 +233,8 @@ private:
 	}
 
 	File createFileFromResource(Resource &resource){
-		return File (StringHelp::toUtf8(resource.getResourceName()),
-		                  Help::Str(workingDirectory, "/", StringHelp::toUtf8(resource.getResourceName())), resource.getResourceSize());
+		auto filename = Help::Str( StringHelp::toUtf8(resource.getResourceName()),".", resource.getResourceSize());
+		return File (filename, Help::Str(workingDirectory, "/", filename), resource.getResourceSize());
 	}
 
 };
