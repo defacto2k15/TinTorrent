@@ -10,9 +10,7 @@
 #include <iostream>
 class ExHelp {
 public:
-	static void writeException( std::exception &e, std::string method){
-		std::cerr << "Exception Caught: "<<method<<": "<<e.what()<<std::endl;
-	}
+	static void writeException( std::exception &e, std::string method);
 };
 
 

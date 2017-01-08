@@ -19,3 +19,26 @@ std::ostream &operator<<(std::ostream &os, const Resource &resource) {
 	os << resource.toJson().dump();
 	return os;
 }
+
+Resource::Resource() : resourceName(L"UNSET"), resourceSize(0) {}
+
+size_t Resource::getSegmentCount() const {
+	return (size_t) ceil( double(resourceSize) / double(Constants::segmentSize));
+}
+
+bool Resource::operator==(const Resource &other) const {
+	return resourceName == other.resourceName &&
+	       resourceSize == other.resourceSize;
+}
+
+json Resource::toJson() const {
+	json j;
+	j["Name"] = StringHelp::toUtf8(resourceName);
+	j["Size"] = resourceSize;
+	return j;
+}
+
+void Resource::parseJson(json j) {
+	resourceName = StringHelp::toUtf16(j["Name"]);
+	resourceSize = j["Size"];
+}

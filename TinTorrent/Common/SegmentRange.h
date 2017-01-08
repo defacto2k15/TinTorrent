@@ -13,8 +13,7 @@ class SegmentRange {
 	unsigned max;
 public:
 	SegmentRange(unsigned int min, unsigned int max);
-	SegmentRange() : min(0), max(0){
-	}
+	SegmentRange();
 
 	unsigned int getMin() const;
 
@@ -22,13 +21,9 @@ public:
 
 	friend std::ostream &operator<<(std::ostream &os, const SegmentRange &range);
 
-	bool inRange(unsigned segmentIndex ) const{
-		return segmentIndex >= min && segmentIndex < max;
-	}
+	bool inRange(unsigned segmentIndex ) const;
 
-	bool empty(){
-		return min == max;
-	}
+	bool empty();
 
 	bool operator==(const SegmentRange &rhs) const;
 

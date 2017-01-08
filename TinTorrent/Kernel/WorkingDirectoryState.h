@@ -14,129 +14,32 @@
 class WorkingDirectoryState {
 	std::map<Resource, std::vector<SegmentState>, ResourceCompare > resources;
 public:
-	void init( std::vector<FileInfo> &initialFiles ){
-		for( FileInfo &file : initialFiles){
-			size_t segmentCount = file.getResource().getSegmentCount();
-			std::vector<SegmentState> segmentStateVec(segmentCount);
-			for( auto i = 0u; i < segmentCount; i++){
-				if( file.getFileSegmentsInfo().getSegmentPresence(i)){
-					segmentStateVec[i] =  SegmentState::PRESENT;
-				} else {
-					segmentStateVec[i] = SegmentState::MISSING;
-				}
-			}
-			resources[file.getResource()] = segmentStateVec;
-		}
-	}
+	void init( std::vector<FileInfo> &initialFiles );
 
-	bool isDownloaded( const Resource &resource) {
-		if( resources.count(resource) == 0 ){
-			return false;
-		}
-		for( auto &state : resources[resource]){
-			if(!(state == SegmentState::PRESENT)){
-				return false;
-			}
-		}
-		return true;
-	}
+	bool isDownloaded( const Resource &resource);
 
-	bool contains(Resource &resource) {
-		return resources.count(resource) != 0;
-	}
+	bool contains(Resource &resource);
 
-	void deallocateSegmentRange(Resource resource, SegmentRange range){
-		auto stateVec = resources[resource];
-		for( auto i = range.getMin(); i < range.getMax(); i++ ){
-			stateVec[i] = SegmentState ::MISSING;
-		}
-	}
+	void deallocateSegmentRange(Resource resource, SegmentRange range);
 
-	void removeResource(Resource resource) {
-		resources.erase(resource);
-	}
+	void removeResource(Resource resource);
 
-	void setSegmentsAsDownloaded(Resource resource, SegmentRange range) {
-		auto stateVec = resources[resource];
-		for( auto i = range.getMin(); i < range.getMax(); i++ ){
-			stateVec[i] = SegmentState::PRESENT;
-		}
-	}
+	void setSegmentsAsDownloaded(Resource resource, SegmentRange range);
 
-	SegmentRange allocateSegmentsToDownload(Resource resource) {
-		auto stateVec = resources[resource];
-		unsigned rangeMin = (unsigned)-1;
-		unsigned rangeMax = (unsigned)-1;
-		for( auto i = 0u; i < stateVec.size(); i++ ){
-			if( stateVec[i] == SegmentState::MISSING){
-				if( rangeMin == (unsigned)-1){
-					rangeMin = i;
-				} else 	if( i - rangeMin >= Constants::maxSegmentChunkSize){
-					rangeMax = i;
-					break;
+	SegmentRange allocateSegmentsToDownload(Resource resource);
 
-				} else {
-					continue;
-				}
-			} else{
-				if( rangeMin == (unsigned)-1){
-					rangeMax = i;
-				} else {
-					continue;
-				}
-			}
-		}
+	void addResource(Resource resource);
 
-		if( rangeMin == (unsigned)-1){
-			Assertions::fail("There is no segments left to download");
-		}
-		if( rangeMax == (unsigned)-1){
-			rangeMax = (unsigned )stateVec.size();
-		}
-		return SegmentRange(rangeMin, rangeMax);
-	}
+	void addEmptyResource(Resource resource);
 
-	void addResource(Resource resource) {
-		createResourceFilledWith(resource, SegmentState::PRESENT);
-	}
+	std::vector<Resource> getDownloadedResources();
 
-	void addEmptyResource(Resource resource) {
-		createResourceFilledWith(resource, SegmentState::MISSING);
-	}
-
-	std::vector<Resource> getDownloadedResources(){
-		std::vector<Resource> outVec;
-		for( auto &pair : resources){
-			if( isDownloaded(pair.first)){
-				outVec.push_back(pair.first);
-			}
-		}
-		return outVec;
-	}
-
-	std::vector<OutLocalResource> getOutLocalResource(){
-		std::vector<OutLocalResource> outVec;
-		for( auto &pair : resources ){
-			outVec.push_back( OutLocalResource( pair.first, calculatePresencePercent( pair.second)));
-		}
-		return outVec;
-	}
+	std::vector<OutLocalResource> getOutLocalResource();
 
 private:
-	uint8_t calculatePresencePercent( std::vector<SegmentState> &vec ){
-		auto presentSegmentsCount = std::count_if( begin(vec), end(vec), []( SegmentState &state ){ return state == SegmentState ::PRESENT;});
-		return (uint8_t )(( 100 * presentSegmentsCount) / vec.size());
-	}
+	uint8_t calculatePresencePercent( std::vector<SegmentState> &vec );
 
-	void createResourceFilledWith( Resource resource, SegmentState state ){
-		size_t segmentCount = resource.getSegmentCount();
-		Assertions::check( segmentCount > 0, "Problem: Calculated segment count is 0");
-		std::vector<SegmentState> segmentStateVec(segmentCount);
-		for( auto i = 0u; i < segmentCount; i++){
-			segmentStateVec[i] =  state;
-		}
-		resources[resource] = segmentStateVec;
-	}
+	void createResourceFilledWith( Resource resource, SegmentState state );
 };
 
 

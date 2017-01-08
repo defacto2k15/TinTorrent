@@ -3,3 +3,7 @@
 //
 
 #include "ExHelp.h"
+
+void ExHelp::writeException(std::exception &e, std::string method) {
+	std::cerr << "Exception Caught: "<<method<<": "<<e.what()<<std::endl;
+}

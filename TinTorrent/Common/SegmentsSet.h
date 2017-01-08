@@ -15,26 +15,16 @@ class SegmentsSet {
 	SegmentRange range;
 	std::vector<Segment> segments;
 public:
-	SegmentsSet(const SegmentRange &range, const std::vector<Segment> &segments) : range(range), segments(segments) {}
+	SegmentsSet(const SegmentRange &range, const std::vector<Segment> &segments);
 
-	SegmentRange  getRange(){
-		return range;
-	}
+	SegmentRange  getRange();
 
-	Segment getSegment(unsigned segmentIndex){
-		assertIndexInRange(segmentIndex);
-		return segments[ segmentIndex - range.getMin()];
-	}
+	Segment getSegment(unsigned segmentIndex);
 
-	friend std::ostream &operator<<(std::ostream &os, const SegmentsSet &set) {
-		os << "range: " << set.range << " segments: " << Help::writeVecContents(set.segments).str();
-		return os;
-	}
+	friend std::ostream &operator<<(std::ostream &os, const SegmentsSet &set);
 
 private:
-	void assertIndexInRange( unsigned segmentIndex){
-		Assertions::check(range.inRange(segmentIndex), Help::Str("There is no segment of index ", segmentIndex," in range", range));
-	}
+	void assertIndexInRange( unsigned segmentIndex);
 };
 
 

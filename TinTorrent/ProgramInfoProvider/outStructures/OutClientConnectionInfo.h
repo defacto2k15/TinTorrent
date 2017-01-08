@@ -14,21 +14,13 @@ class OutClientConnectionInfo {
 	TinAddress address;
 	std::experimental::optional<Resource> downloadedResource;
 public:
-	OutClientConnectionInfo( TinAddress address ): address(address){
+	OutClientConnectionInfo( TinAddress address );
 
-	}
+	OutClientConnectionInfo( TinAddress address, Resource resource );
 
-	OutClientConnectionInfo( TinAddress address, Resource resource ) : address(address),
-	                                                                     downloadedResource(std::experimental::make_optional(resource)){
-	}
+	bool isResourceBeingDownloaded();
 
-	bool isResourceBeingDownloaded(){
-		return (bool)downloadedResource;
-	}
-
-	Resource getResource(){
-		return downloadedResource.value();
-	}
+	Resource getResource();
 };
 
 

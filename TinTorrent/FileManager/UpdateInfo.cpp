@@ -21,3 +21,7 @@ std::ostream &operator<<(std::ostream &os, const UpdateInfo &info) {
 	os << "newFiles: " << Help::writeVecContents(info.newFiles).str() << " deletedFiles: " << Help::writeVecContents(info.deletedFiles).str();
 	return os;
 }
+
+bool UpdateInfo::empty() {
+	return newFiles.empty() && deletedFiles.empty();
+}

@@ -10,9 +10,7 @@
 
 class BitUtils {
 public:
-	static bool getNthBit( uint8_t value, int n){
-		return ((1 << n) & value) != 0;
-	}
+	static bool getNthBit( uint8_t value, int n);
 };
 
 

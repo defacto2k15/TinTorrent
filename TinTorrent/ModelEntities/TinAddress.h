@@ -13,28 +13,13 @@
 class TinAddress {
 	sockaddr_in sockaddr;
 public:
-	TinAddress(std::string ipAsString, uint16_t portNumber) {
-		// store this IP address in sa:
-		int conversionResult = inet_pton(AF_INET, ipAsString.c_str(), &(sockaddr.sin_addr));
-		Assertions::check([conversionResult](){return conversionResult==1;}, "Konwersja ip string -> ip num nie udala sie");
-		sockaddr.sin_family = AF_INET;
-		sockaddr.sin_port = htons(portNumber);
-	}
+	TinAddress(std::string ipAsString, uint16_t portNumber);
 
-	TinAddress( sockaddr_in sockaddr) : sockaddr(sockaddr){
+	TinAddress( sockaddr_in sockaddr);
 
-	}
+	sockaddr_in getSockaddr() const;
 
-	sockaddr_in getSockaddr() const{
-		return sockaddr;
-	}
-
-	friend std::ostream &operator<<(std::ostream &os, const TinAddress &address) {
-		char str[INET_ADDRSTRLEN];
-		inet_ntop(AF_INET, &(address.sockaddr.sin_addr), str, INET_ADDRSTRLEN);
-		os << "sockaddr: " << str;
-		return os;
-	}
+	friend std::ostream &operator<<(std::ostream &os, const TinAddress &address);
 
 	bool operator==(const TinAddress &rhs) const;
 
@@ -43,10 +28,7 @@ public:
 
 struct TinAddressCompare
 {
-	bool operator() (const TinAddress& lhs, const TinAddress& rhs) const
-	{
-		return lhs.getSockaddr().sin_addr.s_addr < rhs.getSockaddr().sin_addr.s_addr;
-	}
+	bool operator() (const TinAddress& lhs, const TinAddress& rhs) const;
 };
 
 #endif //TINTORRENT_TINADDRESS_H

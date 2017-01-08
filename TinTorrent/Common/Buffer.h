@@ -25,30 +25,15 @@ public:
 
 	void setSize( size_t newSize );
 
-	void setData( const uint8_t *inData, size_t size){
-		setSize(size);
-		memcpy(data, inData, size );
-	}
+	void setData( const uint8_t *inData, size_t size);
 
-	void setData( size_t  offset, const uint8_t *inData, size_t size){
-		setSize(size+offset);
-		memcpy(data+offset, inData, size );
-	}
+	void setData( size_t  offset, const uint8_t *inData, size_t size);
 
-	void setData( Buffer &other, size_t offset){
-		setSize( std::max( size, other.getSize()+offset));
-		memcpy(data+offset, other.getData(), other.getSize() );
-	}
+	void setData( Buffer &other, size_t offset);
 
-	Buffer getBufferWithOffset(size_t offset){
-		return Buffer(data+offset, maxSize-offset, size-offset);
-	}
+	Buffer getBufferWithOffset(size_t offset);
 
-	Buffer getSubset( size_t start, size_t end){
-		auto length = end - start;
-		Assertions::check(end <=size, "Error: end is bigger than size of buffer");
-		return Buffer( getData() + start, length, length);
-	}
+	Buffer getSubset( size_t start, size_t end);
 
 	bool operator==(const Buffer &rhs) const;
 

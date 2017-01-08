@@ -17,36 +17,13 @@ class BlockingElement{
 	bool unlockAfterActive = false;
 	std::shared_ptr<std::thread> unlockingThread;
 public:
-	void unlock(){
-		{
-			std::lock_guard<std::mutex> lk(m);
-			ready = true;
-		}
-		cv.notify_one();
-	}
+	void unlock();
 
-	void unlockAfter(unsigned int miliseconds ){
-		if( unlockAfterActive ){
-			throw std::logic_error("UnlockAfter was arleady caleld");
-		}
-		unlockAfterActive = true;
+	void unlockAfter(unsigned int miliseconds );
 
-		unlockingThread = std::make_shared<std::thread>( [this, miliseconds](){
-			std::this_thread::sleep_for(std::chrono::milliseconds(miliseconds));
-			unlock();
-		});
-	}
+	void waitForUnlock();
 
-	void waitForUnlock(){
-		std::unique_lock<std::mutex> lk(m);
-		cv.wait(lk, [this] { return ready; });
-	}
-
-	~BlockingElement(){
-		if( unlockingThread){
-			unlockingThread->join();
-		}
-	}
+	~BlockingElement();
 
 };
 

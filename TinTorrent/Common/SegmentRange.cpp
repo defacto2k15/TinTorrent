@@ -27,3 +27,14 @@ bool SegmentRange::operator==(const SegmentRange &rhs) const {
 bool SegmentRange::operator!=(const SegmentRange &rhs) const {
 	return !(rhs == *this);
 }
+
+SegmentRange::SegmentRange() : min(0), max(0){
+}
+
+bool SegmentRange::inRange(unsigned segmentIndex) const {
+	return segmentIndex >= min && segmentIndex < max;
+}
+
+bool SegmentRange::empty() {
+	return min == max;
+}

@@ -14,63 +14,19 @@ class ClientThreadsCollection {
 	std::map<TinAddress, std::shared_ptr<TinClientThread>, TinAddressCompare> clientThreads;
 public:
 
-	void clearThread(TinAddress address){
-		clientThreads[address]->add( []( TinClientThread &t){
-			t.genericCloseConnection();
-		});
-	}
+	void clearThread(TinAddress address);
 
-	void removeThread (TinAddress &address){
-		clientThreads[address]->add( []( TinClientThread &t){
-			t.genericCloseConnection();
-		});
-		clientThreads[address]->add( []( TinClientThread &t){
-			t.killYourself();
-		});
-		clientThreads.erase(address);
-	}
+	void removeThread (TinAddress &address);
 
-	std::shared_ptr<TinClientThread> get(TinAddress address) {
-		return clientThreads[address];
-	}
+	std::shared_ptr<TinClientThread> get(TinAddress address);
 
-	void closeThoseWorkingWith(Resource &resource) {
-		std::vector<TinAddress> thoseWorkingWith;
-		for( auto &pair : clientThreads){
-			if( pair.second->getRequestedResource() == resource){
-				thoseWorkingWith.push_back(pair.first);
-			}
-		}
-		for( auto &address : thoseWorkingWith){
-			clearThread(address);
-		}
-	}
+	void closeThoseWorkingWith(Resource &resource);
 
-	void addNewThread(TinAddress &address, std::shared_ptr<TinClientThread> clientThread) {
-		Assertions::check(clientThreads.count(address) == 0, Help::Str(" There arleady is one thread with address ", address) );
-		clientThreads[address] = clientThread;
-	}
+	void addNewThread(TinAddress &address, std::shared_ptr<TinClientThread> clientThread);
 
-	bool isBusy(const TinAddress &address){
-		if( clientThreads.count(address) == 0 ){
-			return true;
-		} else if ( clientThreads[address]->hasOpenedConnection()){
-			return false;
-		}
-		return true;
-	}
+	bool isBusy(const TinAddress &address);
 
-	std::vector<OutClientConnectionInfo> getConnectionsInfo(){
-		std::vector<OutClientConnectionInfo> outVec;
-		for( auto &pair : clientThreads ){
-			if( isBusy(pair.first)){
-				outVec.push_back( OutClientConnectionInfo(pair.first, pair.second->getRequestedResource()));
-			} else {
-				outVec.push_back( OutClientConnectionInfo(pair.first));
-			}
-		}
-		return outVec;
-	}
+	std::vector<OutClientConnectionInfo> getConnectionsInfo();
 };
 
 

@@ -17,33 +17,20 @@ class Resource {
 	std::wstring resourceName;
 	size_t  resourceSize;
 public:
-	Resource() : resourceName(L"UNSET"), resourceSize(0) {}
+	Resource();
 	Resource(const std::wstring &resourceName, size_t resourceSize);
 
 	const std::wstring &getResourceName() const;
 
 	size_t getResourceSize() const;
 
-	size_t getSegmentCount() const{
-		return (size_t) ceil( double(resourceSize) / double(Constants::segmentSize));
-	}
+	size_t getSegmentCount() const;
 
-	bool operator==(const Resource &other) const {
-		return resourceName == other.resourceName &&
-	           resourceSize == other.resourceSize;
-	}
+	bool operator==(const Resource &other) const;
 
-	json toJson() const{
-		json j;
-		j["Name"] = StringHelp::toUtf8(resourceName);
-		j["Size"] = resourceSize;
-		return j;
-	}
+	json toJson() const;
 
-	void parseJson(json j){
-		resourceName = StringHelp::toUtf16(j["Name"]);
-		resourceSize = j["Size"];
-	}
+	void parseJson(json j);
 
 	friend std::ostream &operator<<(std::ostream &os, const Resource &resource);
 };

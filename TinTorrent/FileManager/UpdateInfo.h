@@ -21,9 +21,7 @@ public:
 
 	friend std::ostream &operator<<(std::ostream &os, const UpdateInfo &info);
 
-	bool empty(){
-		return newFiles.empty() && deletedFiles.empty();
-	}
+	bool empty();
 };
 
 
