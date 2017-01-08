@@ -20,8 +20,6 @@
 class TinServerSocket : public SocketWrapper{
 private:
     uint16_t portNumber;
-    // TODO configurationProvider
-	// TODO add state of serverSocket Inited, Listening itd
 public:
     TinServerSocket(uint16_t portNumber) : portNumber(portNumber) {}
 
@@ -37,8 +35,7 @@ public:
 		int bindResult = bind(socketDescriptor, (struct sockaddr*)&serverAddr, sizeof(serverAddr ) );
 		Assertions::check<SocketCommunicationException>( [bindResult](){ return bindResult == 0 ;}, "Binding socketDescriptor failed");
 
-		// todo configure backlog
-		int listenResult = listen( socketDescriptor, 10);
+		int listenResult = listen( socketDescriptor, Constants::serverBacklogSize);
 		Assertions::check<SocketCommunicationException>( [listenResult](){ return listenResult == 0; }, "Listen method failed");
 	}
 

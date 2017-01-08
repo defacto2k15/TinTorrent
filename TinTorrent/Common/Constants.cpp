@@ -19,3 +19,4 @@ unsigned Constants::maxSegmentChunkSize = 2;
 unsigned Constants::secondsBetweenBroadcasts = 60;
 unsigned Constants::secondsBetweenStartingDownloads = 30;
 bool Constants::advancedLoggingActive = false;
+int Constants::serverBacklogSize = 10;

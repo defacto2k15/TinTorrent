@@ -26,6 +26,7 @@ public:
 	static unsigned secondsBetweenBroadcasts;
 	static unsigned secondsBetweenStartingDownloads;
 	static bool advancedLoggingActive;
+	static int serverBacklogSize;
 
 	static bool parseConstants( std::string &filePayload){
 		try{
@@ -46,6 +47,7 @@ public:
 			secondsBetweenBroadcasts = getElement<unsigned >(j, "secondsBetweenBroadcasts", secondsBetweenBroadcasts);
 			secondsBetweenStartingDownloads = getElement<unsigned >(j, "secondsBetweenStartingDownloads", secondsBetweenStartingDownloads);
 			advancedLoggingActive = getElement<bool >(j, "advancedLoggingActive", advancedLoggingActive);
+			serverBacklogSize = getElement<int >(j, "serverBacklogSize", serverBacklogSize);
 		} catch( std::exception &ex){
 			std::cout << " Loading configuration failed: "<<ex.what() << std::endl;
 			return false;
