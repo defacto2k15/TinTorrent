@@ -27,7 +27,7 @@ public:
 
 	void initSocket(){
 		socketDescriptor = socket(AF_INET, SOCK_STREAM, 0);
-		Assertions::check( [this](){ return socketDescriptor != -1;}, "Opening socketDescriptor failed");
+		Assertions::check<SocketCommunicationException>( [this](){ return socketDescriptor != -1;}, "Opening socketDescriptor failed");
 
 		sockaddr_in serverAddr;
 		serverAddr.sin_family = AF_INET;
@@ -35,11 +35,11 @@ public:
 		serverAddr.sin_port = htons(portNumber);
 
 		int bindResult = bind(socketDescriptor, (struct sockaddr*)&serverAddr, sizeof(serverAddr ) );
-		Assertions::check( [bindResult](){ return bindResult == 0 ;}, "Binding socketDescriptor failed");
+		Assertions::check<SocketCommunicationException>( [bindResult](){ return bindResult == 0 ;}, "Binding socketDescriptor failed");
 
 		// todo configure backlog
 		int listenResult = listen( socketDescriptor, 10);
-		Assertions::check( [listenResult](){ return listenResult == 0; }, "Listen method failed");
+		Assertions::check<SocketCommunicationException>( [listenResult](){ return listenResult == 0; }, "Listen method failed");
 	}
 
 	std::shared_ptr<TinConnectedServerSocket> listenForConnections(){
@@ -47,7 +47,7 @@ public:
 		socklen_t socklen = sizeof(struct sockaddr_in);
 		socket_descriptor_t associatedDescriptor
 				= accept( socketDescriptor, (struct sockaddr *)&client,  &socklen);
-		Assertions::check([associatedDescriptor]() { return associatedDescriptor != -1;}, "Funkcja accept nie powiadla sie");
+		Assertions::check<SocketCommunicationException>([associatedDescriptor]() { return associatedDescriptor != -1;}, "Funkcja accept nie powiadla sie");
 		return std::make_shared<TinConnectedServerSocket>(associatedDescriptor, client);
 	}
 };

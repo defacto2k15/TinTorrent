@@ -20,6 +20,11 @@ public:
 	void init();
 
 	void listenForConnections();
+
+	void internalKillYourself() override{
+		std::cout << "ServerSocketThread. Got message internalKillYourself" <<  std::endl;
+		serverSocket.shutdownSocket();
+	}
 };
 
 

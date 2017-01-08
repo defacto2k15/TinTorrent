@@ -23,6 +23,11 @@ public:
 
 	void sendRevertMessage( std::vector<Resource> resources );
 
+	virtual  void internalKillYourself() override {
+		std::cout << "BroadcastingThread: got internalKillYourself. Telling broadcastSocket to shut down"<< std::endl;
+		broadcastSocket.shutdownSocket();
+	}
+
 };
 
 

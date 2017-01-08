@@ -19,6 +19,10 @@ public:
 
 	void listenForBroadcasts();
 
+	void internalKillYourself() override {
+		std::cout <<"TinUdpListeningSocket: Got internal kill yourself message. Shutdown of socket" << std::endl;
+		udpSocket.shutdownSocket();
+	}
 };
 
 

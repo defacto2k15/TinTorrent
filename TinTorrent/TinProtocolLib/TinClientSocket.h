@@ -12,6 +12,7 @@
 #include "../Assertions/Assertions.h"
 #include "SocketWrapper.h"
 #include "TinConnectedClientSocket.h"
+#include "SocketCommunicationException.h"
 
 class TinClientSocket : public SocketWrapper{
 	TinAddress addressToConnect;
@@ -20,14 +21,14 @@ public:
 
 	void initSocket(){
 		socketDescriptor = socket(AF_INET, SOCK_STREAM, 0);
-		Assertions::check( [this](){ return socketDescriptor != -1;}, "Opening socketDescriptor failed");
+		Assertions::check<SocketCommunicationException>( [this](){ return socketDescriptor != -1;}, "Opening socketDescriptor failed");
 	}
 
 	TinConnectedClientSocket connect(){
-		Assertions::check( [this](){return socketDescriptor != 0;}, "Socket not initialized");
+		Assertions::check<SocketCommunicationException>( [this](){return socketDescriptor != 0;}, "Socket not initialized");
 		sockaddr_in server = addressToConnect.getSockaddr();
 		int connectResult = ::connect(socketDescriptor, (struct sockaddr *)&server, sizeof(server));
-		Assertions::check( [connectResult](){ return connectResult == 0;}, "Connect failed");
+		Assertions::check<SocketCommunicationException>( [connectResult](){ return connectResult == 0;}, "Connect failed");
 		socket_descriptor_t  tempSocket = socketDescriptor;
 		socketDescriptor = 0;
 		return  TinConnectedClientSocket( tempSocket);

@@ -11,6 +11,7 @@
 #include "Messages/MessageResourceRequest.h"
 #include "Messages/MessageClose.h"
 #include "MessageCloseException.h"
+#include "SocketCommunicationException.h"
 
 using json = nlohmann::json;
 
@@ -23,7 +24,7 @@ protected:
 
 	void readToBuffer(){
 		ssize_t readSize = recv( socket, buffer.getData(), buffer.getMaxSize(), 0);
-		Assertions::check([readSize](){ return readSize != -1;}, "Recieving message failed");
+		Assertions::check<SocketCommunicationException>([readSize](){ return readSize != -1;}, "Recieving message failed");
 		buffer.setSize((size_t )readSize);
 		checkIfRecievedMessageClose();
 	}
@@ -45,8 +46,8 @@ protected:
 	void sendBuffer(){
 		ssize_t sendBytes = send(socket, buffer.getData(), buffer.getSize(), 0);
 		auto &varBuffer = buffer;
-		Assertions::check([sendBytes, &varBuffer]{return sendBytes == (ssize_t)varBuffer.getSize();}, "Sending failed");
-		Assertions::check(sendBytes != 0 , "Has sent 0 bytes, as were in buffer. Propably a mistake as there was 0 in buffer");
+		Assertions::check<SocketCommunicationException>([sendBytes, &varBuffer]{return sendBytes == (ssize_t)varBuffer.getSize();}, "Sending failed");
+		Assertions::check<SocketCommunicationException>(sendBytes != 0 , "Has sent 0 bytes, as were in buffer. Propably a mistake as there was 0 in buffer");
 	}
 
 	// todo there should be constantId taken into consideration
@@ -77,7 +78,7 @@ protected:
 		// todo UWAGA : na razie sizePrefix nie bierze pod uwage wielkosci samego siebie, czyli tych 2b
 		uint16_t sizePrefix = *((uint16_t *)buffer.getData());
 		//todo throw other, business logic exception
-		Assertions::check( sizePrefix == buffer.getSize(), "SizePrefix is not equal to buffer content length");
+		Assertions::check<SocketCommunicationException>( sizePrefix == buffer.getSize(), "SizePrefix is not equal to buffer content length");
 	}
 
 public:
@@ -94,7 +95,7 @@ private:
 	json getJsonFromBuffer(){
 		Buffer bufferToDeserialize = buffer.getBufferWithOffset(serializedMessageSizeOffset);
 		std::string jsonString((const char*) (buffer.getData()+serializedMessageSizeOffset));
-		Assertions::check([&jsonString, this](){ return jsonString.length() < buffer.getSize();}, //todo change to equal
+		Assertions::check<SocketCommunicationException>([&jsonString, this](){ return jsonString.length() < buffer.getSize();}, //todo change to equal
 		                  "Message deserialization. InString bigger than buffer");
 		// todo throw other exception - something like Model logic exception
 		json j = json::parse(jsonString);

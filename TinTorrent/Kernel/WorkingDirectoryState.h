@@ -8,6 +8,7 @@
 
 #include <FileManager/ModelEntities/FileInfo.h>
 #include <Common/SegmentRange.h>
+#include <ProgramInfoProvider/outStructures/OutLocalResource.h>
 #include "SegmentState.h"
 
 class WorkingDirectoryState {
@@ -94,6 +95,7 @@ public:
 
 	void addResource(Resource resource) {
 		size_t segmentCount = resource.getSegmentCount();
+		Assertions::check( segmentCount > 0, "Problem: Calculated segment count is 0");
 		std::vector<SegmentState> segmentStateVec(segmentCount);
 		for( auto i = 0u; i < segmentCount; i++){
 			segmentStateVec[i] =  SegmentState::PRESENT;
@@ -109,6 +111,20 @@ public:
 			}
 		}
 		return outVec;
+	}
+
+	std::vector<OutLocalResource> getOutLocalResource(){
+		std::vector<OutLocalResource> outVec;
+		for( auto &pair : resources ){
+			outVec.push_back( OutLocalResource( pair.first, calculatePresencePercent( pair.second)));
+		}
+		return outVec;
+	}
+
+private:
+	uint8_t calculatePresencePercent( std::vector<SegmentState> &vec ){
+		auto presentSegmentsCount = std::count_if( begin(vec), end(vec), []( SegmentState &state ){ return state == SegmentState ::PRESENT;});
+		return (uint8_t )(( 100 * presentSegmentsCount) / vec.size());
 	}
 };
 

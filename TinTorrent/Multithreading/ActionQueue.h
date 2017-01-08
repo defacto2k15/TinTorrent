@@ -13,17 +13,20 @@
 #include <thread>
 #include <iostream>
 
+#define UNUSED(x) (void)(x)
+
 template<typename T>
 class ActionQueue {
 	std::deque<std::function<void(T& )> > actionQueue;
 	std::mutex mutex;
 	std::condition_variable notEmptyActionQueue;
-	std::thread workingThread;
 	T *castedThis;
-	bool threadShouldRun = true;
+	std::thread workingThread;
 protected:
 	ActionQueue( T* castedThis ) : castedThis(castedThis){
 	}
+
+	bool threadShouldRun = true;
 public:
 	void add( std::function<void(T&)> action){
 		{
@@ -31,6 +34,11 @@ public:
 			actionQueue.push_front(action);
 		}
 		this->notEmptyActionQueue.notify_one();
+	}
+
+	void clearQueue(){
+		std::unique_lock<std::mutex> lock(this->mutex);
+		actionQueue.clear();
 	}
 
 	void performAction( T& consumer){
@@ -53,12 +61,19 @@ public:
 	}
 
 	void join(){
-		workingThread.join();
+		internalJoin();
+		if( workingThread.joinable() ){
+			workingThread.join();
+		}
 	}
 
 	void killYourself(){
 		std::cout << "ActionQueue: got kill yourself request" << std::endl;
 		threadShouldRun = false;
+		clearQueue();
+		internalKillYourself();
+
+		add( [](T &UNUSED_VAR){ UNUSED(UNUSED_VAR);});
 	}
 
 	virtual ~ActionQueue(){
@@ -68,6 +83,15 @@ public:
 		}
 		killYourself();
 		join();
+	}
+
+protected:
+	virtual void internalKillYourself(){
+		// do nothing - to be implemented by inheritance;
+	}
+
+	virtual void internalJoin(){
+		// do nothing - to be implemented by inheritance;
 	}
 
 private:

@@ -11,6 +11,7 @@
 #include <Common/InMemoryBuffer.h>
 #include <ModelEntities/TinAddress.h>
 #include "SocketWrapper.h"
+#include "SocketCommunicationException.h"
 
 class TinBroadcastSocket : public SocketWrapper {
 	TinAddress destinationAddress;
@@ -21,10 +22,10 @@ public:
 
 	void initSocket(){
 		socketDescriptor = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-		Assertions::check( [this](){ return socketDescriptor != -1;}, "Opening client broadcast socket failed");
+		Assertions::check<SocketCommunicationException>( [this](){ return socketDescriptor != -1;}, "Opening client broadcast socket failed");
 		int broadcast = 1;
 		int res = setsockopt(socketDescriptor, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof broadcast);
-		Assertions::check( [this, res](){ return res != -1;}, "Seting client socket to broadcasting failed");
+		Assertions::check<SocketCommunicationException>( [this, res](){ return res != -1;}, "Seting client socket to broadcasting failed");
 	}
 
 	void sendAnnounceMessage( std::vector<Resource> &resources ){
@@ -55,8 +56,8 @@ private:
 		                           (int)messagesBuffer.getSize(), 0,
 		                           (sockaddr*)&mySockaddr, sizeof(sockaddr));
 		auto &varBuffer = messagesBuffer;
-		Assertions::check([sendBytes, &varBuffer]{return sendBytes == (ssize_t)varBuffer.getSize();}, "Sending broadcast message failed");
-		Assertions::check(sendBytes != 0 , "Broadcasting: Has sent 0 bytes, as were in buffer. Propably a mistake as there was 0 in buffer");
+		Assertions::check<SocketCommunicationException>([sendBytes, &varBuffer]{return sendBytes == (ssize_t)varBuffer.getSize();}, "Sending broadcast message failed");
+		Assertions::check<SocketCommunicationException>(sendBytes != 0 , "Broadcasting: Has sent 0 bytes, as were in buffer. Propably a mistake as there was 0 in buffer");
 	}
 
 };

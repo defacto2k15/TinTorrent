@@ -23,10 +23,20 @@ void TinServerSocketThread::init() {
 void TinServerSocketThread::listenForConnections() {
 	std::cout << "ServerSocketThread: listening for connections "<<std::endl;
 	while(true) {
-		try {
-			auto connectedSocket = serverSocket.listenForConnections();
-			std::cout << Help::Str("ServerSocketThread: got connection from ", connectedSocket->getClientAddress()) << std::endl;
-			kernel.add([connectedSocket](Kernel &k) { k.recievedConnection(connectedSocket); });
+		try{
+			try {
+				auto connectedSocket = serverSocket.listenForConnections();
+				std::cout << Help::Str("ServerSocketThread: got connection from ", connectedSocket->getClientAddress())
+				          << std::endl;
+				kernel.add([connectedSocket](Kernel &k) { k.recievedConnection(connectedSocket); });
+			} catch( SocketCommunicationException &ex ) {
+				if (!threadShouldRun) {
+					std::cout << "ServerSocketThread: Got SCE but thread is exiting " << std::endl;
+					break;
+				} else {
+					throw ex;
+				}
+			}
 		} catch (std::exception &e) {
 			std::cout << Help::Str("ServerSocketThread: listening for connections failed ", e.what()) << std::endl;
 		}

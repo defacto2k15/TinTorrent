@@ -89,11 +89,22 @@ Resource TinConnectedServerThread::getRequestedResource() {
 }
 
 void TinConnectedServerThread::handleException(std::function<void()> func) {
+
 	try{
-		func();
-	} catch( MessageCloseException &closeException){
-		std::cout << Help::Str("ConnectedServerThread ",threadId," recieved close message ", closeException.getMessageClose().toJson().dump()) << std::endl;
-		kernel.add([this](Kernel &k){ k.serverCommunicationClosed(threadId);});
+		try{
+			func();
+		} catch( MessageCloseException &closeException){
+			std::cout << Help::Str("ConnectedServerThread ",threadId," recieved close message ", closeException.getMessageClose().toJson().dump()) << std::endl;
+			kernel.add([this](Kernel &k){ k.serverCommunicationClosed(threadId);});
+		} catch( SocketCommunicationException &ex ) {
+			std::cout << Help::Str("ConnectedServerThread got SCE exception ", ex.what()) << std::endl;
+			if (!threadShouldRun) {
+				std::cout << "ConnectedServerThread. ThreadShouldRun is falce, so exiting " << std::endl;
+				return;
+			} else {
+				throw ex;
+			}
+		}
 	} catch( std::exception &e){
 		std::cout << Help::Str("ConnectedServerThread ",threadId," listening resource request failed: ", e.what()) << std::endl;
 		kernel.add([this](Kernel &k){ k.serverCommunicationFailure(threadId);});

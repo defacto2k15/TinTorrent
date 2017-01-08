@@ -16,12 +16,10 @@ std::vector<FileInfo> FileManagerThread::initialCheck() {
 
 void FileManagerThread::startScheduledCheckings(unsigned timeBetweenChecks) {
 	std::cout<<"FileManagerThread: startScheduledCheckings "<<std::endl;
-	sheduledCheckThread = std::thread([timeBetweenChecks, this](){
-		while(true){ //todo do sth with it
-			std::this_thread::sleep_for(std::chrono::seconds(timeBetweenChecks));
+	scheduledCheckThread = std::make_unique<ActionThread>( [timeBetweenChecks, this](){
 			add( [this]( FileManagerThread &th){ th.checkChanges();});
-		}
-	});
+		}, timeBetweenChecks);
+	scheduledCheckThread->start();
 }
 
 void FileManagerThread::createEmptyResource(Resource resource) {

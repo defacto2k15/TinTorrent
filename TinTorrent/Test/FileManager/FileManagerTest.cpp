@@ -5,6 +5,7 @@
 #include <fstream>
 #include <Utils/StreamUtils.h>
 #include <Common/InMemoryBuffer.h>
+#include <Test/FileTestingBase.h>
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "FileManager/FileManager.h"
@@ -12,70 +13,10 @@
 #include "../../Assertions/Assertions.h"
 #include "Common/SegmentsSet.h"
 
-// todo
-#define TEST_WORKING_DIRECTORY L"/home/defacto/ClionProjects/TinTorrent/Test/TestWorkingDirectory"
 
-#ifndef TEST_WORKING_DIRECTORY
-#error "TEST_WORKING_DIRECTORY MUST BE DEFINED"
-#endif
-
-class FileMangerTest: public ::testing::Test {
+class FileMangerTest: public ::testing::Test, public FileTestingBase {
 	virtual void SetUp() {
-		Assertions::check(workingDirectory.size() > 10, "Saved ur ass, faggot");
-		system(("exec rm -r "+workingDirectory+"/*").c_str());
-	}
-
-public:
-	std::string workingDirectory = StringHelp::toUtf8(std::wstring( TEST_WORKING_DIRECTORY));
-
-	void addFileToWorkingDirectory( std::wstring fileName, size_t size){
-		std::ofstream ofs( workingDirectory+std::string("/") + StringHelp::toUtf8(fileName), std::ios::binary | std::ios::out);
-		ofs.seekp( size-1);
-		ofs.write("", 1);
-	}
-
-	void addFileToWorkingDirectory( std::wstring fileName, std::vector<bool> payload){
-		std::ofstream ofs( workingDirectory+std::string("/") + StringHelp::toUtf8(fileName), std::ios::binary | std::ios::out);
-		StreamUtils::writeToStream(ofs, payload);
-	}
-
-	void addFileToWorkingDirectory( std::wstring fileName, Buffer &payload ){
-		std::ofstream ofs( getPathToFile(fileName),  std::ios::binary | std::ios::out);
-		StreamUtils::writeToStream(ofs, payload);
-	}
-
-	bool fileExists( std::wstring fileName ){
-		std::ifstream infile(workingDirectory+std::string("/")+StringHelp::toUtf8(fileName));
-		return infile.good();
-	}
-
-	void removeFile( std::wstring fileName ){
-		FileUtils::removeFile(getPathToFile(fileName));
-	}
-
-	void randomizeBuffer( Buffer &buffer){
-		buffer.setSize(buffer.getMaxSize());
-		for(auto i = 0u; i < buffer.getMaxSize(); i++){
-			*(buffer.getData() + i) = static_cast<uint8_t >(rand());
-		}
-	}
-
-	std::string getPathToFile( std::wstring fileName ){
-		return workingDirectory + std::string("/")+ StringHelp::toUtf8(fileName);
-	}
-
-	void setBufferContentToIndex( Buffer &buffer ){
-		buffer.setSize(buffer.getMaxSize());
-		for( auto i = 0u; i < buffer.getSize(); i++){
-			*(buffer.getData()+i) = (uint8_t)i;
-		}
-	}
-
-	void setBufferToConstant( Buffer &buffer, uint8_t value ){
-		buffer.setSize(buffer.getMaxSize());
-		for( auto i = 0u; i < buffer.getSize(); i++){
-			*(buffer.getData()+i) = value;
-		}
+		fileSetUp();
 	}
 };
 

@@ -7,6 +7,8 @@
 
 
 #include <unistd.h>
+#include <sys/socket.h>
+#include <iostream>
 #include "../Common/Typedefs.h"
 #include "../Assertions/Assertions.h"
 
@@ -27,6 +29,16 @@ public:
 
 	virtual ~SocketWrapper() {
 		closeSocket();
+	}
+
+	void shutdownSocket(){
+		if( socketDescriptor != INVALID ){
+			auto res = shutdown(socketDescriptor, SHUT_RD);
+			if( res == -1 ){
+				std::cout << "Warning: shutdown of socket failed " << std::endl;
+			}
+		}
+
 	}
 };
 

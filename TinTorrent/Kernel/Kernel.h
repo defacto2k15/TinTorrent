@@ -20,13 +20,17 @@
 #include "ClientThreadsCollection.h"
 #include "ServerThreadsCollection.h"
 #include <Kernel/Kernel.h>
+#include <ProgramInfoProvider/outStructures/OutLocalResource.h>
+#include <future>
+#include <ProgramInfoProvider/ProgramInfoProvider.h>
+#include <Multithreading/ActionThread.h>
 
 class Kernel : public ActionQueue<Kernel> {
-	std::vector<FileInfo> currentFiles;
 	std::unique_ptr<ThreadTinBroadcast> threadTinBroadcast;
 	std::unique_ptr<ThreadTinUdpListeningSocket> threadUdpListening;
 	std::unique_ptr<TinServerSocketThread> serverSocketThread;
 	std::unique_ptr<FileManagerThread> fileManagerThread;
+	std::unique_ptr<ProgramInfoProvider> programInfoProvider;
 
 	WorkingDirectoryState workingDirectoryState;
 	TinNetworkState tinNetworkState;
@@ -36,8 +40,8 @@ class Kernel : public ActionQueue<Kernel> {
 	std::vector<Resource> resourcesToDownload;
 	std::vector<Resource> revertedResources;
 
-	std::thread broadcastingThread;
-	std::thread downloadStartingThread;
+	std::unique_ptr<ActionThread> broadcastingThread;
+	std::unique_ptr<ActionThread> downloadStartingThread;
 public:
 	Kernel() : ActionQueue(this){
 	}
@@ -51,11 +55,13 @@ public:
 		std::cout << Help::Str("Kernel starts with workingDir: "+workingDirectory) << std::endl;
 		std::cout << Help::Str("Starting WorkingDirectoryManager") << std::endl;
 		WorkingDirectoryManager directoryManager(workingDirectory);
-		currentFiles = directoryManager.check();
+		auto currentFiles = directoryManager.check();
 		std::cout << Help::Str("Found ",currentFiles.size()," files in workDir: ") << std::endl;
 		std::cout << Help::writeVecContents(currentFiles).str() << std::endl;
 
 		/// start of initialization
+		programInfoProvider = std::make_unique<ProgramInfoProvider>(*this);
+
 		std::cout << "Kernel: initialize working directory" << std::endl;
 		fileManagerThread = std::make_unique<FileManagerThread>(*this, workingDirectory);
 		auto initialState = fileManagerThread->initialCheck();
@@ -117,20 +123,16 @@ public:
 		std::cout << "Kernel: Told threads to listen for conenctions" <<std::endl;
 		threadUdpListening->add( []( ThreadTinUdpListeningSocket &t){  t.listenForBroadcasts();} );
 		serverSocketThread->add( [] (TinServerSocketThread &t){ t.listenForConnections(); } );
-		broadcastingThread = std::thread( [this](){
-			while(true){ //todo stop method
+		broadcastingThread = std::make_unique<ActionThread>( [this](){
 				this->add([](Kernel &k) {k.broadcastResources();});
-				std::this_thread::sleep_for(std::chrono::seconds(Constants::secondsBetweenBroadcasts));
-			}
-		});
-		downloadStartingThread = std::thread ([this](){
-			while(true){
+		}, Constants::secondsBetweenBroadcasts);
+		broadcastingThread->start();
+		downloadStartingThread = std::make_unique<ActionThread>([this](){
 				this->add( [](Kernel &k){
 					k.tryToDownloadResources();
 				});
-				std::this_thread::sleep_for(std::chrono::seconds(Constants::secondsBetweenStartingDownloads));
-			}
-		});
+		}, Constants::secondsBetweenStartingDownloads);
+		downloadStartingThread->start();
 	}
 
 /// STORY : TinClientThread recieved broadcast //////////////////////////
@@ -322,6 +324,49 @@ public:
 		}
 		tryToDownloadResources();
 	}
+
+/// providing resource data
+	ProgramInfoProvider &getProgramInfoProvider(){
+		return *programInfoProvider;
+	}
+
+	void provideLocalResources( std::promise< std::vector<OutLocalResource>>& promise ){
+		promise.set_value( workingDirectoryState.getOutLocalResource());
+	}
+
+/// closing
+	void closeKernel(){
+		std::cout << "Kernel. Closing" << std::endl;
+		killYourself();
+		std::cout << " Kernel. Killing fileManagerThread " << std::endl;
+		fileManagerThread->killYourself();
+		std::cout << " Kernel. Killing threadTinBroadcast" << std::endl;
+		threadTinBroadcast->killYourself();
+		std::cout << " Kernel. Killing threadUdpListening" << std::endl;
+		threadUdpListening->killYourself();
+		std::cout << " Kernel. Killing serverSocketThread" << std::endl;
+		serverSocketThread->killYourself();
+		std::cout << " Kernel. Killing broadcastingThread" << std::endl;
+		broadcastingThread->killYourself();
+		std::cout << " Kernel. Killing downloadStartingThread" << std::endl;
+		downloadStartingThread->killYourself();
+
+		std::cout << "Kernel. Joining fileManagerThread " << std::endl;
+		fileManagerThread->join();
+		std::cout << "Kernel. Joining threadTinBroadcast " << std::endl;
+		threadTinBroadcast->join();
+		std::cout << "Kernel. Joining threadUdpListening " << std::endl;
+		threadUdpListening->join();
+		std::cout << "Kernel. Joining serverSocketThread " << std::endl;
+		serverSocketThread->join();
+		std::cout << "Kernel. Joining broadcastingThread" << std::endl;
+		broadcastingThread->join();
+		std::cout << "Kernel. Joining downloadStaringThread" << std::endl;
+		downloadStartingThread->join();
+
+		std::cout << "Kernel. Kill my thread " << std::endl;
+		join();
+	}
 private:
 	void loadConfiguration(std::string configurationDirectory){
 		if(configurationDirectory.empty()){
@@ -382,7 +427,8 @@ private:
 	}
 
 	void killApplication(){
-		std::cout << "Kernel: killing aplciation " << std::endl;
+		std::cout << "Kernel: killing application." << std::endl;
+
 		std::exit(-1);
 	}
 };

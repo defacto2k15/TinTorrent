@@ -35,6 +35,13 @@ public:
 	int getThreadId();
 
 	Resource getRequestedResource();
+
+	virtual void internalKillYourself(){
+		std::cout << "ConnectedServerThread. Got message internalKillYourself" <<  std::endl;
+		if( connectedServerSocket ){
+			connectedServerSocket->shutdownSocket();
+		}
+	}
 private:
 	void handleException( std::function<void()> func );
 };

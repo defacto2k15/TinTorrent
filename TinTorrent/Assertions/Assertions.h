@@ -11,25 +11,31 @@
 
 class Assertions {
 public:
-    static void check( std::function<bool()> funcToCheck, std::string errMessage ){
-	    check(funcToCheck(), errMessage);
+	class AssertionException : public std::runtime_error{
+	public:
+		AssertionException(std::string message ) : std::runtime_error(message){
+		}
+	};
+
+    template< typename TException = AssertionException >
+	static void check( std::function<bool()> funcToCheck, std::string errMessage ){
+	    check<TException>(funcToCheck(), errMessage);
     }
+
+	template< typename TException = AssertionException >
 	static void check( bool value, std::string errMessage ){
 		if(!value){
 			errMessage.append( std::string(" Errno is ")+std::string(strerror(errno)));
-			throw AssertionException(errMessage);
+			throw TException(errMessage);
 		}
 	}
 
+	template< typename TException = AssertionException >
 	static void fail(std::string errMessage ){
-		check(false, errMessage);
+		check<TException>(false, errMessage);
 	}
 
-    class AssertionException : public std::runtime_error{
-    public:
-        AssertionException(std::string message ) : std::runtime_error(message){
-        }
-    };
+
 };
 
 

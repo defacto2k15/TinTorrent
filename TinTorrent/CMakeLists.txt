@@ -39,7 +39,7 @@ set(SOURCE_FILES main.cpp TinProtocolLib/TinServerSocket.cpp TinProtocolLib/TinS
         TinProtocolLib/Threads/TinClientThread.cpp TinProtocolLib/Threads/TinClientThread.h FileManager/FileManagerThread.cpp
         FileManager/FileManagerThread.h Kernel/WorkingDirectoryState.cpp Kernel/WorkingDirectoryState.h Kernel/TinNetworkState.cpp
         Kernel/TinNetworkState.h Kernel/SegmentState.h Kernel/ClientThreadsCollection.cpp Kernel/ClientThreadsCollection.h
-        Kernel/ServerThreadsCollection.cpp Kernel/ServerThreadsCollection.h)
+        Kernel/ServerThreadsCollection.cpp Kernel/ServerThreadsCollection.h ProgramInfoProvider/outStructures/OutLocalResource.cpp ProgramInfoProvider/outStructures/OutLocalResource.h ProgramInfoProvider/ProgramInfoProvider.cpp ProgramInfoProvider/ProgramInfoProvider.h TinProtocolLib/SocketCommunicationException.cpp TinProtocolLib/SocketCommunicationException.h Multithreading/ActionThread.cpp Multithreading/ActionThread.h Test/FileTestingBase.cpp Test/FileTestingBase.h)
 add_executable(TinTorrent ${SOURCE_FILES})
 
 target_compile_options( TinTorrent PRIVATE -Wall -Wextra )

@@ -7,6 +7,7 @@
 
 
 #include <Multithreading/ActionQueue.h>
+#include <Multithreading/ActionThread.h>
 #include "WorkingDirectoryManager.h"
 #include "FileManager.h"
 class Kernel;
@@ -14,7 +15,7 @@ class Kernel;
 class FileManagerThread : public ActionQueue<FileManagerThread> {
 	FileManager fileManager;
 	Kernel &kernel;
-	std::thread sheduledCheckThread;
+	std::unique_ptr<ActionThread> scheduledCheckThread;
 public:
 	FileManagerThread( Kernel &kernel, std::string workingDirectory );
 
@@ -32,6 +33,16 @@ public:
 
 	void removeResource( Resource resource );
 
+	virtual void internalKillYourself() override {
+		std::cout << "FileManagerThread. Dying. killing scheduledCheckThread " << std::endl;
+		scheduledCheckThread->killYourself();
+
+	}
+
+	virtual void internalJoin() override {
+		std::cout << "FileManagerThread. Joining scheduledCheckThread " << std::endl;
+		scheduledCheckThread->join();
+	}
 };
 
 
