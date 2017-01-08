@@ -80,6 +80,6 @@ BroadcastMessage::BroadcastType BroadcastMessage::getType() {
 }
 
 std::ostream &operator<<(std::ostream &os, const BroadcastMessage &message) {
-	os << "resources: " << Help::writeVecContents(message.resources).str() << " type: " << message.type.getValue();
+	os << "resources: " << Help::writeVecContents(message.resources) << " type: " << message.type.getValue();
 	return os;
 }

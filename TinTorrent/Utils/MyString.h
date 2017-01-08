@@ -56,12 +56,12 @@ private:
 
 public:
 	template<typename T>
-	static std::stringstream writeVecContents( std::vector<T> vec){
+	static std::string writeVecContents( std::vector<T> vec){
 		std::stringstream ss;
 		for(auto i = 0u; i < vec.size(); i++ ){
 			ss <<"["<<i<<"] : " << vec[i] << std::endl;
 		}
-		return ss;
+		return ss.str();
 	}
 
 };

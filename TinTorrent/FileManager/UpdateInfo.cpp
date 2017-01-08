@@ -18,7 +18,7 @@ std::vector<FileInfo> UpdateInfo::getDeletedFiles() {
 }
 
 std::ostream &operator<<(std::ostream &os, const UpdateInfo &info) {
-	os << "newFiles: " << Help::writeVecContents(info.newFiles).str() << " deletedFiles: " << Help::writeVecContents(info.deletedFiles).str();
+	os << "newFiles: " << Help::writeVecContents(info.newFiles) << " deletedFiles: " << Help::writeVecContents(info.deletedFiles);
 	return os;
 }
 
