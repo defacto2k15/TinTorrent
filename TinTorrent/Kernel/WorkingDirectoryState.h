@@ -30,6 +30,9 @@ public:
 	}
 
 	bool isDownloaded( const Resource &resource) {
+		if( resources.count(resource) == 0 ){
+			return false;
+		}
 		for( auto &state : resources[resource]){
 			if(!(state == SegmentState::PRESENT)){
 				return false;
@@ -94,13 +97,11 @@ public:
 	}
 
 	void addResource(Resource resource) {
-		size_t segmentCount = resource.getSegmentCount();
-		Assertions::check( segmentCount > 0, "Problem: Calculated segment count is 0");
-		std::vector<SegmentState> segmentStateVec(segmentCount);
-		for( auto i = 0u; i < segmentCount; i++){
-			segmentStateVec[i] =  SegmentState::PRESENT;
-		}
-		resources[resource] = segmentStateVec;
+		createResourceFilledWith(resource, SegmentState::PRESENT);
+	}
+
+	void addEmptyResource(Resource resource) {
+		createResourceFilledWith(resource, SegmentState::MISSING);
 	}
 
 	std::vector<Resource> getDownloadedResources(){
@@ -125,6 +126,16 @@ private:
 	uint8_t calculatePresencePercent( std::vector<SegmentState> &vec ){
 		auto presentSegmentsCount = std::count_if( begin(vec), end(vec), []( SegmentState &state ){ return state == SegmentState ::PRESENT;});
 		return (uint8_t )(( 100 * presentSegmentsCount) / vec.size());
+	}
+
+	void createResourceFilledWith( Resource resource, SegmentState state ){
+		size_t segmentCount = resource.getSegmentCount();
+		Assertions::check( segmentCount > 0, "Problem: Calculated segment count is 0");
+		std::vector<SegmentState> segmentStateVec(segmentCount);
+		for( auto i = 0u; i < segmentCount; i++){
+			segmentStateVec[i] =  state;
+		}
+		resources[resource] = segmentStateVec;
 	}
 };
 

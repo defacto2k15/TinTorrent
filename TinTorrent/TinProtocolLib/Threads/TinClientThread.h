@@ -19,6 +19,7 @@ class TinClientThread : public ActionQueue<TinClientThread>{
 	std::unique_ptr<TinConnectedClientSocket> connectedSocket;
 	Resource requestedResource;
 	SegmentRange requestedSegments;
+	bool isConnectionOpen = false;
 public:
 	TinClientThread( TinAddress &addressToConnect, Kernel &kernel );
 
@@ -35,6 +36,8 @@ public:
 	SegmentRange getRequestedSegments() const;
 
 	void genericCloseConnection();
+
+	bool hasOpenedConnection();
 
 private:
 	void handleException( std::function<void()> func );

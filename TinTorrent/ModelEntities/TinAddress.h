@@ -35,6 +35,10 @@ public:
 		os << "sockaddr: " << str;
 		return os;
 	}
+
+	bool operator==(const TinAddress &rhs) const;
+
+	bool operator!=(const TinAddress &rhs) const;
 };
 
 struct TinAddressCompare

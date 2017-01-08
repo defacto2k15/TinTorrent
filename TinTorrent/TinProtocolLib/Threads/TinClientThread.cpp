@@ -16,14 +16,16 @@ void TinClientThread::startDownloadingProcess(Resource resource, SegmentRange se
 		std::cout << Help::Str("TinClientThread of ", addressToConnect," done init") << std::endl;
 		connectedSocket = std::make_unique<TinConnectedClientSocket>(clientSocket.connect());
 		std::cout << Help::Str("TinClientThread of ", addressToConnect," done connect") << std::endl;
+		isConnectionOpen = true;
+		requestedResource = resource;
+		requestedSegments = segmentsToDownload;
+		sendResourceRequest( );
 	} catch (std::exception &e ){
 		std::cout << Help::Str("TinClientThread of ", addressToConnect," connecting failure: ",e.what()) << std::endl;
 		kernel.add([this](Kernel &k){ k.connectingToClientFailed(addressToConnect);});
+		isConnectionOpen = false;
 		return;
 	}
-	requestedResource = resource;
-	requestedSegments = segmentsToDownload;
-	sendResourceRequest( );
 }
 
 void TinClientThread::sendResourceRequest() {
@@ -87,6 +89,7 @@ void TinClientThread::closeConnection(MessageClose::CloseReason closeReason) {
 	handleException([closeReason, this](){
 		connectedSocket->closeConnection(closeReason);
 	});
+	isConnectionOpen = false;
 }
 
 Resource TinClientThread::getRequestedResource() const {
@@ -100,7 +103,7 @@ SegmentRange TinClientThread::getRequestedSegments() const {
 void TinClientThread::genericCloseConnection() {
 	try{
 		connectedSocket->closeConnection(MessageClose::CloseReason::OK);
-
+		isConnectionOpen = false;
 	} catch (...){
 		// swallowing exception
 	}
@@ -117,5 +120,10 @@ void TinClientThread::handleException(std::function<void()> func) { //ugly code 
 		std::cout << Help::Str("TinClientThread ",addressToConnect," listening resource request failed: ", e.what()) << std::endl;
 		kernel.add([this](Kernel &k){ k.clientCommunicationFailure(addressToConnect);});
 		connectedSocket->closeConnection( MessageClose::CloseReason::JSON_DESERIALIZATION);
+		isConnectionOpen = false;
 	}
+}
+
+bool TinClientThread::hasOpenedConnection () {
+	return  ( connectedSocket && isConnectionOpen);
 }

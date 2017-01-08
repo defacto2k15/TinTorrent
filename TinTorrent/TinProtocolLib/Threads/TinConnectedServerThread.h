@@ -17,8 +17,10 @@ class TinConnectedServerThread : public ActionQueue<TinConnectedServerThread> {
 	std::shared_ptr<TinConnectedServerSocket> connectedServerSocket;
 	int threadId;
 	Resource requestedResource;
+	bool isConnectionOpen = false;
 public:
-	TinConnectedServerThread( Kernel &kernel, std::shared_ptr<TinConnectedServerSocket> connectedServerSocket, int threadId);
+	TinConnectedServerThread( Kernel &kernel, std::shared_ptr<TinConnectedServerSocket> connectedServerSocket,
+	                          int threadId);
 
 	void listenForResourceRequest();
 
@@ -36,11 +38,19 @@ public:
 
 	Resource getRequestedResource();
 
+	TinAddress getConnectedAddress(){
+		return connectedServerSocket->getClientAddress();
+	}
+
 	virtual void internalKillYourself(){
 		std::cout << "ConnectedServerThread. Got message internalKillYourself" <<  std::endl;
 		if( connectedServerSocket ){
 			connectedServerSocket->shutdownSocket();
 		}
+	}
+
+	bool getIsConnectionOpen(){
+		return isConnectionOpen;
 	}
 private:
 	void handleException( std::function<void()> func );

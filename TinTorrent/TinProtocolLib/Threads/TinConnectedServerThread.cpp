@@ -18,6 +18,7 @@ void TinConnectedServerThread::listenForResourceRequest() {
 		requestedResource = request.getResource();
 		std::cout << Help::Str("ConnectedServerThread ",threadId," got request: ",request.toJson().dump()) << std::endl;
 		kernel.add([ this](Kernel &k){ k.gotResourceRequest(threadId, requestedResource);});
+		isConnectionOpen = true;
 	});
 }
 
@@ -70,11 +71,13 @@ void TinConnectedServerThread::sendCloseMessage(MessageClose::CloseReason reason
 	handleException( [this, reason]() {
 		connectedServerSocket->closeConnection(reason);
 	});
+	isConnectionOpen = false;
 }
 
 void TinConnectedServerThread::genericClose() {
 	try{
 		connectedServerSocket->closeConnection(MessageClose::CloseReason::OK);
+		isConnectionOpen = false;
 	} catch (...){
 		// swallowing exception
 	}
@@ -97,6 +100,7 @@ void TinConnectedServerThread::handleException(std::function<void()> func) {
 			std::cout << Help::Str("ConnectedServerThread ",threadId," recieved close message ", closeException.getMessageClose().toJson().dump()) << std::endl;
 			kernel.add([this](Kernel &k){ k.serverCommunicationClosed(threadId);});
 		} catch( SocketCommunicationException &ex ) {
+			isConnectionOpen = false;
 			std::cout << Help::Str("ConnectedServerThread got SCE exception ", ex.what()) << std::endl;
 			if (!threadShouldRun) {
 				std::cout << "ConnectedServerThread. ThreadShouldRun is falce, so exiting " << std::endl;
@@ -109,5 +113,6 @@ void TinConnectedServerThread::handleException(std::function<void()> func) {
 		std::cout << Help::Str("ConnectedServerThread ",threadId," listening resource request failed: ", e.what()) << std::endl;
 		kernel.add([this](Kernel &k){ k.serverCommunicationFailure(threadId);});
 		connectedServerSocket->closeConnection( MessageClose::CloseReason::JSON_DESERIALIZATION);
+		isConnectionOpen = false;
 	}
 }

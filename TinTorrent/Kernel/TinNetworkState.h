@@ -9,6 +9,7 @@
 #include <ModelEntities/TinAddress.h>
 #include <TinProtocolLib/Messages/BroadcastMessage.h>
 #include <Utils/ContainerUtils.h>
+#include <ProgramInfoProvider/outStructures/OutTinResourcesInOtherClients.h>
 
 class TinNetworkState {
 	std::map<TinAddress, std::vector<Resource>, TinAddressCompare > resourceMap;
@@ -42,6 +43,14 @@ public:
 			if( ContainerUtils::Contains(pair.second, resource)){
 				outVec.push_back(pair.first);
 			}
+		}
+		return outVec;
+	}
+
+	std::vector<OutTinResourcesInOtherClients> getResourcesInOtherClients(){
+		std::vector<OutTinResourcesInOtherClients> outVec;
+		for( auto &pair : resourceMap){
+			outVec.push_back( OutTinResourcesInOtherClients(pair.first, pair.second));
 		}
 		return outVec;
 	}

@@ -151,6 +151,8 @@ public:
 					std::cout << Help::Str("Kernel: i want to start download of  ", resource.toJson().dump())
 					          << std::endl;
 					resourcesToDownload.push_back(resource);
+					workingDirectoryState.addEmptyResource(resource);
+					fileManagerThread->createEmptyResource(resource);
 				}
 			}
 			tryToDownloadResources();
@@ -330,10 +332,6 @@ public:
 		return *programInfoProvider;
 	}
 
-	void provideLocalResources( std::promise< std::vector<OutLocalResource>>& promise ){
-		promise.set_value( workingDirectoryState.getOutLocalResource());
-	}
-
 /// closing
 	void closeKernel(){
 		std::cout << "Kernel. Closing" << std::endl;
@@ -367,6 +365,32 @@ public:
 		std::cout << "Kernel. Kill my thread " << std::endl;
 		join();
 	}
+
+///getters
+	 WorkingDirectoryState &getWorkingDirectoryState()  {
+		return workingDirectoryState;
+	}
+
+	 TinNetworkState &getTinNetworkState()  {
+		return tinNetworkState;
+	}
+
+	 ClientThreadsCollection &getClientThreads()  {
+		return clientThreads;
+	}
+
+	 ServerThreadsCollection &getServerThreads()  {
+		return serverThreads;
+	}
+
+	 std::vector<Resource> getResourcesToDownload()  {
+		return resourcesToDownload;
+	}
+
+	 std::vector<Resource> getRevertedResources()  {
+		return revertedResources;
+	}
+
 private:
 	void loadConfiguration(std::string configurationDirectory){
 		if(configurationDirectory.empty()){
@@ -394,6 +418,12 @@ private:
 			std::cout << Help::Str("Kernel: resource ",resource,
 			                       " can be downloaded from ",Help::writeVecContents(clientsThanCanDownloadResource).str()) << std::endl;
 			for( auto &address : clientsThanCanDownloadResource ){
+				if( clientThreads.isBusy(address)){
+					std::cout << Help::Str("Kernel: resource ",resource,
+					                       " cannot be downloaded from ",address," as it is arleady downloading sth.") << std::endl;
+					break;
+				}
+
 				SegmentRange segmentsToDownload = workingDirectoryState.allocateSegmentsToDownload(resource);
 				if( segmentsToDownload.empty()){
 					std::cout << Help::Str("Kernel: no segments to download for client ",address ) << std::endl;

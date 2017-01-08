@@ -8,6 +8,8 @@
 
 #include <memory>
 #include <TinProtocolLib/Threads/TinConnectedServerThread.h>
+#include <ProgramInfoProvider/outStructures/OutClientConnectionInfo.h>
+#include <ProgramInfoProvider/outStructures/OutServerConnectionInfo.h>
 
 class ServerThreadsCollection {
 	int createdThreadsCount = 0;
@@ -46,6 +48,16 @@ public:
 		for( auto &id : threadsToClose){
 			closeThread(id);
 		}
+	}
+
+	std::vector<OutServerConnectionInfo> getConnectionsInfo(){
+		std::vector<OutServerConnectionInfo> outVec;
+		for( auto & pair : threads ){
+			if( pair.second  && pair.second->getIsConnectionOpen()){
+				outVec.push_back( OutServerConnectionInfo( pair.second->getConnectedAddress(), pair.second->getRequestedResource()));
+			}
+		}
+		return outVec;
 	}
 };
 

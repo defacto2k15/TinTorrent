@@ -8,6 +8,7 @@
 
 #include <ModelEntities/TinAddress.h>
 #include <TinProtocolLib/Threads/TinClientThread.h>
+#include <ProgramInfoProvider/outStructures/OutClientConnectionInfo.h>
 
 class ClientThreadsCollection {
 	std::map<TinAddress, std::shared_ptr<TinClientThread>, TinAddressCompare> clientThreads;
@@ -17,7 +18,6 @@ public:
 		clientThreads[address]->add( []( TinClientThread &t){
 			t.genericCloseConnection();
 		});
-
 	}
 
 	void removeThread (TinAddress &address){
@@ -49,6 +49,27 @@ public:
 	void addNewThread(TinAddress &address, std::shared_ptr<TinClientThread> clientThread) {
 		Assertions::check(clientThreads.count(address) == 0, Help::Str(" There arleady is one thread with address ", address) );
 		clientThreads[address] = clientThread;
+	}
+
+	bool isBusy(const TinAddress &address){
+		if( clientThreads.count(address) == 0 ){
+			return true;
+		} else if ( clientThreads[address]->hasOpenedConnection()){
+			return false;
+		}
+		return true;
+	}
+
+	std::vector<OutClientConnectionInfo> getConnectionsInfo(){
+		std::vector<OutClientConnectionInfo> outVec;
+		for( auto &pair : clientThreads ){
+			if( isBusy(pair.first)){
+				outVec.push_back( OutClientConnectionInfo(pair.first, pair.second->getRequestedResource()));
+			} else {
+				outVec.push_back( OutClientConnectionInfo(pair.first));
+			}
+		}
+		return outVec;
 	}
 };
 
