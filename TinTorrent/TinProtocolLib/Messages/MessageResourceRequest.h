@@ -5,8 +5,6 @@
 #ifndef TINTORRENT_MESSAGERESOURCEREQUEST_H
 #define TINTORRENT_MESSAGERESOURCEREQUEST_H
 
-
-#include <codecvt>
 #include "../../Common/InMemoryBuffer.h"
 #include "Message.h"
 #include "../../ModelEntities/Resource.h"

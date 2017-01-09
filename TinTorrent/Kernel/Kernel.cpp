@@ -19,7 +19,7 @@ void Kernel::startApp(std::string workingDirectory, std::string configurationDir
 	log.debug("Starting WorkingDirectoryManager");
 	WorkingDirectoryManager directoryManager(workingDirectory);
 	auto currentFiles = directoryManager.check();
-	log.debug("Found ",currentFiles.size()," files in workDir: ", Help::writeVecContents(currentFiles).str());
+	log.debug("Found ",currentFiles.size()," files in workDir: ", Help::writeVecContents(currentFiles));
 
 	/// start of initialization
 	programInfoProvider = std::make_unique<ProgramInfoProvider>(*this);
@@ -368,7 +368,7 @@ void Kernel::tryToDownloadResources() {
 	for( auto &resource : resourcesToDownload){
 		std::vector<TinAddress> clientsThanCanDownloadResource = tinNetworkState.avalibleClientsForDownload(resource);
 		log.debug(" resource ",resource,
-		      " can be downloaded from ",Help::writeVecContents(clientsThanCanDownloadResource).str()) ;
+		      " can be downloaded from ",Help::writeVecContents(clientsThanCanDownloadResource)) ;
 		for( auto &address : clientsThanCanDownloadResource ){
 			if( clientThreads.isBusy(address)){
 				log.debug(" resource ",resource,

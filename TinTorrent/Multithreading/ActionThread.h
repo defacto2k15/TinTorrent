@@ -8,6 +8,7 @@
 
 #include <functional>
 #include "ActionQueue.h"
+#include <chrono>
 
 class ActionThread : public ActionQueue<ActionThread>{
 	std::function< void()> funcToRunInLoop;
@@ -20,7 +21,7 @@ public:
 	void runOneLoop(){
 		std::unique_lock<std::mutex> lk(mutex);
 		funcToRunInLoop();
-		bool wasTimeouted = !waitingConditionVariable.wait_for(lk, std::chrono::operator""s(secondsBetweenLoops),
+		bool wasTimeouted = !waitingConditionVariable.wait_for(lk, std::chrono::milliseconds(secondsBetweenLoops * 1000),
 		                                                       [this]{return !threadShouldRun;});
 		if( wasTimeouted ){
 			add( [](ActionThread &t ){

@@ -23,7 +23,7 @@ void ThreadTinBroadcast::init() {
 }
 
 void ThreadTinBroadcast::sendAnnounceMessage(std::vector<Resource> resources) {
-	log.debug("sendAnnounceMessage with ", Help::writeVecContents(resources).str());
+	log.debug("sendAnnounceMessage with ", Help::writeVecContents(resources));
 	try{
 		broadcastSocket.sendAnnounceMessage(resources);
 		log.debug("sendAnnounceMessage ok" );
@@ -33,7 +33,7 @@ void ThreadTinBroadcast::sendAnnounceMessage(std::vector<Resource> resources) {
 }
 
 void ThreadTinBroadcast::sendRevertMessage(std::vector<Resource> resources) {
-	log.debug("sendRevertMessage with ",  Help::writeVecContents(resources).str());
+	log.debug("sendRevertMessage with ",  Help::writeVecContents(resources));
 
 	try{
 		broadcastSocket.sendRevertMessage(resources);

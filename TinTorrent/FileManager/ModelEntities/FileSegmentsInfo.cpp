@@ -18,7 +18,7 @@ bool FileSegmentsInfo::operator!=(const FileSegmentsInfo &rhs) const {
 }
 
 std::ostream &operator<<(std::ostream &os, const FileSegmentsInfo &info) {
-	os << "segmentPresence: " << Help::writeVecContents(info.segmentPresence).str();
+	os << "segmentPresence: " << Help::writeVecContents(info.segmentPresence);
 	return os;
 }
 

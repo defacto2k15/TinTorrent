@@ -14,7 +14,7 @@
 #include<functional>
 
 #if defined(_WIN32) && defined(SPDLOG_WCHAR_FILENAMES)
-#include <codecvt>
+
 #include <locale>
 #endif
 
