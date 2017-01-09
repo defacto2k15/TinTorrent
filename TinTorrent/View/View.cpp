@@ -1,6 +1,8 @@
 #include <View/View.h>
 #include <View/MainMenuScreen.h>
 #include <View/LocalResourcesScreen.h>
+#include <View/OtherClientsScreen.h>
+#include <View/StatusScreen.h>
 #include <iostream>
 #include <ncurses.h>
 
@@ -14,6 +16,10 @@ View::View(Kernel *k) : kernel(k)
 	screens.push_back(screen1);
 	LocalResourcesScreen *screen2 = new LocalResourcesScreen("local_resources", kernel);
 	screens.push_back(screen2);
+	OtherClientsScreen *screen3 = new OtherClientsScreen("other_clients", kernel);
+	screens.push_back(screen3);
+	StatusScreen *screen4 = new StatusScreen("status", kernel);
+	screens.push_back(screen4);
 	activeScreen = screens.front();
 }
 
@@ -34,6 +40,11 @@ void View::start()
 			std::string submit = activeScreen->inputHandle();
 			std::string empty = "";			
 			
+			if(submit.compare("exit") == 0) {
+				// TODO stop kernel or not?
+				break;
+			}
+
 			if(submit.compare(empty) != 0)
 			{
 				changeActiveScreen(submit);
@@ -44,7 +55,7 @@ void View::start()
 		else
 		{
 			std::cout << "No active screen, abort!\n";
-			//break;
+			break;
 		}
 	}
 }

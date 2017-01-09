@@ -6,8 +6,6 @@ MainMenuScreen::MainMenuScreen(std::string name, Kernel *k) : Screen(name, k)
 {
 	choisePos = 0;
 	activeOption = 0;
-	pageNumber = 1;
-	remoteResources.clear();
 	outConnections.clear();
 	inConnections.clear();
 }
@@ -27,30 +25,9 @@ void MainMenuScreen::drawScreen()
 	printw( "3. Status\n" );
 	attroff( A_UNDERLINE);
 	
-	if(activeOption == 2)
-	{
-		printw( "\nLiczba wezlow: %d [Strona %d/%d]\n", remoteResources.size(),
-				  pageNumber, remoteResources.size()/PAGE_SIZE+1 );
-		printw( "%20s%20s\n", "Adres:", "Liczba zasobow:" );
-		std::vector<OutTinResourcesInOtherClients>::iterator resEnd = (pageNumber * PAGE_SIZE < remoteResources.size() ? remoteResources.begin() + (pageNumber-1)*PAGE_SIZE + PAGE_SIZE : remoteResources.end());  
-		for(std::vector<OutTinResourcesInOtherClients>::iterator it = remoteResources.begin()+(pageNumber-1)*PAGE_SIZE;
-			 it != resEnd; ++it)
-		{
-			std::stringstream ss;
-			ss << (*it).getAddress();
-			printw( "%20.20s%20d\n", ss.str().c_str(), (*it).getResources().size());
-		}
-	}
-	else if(activeOption == 3)
-	{
-		printw( "\nStatus kernela:\n" );
-		printw( "- polaczenia wychodzace: %d\n", outConnections.size() );
-		for(std::vector<OutClientConnectionInfo>::iterator it = outConnections.begin();
-			 it != outConnections.end(); ++it)
-		{
-			printw("conn\n");
-		}
-	}
+	if(choisePos == 3) attron( A_UNDERLINE);
+	printw( "4. Wyjscie\n" );
+	attroff( A_UNDERLINE);
 }
 
 std::string MainMenuScreen::inputHandle() 
@@ -66,32 +43,24 @@ std::string MainMenuScreen::inputHandle()
 			break;
 		case 10:
 		{
-			ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
 			if(choisePos == 0)
 			{
 				return "local_resources";
 			}
 			else if(choisePos == 1)
 			{
-				pageNumber = 1;
-				activeOption = 2;
-				remoteResources = infoProvider.getResourcesInOtherClients();
+				return "other_clients";
 			}
 			else if(choisePos == 2)
 			{
-				pageNumber = 1;
-				activeOption = 3;
-				outConnections = infoProvider.getConnectionsToOtherServersInfo();
-				inConnections = infoProvider.getConnectionsToUsInfo();
+				return "status";
+			}
+			else if(choisePos == 3)
+			{
+				return "exit";
 			}
 			break;
 		}
-		case KEY_RIGHT:
-			if(pageNumber < remoteResources.size()/PAGE_SIZE+1) pageNumber++;
-			break;
-		case KEY_LEFT:
-			if(pageNumber > 1) pageNumber--;
-			break;
 	}
 	return "";
 }
