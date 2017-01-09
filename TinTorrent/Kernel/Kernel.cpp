@@ -40,7 +40,7 @@ void Kernel::startApp(std::string workingDirectory, std::string configurationDir
 
 	serverSocketThread = std::make_unique<TinServerSocketThread>(*this);
 	serverSocketThread->startThread();
-
+	
 	/// start listener of udp
 	log.debug(" init threadTinBroadcast ");
 	threadTinBroadcast->add( [](ThreadTinBroadcast & b){ b.init();});
