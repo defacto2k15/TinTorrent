@@ -22,7 +22,7 @@ public:
 
 	void closeThoseWorkingWith(Resource &resource);
 
-	void addNewThread(TinAddress &address, std::shared_ptr<TinClientThread> clientThread);
+	void addNewThread(TinAddress &address, Kernel &kernel, std::function<void(TinClientThread&)> threadFunc);
 
 	bool isBusy(const TinAddress &address);
 

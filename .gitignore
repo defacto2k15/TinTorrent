@@ -1,3 +1,4 @@
 TinTorrent/.idea
 TinTorrent/cmake-build-debug
 TinTorrent/build/*
+TinTorrent/doxydocs

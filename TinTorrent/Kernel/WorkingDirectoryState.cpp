@@ -83,8 +83,12 @@ void WorkingDirectoryState::deallocateSegmentRange(Resource resource, SegmentRan
 	}
 }
 
-void WorkingDirectoryState::removeResource(Resource resource) {
-	resources.erase(resource);
+bool WorkingDirectoryState::removeResource(Resource resource) {
+	if( resources.count(resource) != 0){
+		resources.erase(resource);
+		return true;
+	}
+	return false;
 }
 
 void WorkingDirectoryState::setSegmentsAsDownloaded(Resource resource, SegmentRange range) {

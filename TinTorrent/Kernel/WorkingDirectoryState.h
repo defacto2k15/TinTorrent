@@ -22,7 +22,7 @@ public:
 
 	void deallocateSegmentRange(Resource resource, SegmentRange range);
 
-	void removeResource(Resource resource);
+	bool removeResource(Resource resource);
 
 	void setSegmentsAsDownloaded(Resource resource, SegmentRange range);
 

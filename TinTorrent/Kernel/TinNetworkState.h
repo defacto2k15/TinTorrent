@@ -17,6 +17,18 @@ public:
 
 	void addFiles(TinAddress address, std::vector<Resource> resources);
 
+	void addResource (TinAddress &address, Resource &resource){
+		if( !ContainerUtils::Contains(resourceMap[address], resource)){
+			resourceMap[address].push_back(resource);
+		}
+	}
+
+	void addAddress(TinAddress &address){
+		if( resourceMap.count(address) == 0){
+			resourceMap[address] = std::vector<Resource>();
+		}
+	}
+
 	void removeResourceFromClient(TinAddress address, Resource resource);
 
 	void removeClient(TinAddress &address);
