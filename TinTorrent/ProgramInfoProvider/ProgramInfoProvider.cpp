@@ -9,9 +9,20 @@
 ProgramInfoProvider::ProgramInfoProvider(Kernel &kernel) : kernel(kernel){}
 
 std::vector<OutLocalResource> ProgramInfoProvider::getLocalResources() {
-	std::promise< std::vector<OutLocalResource>> elementPromise;
-	kernel.add( [&]( Kernel &k) { elementPromise.set_value( k.getWorkingDirectoryState().getOutLocalResource()); });
-	return (elementPromise.get_future().get());
+	return {
+			{{L"file1.txt", 24424}, 95,
+					{{TinAddress("123.12.22.1", 4444), SegmentRange(0, 3)},
+							{TinAddress("55.12.22.1", 4444),  SegmentRange(4, 5)},
+							{TinAddress("121.12.1.1", 4444),  SegmentRange(7, 9)}
+					}},
+			{{L"file2.txt", 34424}, 100,
+					{{TinAddress("123.12.22.1", 4444), SegmentRange(0, 1)},
+							{TinAddress("53.12.22.1", 4444),  SegmentRange(4, 5)},
+							{TinAddress("119.12.1.1", 4444),  SegmentRange(7, 9)}
+					}}};
+//	std::promise< std::vector<OutLocalResource>> elementPromise;
+//	kernel.add( [&]( Kernel &k) { elementPromise.set_value( k.getWorkingDirectoryState().getOutLocalResource()); });
+//	return (elementPromise.get_future().get());
 }
 
 std::vector<OutTinResourcesInOtherClients> ProgramInfoProvider::getResourcesInOtherClients(){
