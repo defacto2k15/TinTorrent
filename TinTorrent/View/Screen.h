@@ -1,7 +1,7 @@
 //
 // Created by Ransho 08.01.2017
 //
-
+#pragma once
 #include <Kernel/Kernel.h>
 
 class Screen {

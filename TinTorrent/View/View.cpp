@@ -1,5 +1,6 @@
 #include <View/View.h>
 #include <View/MainMenuScreen.h>
+#include <View/LocalResourcesScreen.h>
 #include <iostream>
 #include <ncurses.h>
 
@@ -11,6 +12,8 @@ View::View(Kernel *k) : kernel(k)
 
 	MainMenuScreen *screen1 = new MainMenuScreen("main_menu", kernel);
 	screens.push_back(screen1);
+	LocalResourcesScreen *screen2 = new LocalResourcesScreen("local_resources", kernel);
+	screens.push_back(screen2);
 	activeScreen = screens.front();
 }
 
@@ -29,8 +32,14 @@ void View::start()
 			activeScreen->drawScreen();
 			fflush(stdout);
 			std::string submit = activeScreen->inputHandle();
+			std::string empty = "";			
+			
+			if(submit.compare(empty) != 0)
+			{
+				changeActiveScreen(submit);
+			}
 			sleep(0.1);
-			// TODO change screen
+			
 		}
 		else
 		{

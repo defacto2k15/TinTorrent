@@ -2,10 +2,10 @@
 // Created by Ransho 08.01.2017
 //
 
+#pragma once
+#include <View/Screen.h>
 #include <Kernel/Kernel.h>
 #include <list>
-
-class Screen;
 
 class View {
 private:

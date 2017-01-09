@@ -6,7 +6,10 @@ MainMenuScreen::MainMenuScreen(std::string name, Kernel *k) : Screen(name, k)
 {
 	choisePos = 0;
 	activeOption = 0;
-	localResources.clear();
+	pageNumber = 1;
+	remoteResources.clear();
+	outConnections.clear();
+	inConnections.clear();
 }
 
 void MainMenuScreen::drawScreen()
@@ -17,19 +20,35 @@ void MainMenuScreen::drawScreen()
 	attroff( A_UNDERLINE);
 	
 	if(choisePos == 1) attron( A_UNDERLINE);
-	printw( "2. Jakas opcja\n" );
+	printw( "2. Wyswietlenie wezlow\n" );
+	attroff( A_UNDERLINE);
+
+	if(choisePos == 2) attron( A_UNDERLINE);
+	printw( "3. Status\n" );
 	attroff( A_UNDERLINE);
 	
-	if(activeOption == 1)
+	if(activeOption == 2)
 	{
-		printw( "\nLokalne zasoby: %d\n", localResources.size() );
-		printw( " Nazwa:\tRozmiar:\tPobrany procent:\n" );
-		for(std::vector<OutLocalResource>::iterator it = localResources.begin(); it != localResources.end(); ++it)
+		printw( "\nLiczba wezlow: %d [Strona %d/%d]\n", remoteResources.size(),
+				  pageNumber, remoteResources.size()/PAGE_SIZE+1 );
+		printw( "%20s%20s\n", "Adres:", "Liczba zasobow:" );
+		std::vector<OutTinResourcesInOtherClients>::iterator resEnd = (pageNumber * PAGE_SIZE < remoteResources.size() ? remoteResources.begin() + (pageNumber-1)*PAGE_SIZE + PAGE_SIZE : remoteResources.end());  
+		for(std::vector<OutTinResourcesInOtherClients>::iterator it = remoteResources.begin()+(pageNumber-1)*PAGE_SIZE;
+			 it != resEnd; ++it)
 		{
-			std::string resourceName = StringHelp::toUtf8((*it).resource.getResourceName());
-			printw( "\n%s\t%d\t[%d/100%]\n", resourceName.c_str(),
-														(*it).resource.getResourceSize(),												      
-														(*it).percentDownloaded);
+			std::stringstream ss;
+			ss << (*it).getAddress();
+			printw( "%20.20s%20d\n", ss.str().c_str(), (*it).getResources().size());
+		}
+	}
+	else if(activeOption == 3)
+	{
+		printw( "\nStatus kernela:\n" );
+		printw( "- polaczenia wychodzace: %d\n", outConnections.size() );
+		for(std::vector<OutClientConnectionInfo>::iterator it = outConnections.begin();
+			 it != outConnections.end(); ++it)
+		{
+			printw("conn\n");
 		}
 	}
 }
@@ -39,19 +58,39 @@ std::string MainMenuScreen::inputHandle()
 	int input = getch();
 	switch(input) {
 		case KEY_DOWN:
-			choisePos = (choisePos+1)%3;
+			choisePos = (choisePos+1)%NO_OF_OPTIONS;
 			break;
 		case KEY_UP:
 			choisePos--;
-			if(choisePos < 0) choisePos = 2;
+			if(choisePos < 0) choisePos = NO_OF_OPTIONS-1;
 			break;
-		case KEY_RIGHT:
+		case 10:
+		{
 			ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
 			if(choisePos == 0)
 			{
-				activeOption = 1;
-				localResources = infoProvider.getLocalResources();
+				return "local_resources";
 			}
+			else if(choisePos == 1)
+			{
+				pageNumber = 1;
+				activeOption = 2;
+				remoteResources = infoProvider.getResourcesInOtherClients();
+			}
+			else if(choisePos == 2)
+			{
+				pageNumber = 1;
+				activeOption = 3;
+				outConnections = infoProvider.getConnectionsToOtherServersInfo();
+				inConnections = infoProvider.getConnectionsToUsInfo();
+			}
+			break;
+		}
+		case KEY_RIGHT:
+			if(pageNumber < remoteResources.size()/PAGE_SIZE+1) pageNumber++;
+			break;
+		case KEY_LEFT:
+			if(pageNumber > 1) pageNumber--;
 			break;
 	}
 	return "";
