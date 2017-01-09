@@ -5,7 +5,8 @@
 #include "Resource.h"
 
 Resource::Resource(const std::wstring &resourceName, size_t resourceSize) : resourceName(resourceName),
-                                                                            resourceSize(resourceSize) {}
+                                                                            resourceSize(resourceSize),
+																									 blocked(false) {}
 
 const std::wstring &Resource::getResourceName() const {
 	return resourceName;
@@ -41,4 +42,13 @@ json Resource::toJson() const {
 void Resource::parseJson(json j) {
 	resourceName = StringHelp::toUtf16(j["Name"]);
 	resourceSize = j["Size"];
+}
+
+void Resource::setBlockState(bool blocked) {
+	this->blocked = blocked;	
+}
+
+
+bool Resource::isBlocked() {
+	return blocked;
 }

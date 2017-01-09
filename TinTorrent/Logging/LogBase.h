@@ -26,7 +26,7 @@ public:
 		if( Constants::advancedLoggingActive ){
 			logger->debug( payload);
 		} else {
-			std::cout << payload << std::endl;
+			std::cerr << payload << std::endl;
 		}
 
 	}
@@ -38,7 +38,7 @@ public:
 		if( Constants::advancedLoggingActive ){
 			logger->warn( payload);
 		} else {
-			std::cout << payload << std::endl;
+			std::cerr << payload << std::endl;
 		}
 	}
 
@@ -49,7 +49,7 @@ public:
 		if( Constants::advancedLoggingActive ){
 			logger->info( payload);
 		} else {
-			std::cout << payload << std::endl;
+			std::cerr << payload << std::endl;
 		}
 	}
 

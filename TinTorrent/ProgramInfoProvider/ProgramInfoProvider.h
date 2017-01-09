@@ -30,6 +30,8 @@ public:
 	std::vector<OutClientConnectionInfo> getConnectionsToOtherServersInfo();
 
 	std::vector<OutServerConnectionInfo> getConnectionsToUsInfo();
+	
+	void changeResourceBlockState(Resource);
 };
 
 #endif //TINTORRENT_PROGRAMINFOPROVIDER_H

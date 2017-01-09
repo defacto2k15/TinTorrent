@@ -16,6 +16,7 @@ using json = nlohmann::json;
 class Resource {
 	std::wstring resourceName;
 	size_t  resourceSize;
+	bool blocked;
 public:
 	Resource();
 	Resource(const std::wstring &resourceName, size_t resourceSize);
@@ -33,6 +34,10 @@ public:
 	void parseJson(json j);
 
 	friend std::ostream &operator<<(std::ostream &os, const Resource &resource);
+
+	void setBlockState(bool);
+
+	bool isBlocked();
 };
 
 struct ResourceCompare

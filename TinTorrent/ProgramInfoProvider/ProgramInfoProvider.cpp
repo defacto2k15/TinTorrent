@@ -49,3 +49,7 @@ std::vector<OutServerConnectionInfo> ProgramInfoProvider::getConnectionsToUsInfo
 	kernel.add( [&]( Kernel &k) { elementPromise.set_value( k.getServerThreads().getConnectionsInfo()); });
 	return (elementPromise.get_future().get());
 };
+
+void ProgramInfoProvider::changeResourceBlockState(Resource resource) {
+	//TODO change block state of resource
+}

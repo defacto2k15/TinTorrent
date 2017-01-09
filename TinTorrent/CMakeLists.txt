@@ -3,6 +3,8 @@ project(TinTorrent)
 
 set(CMAKE_CXX_STANDARD 14)
 
+find_package(Curses REQUIRED)
+include_directories(${CURSES_INCLUDE_DIR})
 include_directories(lib)
 include_directories(.)
 
@@ -37,6 +39,10 @@ set(SOURCE_FILES main.cpp TinProtocolLib/TinServerSocket.cpp TinProtocolLib/TinS
         TinProtocolLib/Threads/TinServerSocketThread.cpp TinProtocolLib/Threads/TinServerSocketThread.h
         TinProtocolLib/Threads/TinConnectedServerThread.cpp TinProtocolLib/Threads/TinConnectedServerThread.h
         TinProtocolLib/Threads/TinClientThread.cpp TinProtocolLib/Threads/TinClientThread.h FileManager/FileManagerThread.cpp
+        View/View.h View/View.cpp View/Screen.h View/MainMenuScreen.h View/MainMenuScreen.cpp
+		  View/LocalResourcesScreen.h View/LocalResourcesScreen.cpp
+		  View/OtherClientsScreen.h View/OtherClientsScreen.cpp
+		  View/StatusScreen.h View/StatusScreen.cpp
         FileManager/FileManagerThread.h Kernel/WorkingDirectoryState.cpp Kernel/WorkingDirectoryState.h Kernel/TinNetworkState.cpp
         Kernel/TinNetworkState.h Kernel/SegmentState.h Kernel/ClientThreadsCollection.cpp Kernel/ClientThreadsCollection.h
         Kernel/ServerThreadsCollection.cpp Kernel/ServerThreadsCollection.h ProgramInfoProvider/outStructures/OutLocalResource.cpp ProgramInfoProvider/outStructures/OutLocalResource.h ProgramInfoProvider/ProgramInfoProvider.cpp ProgramInfoProvider/ProgramInfoProvider.h TinProtocolLib/SocketCommunicationException.cpp TinProtocolLib/SocketCommunicationException.h Multithreading/ActionThread.cpp Multithreading/ActionThread.h Test/FileTestingBase.cpp Test/FileTestingBase.h ProgramInfoProvider/outStructures/OutTinResourcesInOtherClients.cpp ProgramInfoProvider/outStructures/OutTinResourcesInOtherClients.h ProgramInfoProvider/outStructures/OutClientConnectionInfo.cpp ProgramInfoProvider/outStructures/OutClientConnectionInfo.h ProgramInfoProvider/outStructures/OutServerConnectionInfo.cpp ProgramInfoProvider/outStructures/OutServerConnectionInfo.h Logging/LogBase.cpp Logging/LogBase.h Logging/LoggingMain.cpp Logging/LoggingMain.h)
@@ -45,6 +51,7 @@ add_executable(TinTorrent ${SOURCE_FILES})
 target_compile_options( TinTorrent PRIVATE -Wall -Wextra )
 find_package (Threads)
 target_link_libraries (TinTorrent ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (TinTorrent ${CURSES_LIBRARIES})
 
 option(BuildTests "BuildTests" OFF)
 if(BuildTests)
