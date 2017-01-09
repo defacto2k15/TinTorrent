@@ -108,6 +108,13 @@ public:
 /// closing
 	void closeKernel();
 
+// view talking
+	bool viewResouceReverted( Resource &resource ){
+		log.debug("Got Resource reverted message from view. Resource: ",resource);
+		removeRevertedResource(resource);
+		return true;
+	}
+
 ///getters
 	 WorkingDirectoryState &getWorkingDirectoryState();
 
