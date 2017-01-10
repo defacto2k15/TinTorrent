@@ -48,7 +48,7 @@ class Kernel : public ActionQueue<Kernel> {
 public:
 	Kernel();
 
-	void startApp(std::string workingDirectory, std::string configurationDirectory);
+	void startApp(std::string workingDirectory);
 // INIT 1.5 /////////////////////////////////
 	void broadcastThreadStartOk();
 
@@ -129,10 +129,7 @@ public:
 	 std::vector<Resource> getRevertedResources();
 
 private:
-	void loadConfiguration(std::string configurationDirectory);
-
 	void tryToDownloadResources();
-
 
 	void removeRevertedResource(Resource &resource);
 

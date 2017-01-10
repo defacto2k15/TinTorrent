@@ -20,3 +20,4 @@ unsigned Constants::secondsBetweenBroadcasts = 60;
 bool Constants::advancedLoggingActive = false;
 int Constants::serverBacklogSize = 10;
 unsigned Constants::secondsBetweenStartingDownloads = 10;
+bool Constants::guiActive = true;

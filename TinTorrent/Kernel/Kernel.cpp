@@ -7,13 +7,9 @@
 Kernel::Kernel() : ActionQueue(this), log("Kernel"){
 }
 
-void Kernel::startApp(std::string workingDirectory, std::string configurationDirectory) {
+void Kernel::startApp(std::string workingDirectory) {
 	/// read workingDirectory
 	log.debug("Kernel starts with workingDir: ",workingDirectory);
-
-	// set configuration
-	log.debug("setting configuration");
-	loadConfiguration(configurationDirectory);
 
 	// logging
 	log.debug("Starting logging");
@@ -343,24 +339,6 @@ std::vector<Resource> Kernel::getRevertedResources() {
 	return revertedResources;
 }
 
-void Kernel::loadConfiguration(std::string configurationDirectory) {
-	if(configurationDirectory.empty()){
-		log.debug("Configuration directory is empty - wont load file " );
-		return;
-	}
-	std::ifstream t(configurationDirectory);
-	if( !t){
-		log.debug("Cannot read configuration file ",configurationDirectory," reverting to default") ;
-	}
-	std::string str((std::istreambuf_iterator<char>(t)),
-	                std::istreambuf_iterator<char>());
-	if(Constants::parseConstants(str)){
-		log.debug("Loading configuration file ",configurationDirectory," OK") ;
-	} else {
-		log.debug("Failed processing configuration file ",configurationDirectory," reverting to default");
-	}
-
-}
 
 void Kernel::tryToDownloadResources() {
 	log.debug(" tryToDownloadResources ") ;
