@@ -345,7 +345,7 @@ void Kernel::tryToDownloadResources() {
 	for( auto &resource : resourcesToDownload){
 		std::vector<TinAddress> clientsThanCanDownloadResource = tinNetworkState.avalibleClientsForDownload(resource);
 		log.debug(" resource ",resource,
-		      " can be downloaded from ",Help::writeVecContents(clientsThanCanDownloadResource)) ;
+		      " can be obtained from addresses: ",Help::writeVecContents(clientsThanCanDownloadResource)) ;
 		for( auto &address : clientsThanCanDownloadResource ){
 			if( clientThreads.isBusy(address)){
 				log.debug(" resource ",resource,

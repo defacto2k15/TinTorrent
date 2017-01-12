@@ -52,7 +52,7 @@ void ClientThreadsCollection::addNewThread(TinAddress &address, Kernel &kernel, 
 
 bool ClientThreadsCollection::isBusy(const TinAddress &address) {
 	if( clientThreads.count(address) == 0 ){
-		return true;
+		return false;
 	} else if ( clientThreads[address]->hasOpenedConnection()){
 		return false;
 	}
