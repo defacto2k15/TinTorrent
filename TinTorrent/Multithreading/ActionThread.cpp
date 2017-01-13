@@ -4,5 +4,5 @@
 
 #include "ActionThread.h"
 
-ActionThread::ActionThread(const std::function<void()> &funcToRunInLoop, unsigned secondsBetweenLoops ) :
-		ActionQueue(this), funcToRunInLoop(funcToRunInLoop), secondsBetweenLoops(secondsBetweenLoops) {}
+ActionThread::ActionThread(const std::function<void()> &funcToRunInLoop, unsigned secondsBetweenLoops, std::string threadName ) :
+		ActionQueue(this ,Help::Str("AC",threadName)), funcToRunInLoop(funcToRunInLoop), secondsBetweenLoops(secondsBetweenLoops) {}

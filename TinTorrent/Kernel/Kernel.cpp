@@ -4,7 +4,7 @@
 
 #include "Kernel.h"
 
-Kernel::Kernel() : ActionQueue(this), log("Kernel"){
+Kernel::Kernel() : ActionQueue(this, "Kernel"), log("Kernel"){
 }
 
 void Kernel::startApp(std::string workingDirectory) {
@@ -81,13 +81,13 @@ void Kernel::applicationInit2() {
 	serverSocketThread->add( [] (TinServerSocketThread &t){ t.listenForConnections(); } );
 	broadcastingThread = std::make_unique<ActionThread>( [this](){
 		this->add([](Kernel &k) {k.broadcastResources();});
-	}, Constants::secondsBetweenBroadcasts);
+	}, Constants::secondsBetweenBroadcasts, "BroadcastingThread") ;
 	broadcastingThread->start();
 	downloadStartingThread = std::make_unique<ActionThread>([this](){
 		this->add( [](Kernel &k){
 			k.tryToDownloadResources();
 		});
-	}, Constants::secondsBetweenStartingDownloads);
+	}, Constants::secondsBetweenStartingDownloads, "DownloadStartThread");
 	downloadStartingThread->start();
 }
 
@@ -359,7 +359,6 @@ void Kernel::tryToDownloadResources() {
 				break;
 			}
 			log.debug(" will download segments ", segmentsToDownload, " by client ",address) ;
-			auto newClientThread = std::make_shared<TinClientThread>(address, *this);
 			clientThreads.addNewThread(address, *this, [resource, segmentsToDownload](TinClientThread &clientThread ) {
 				clientThread.startDownloadingProcess(resource, segmentsToDownload);
 			});

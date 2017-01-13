@@ -25,7 +25,7 @@ class ActionQueue  {
 	T *castedThis;
 	std::thread workingThread;
 protected:
-	ActionQueue( T* castedThis ) : log("ActionQueue"), castedThis(castedThis){
+	ActionQueue( T* castedThis, std::string ancestorPrefix ) : log(ancestorPrefix+"ActionQueue"), castedThis(castedThis){
 	}
 
 	bool threadShouldRun = true;

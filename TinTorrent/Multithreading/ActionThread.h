@@ -16,7 +16,7 @@ class ActionThread : public ActionQueue<ActionThread>{
 	std::mutex mutex;
 	std::condition_variable  waitingConditionVariable;
 public:
-	ActionThread(const std::function<void()> &funcToRunInLoop, unsigned secondsBetweenLoops );
+	ActionThread(const std::function<void()> &funcToRunInLoop, unsigned secondsBetweenLoops, std::string threadName );
 
 	void runOneLoop(){
 		std::unique_lock<std::mutex> lk(mutex);

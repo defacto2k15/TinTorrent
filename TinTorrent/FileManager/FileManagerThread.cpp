@@ -6,7 +6,7 @@
 #include <Kernel/Kernel.h>
 
 FileManagerThread::FileManagerThread(Kernel &kernel, std::string workingDirectory)
-		: ActionQueue(this), log("FileManagerThread"),  fileManager(workingDirectory), kernel(kernel){
+		: ActionQueue(this, "FileManagerThread"), log("FileManagerThread"),  fileManager(workingDirectory), kernel(kernel){
 }
 
 std::vector<FileInfo> FileManagerThread::initialCheck() {
@@ -18,7 +18,7 @@ void FileManagerThread::startScheduledCheckings(unsigned timeBetweenChecks) {
 	log.debug(" startScheduledCheckings ");
 	scheduledCheckThread = std::make_unique<ActionThread>( [timeBetweenChecks, this](){
 			add( [this]( FileManagerThread &th){ th.checkChanges();});
-		}, timeBetweenChecks);
+		}, timeBetweenChecks, "FileManagerScheduledCheckingThread");
 	scheduledCheckThread->start();
 }
 

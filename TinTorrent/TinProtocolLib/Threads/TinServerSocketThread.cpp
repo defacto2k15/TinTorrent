@@ -6,7 +6,7 @@
 #include <Kernel/Kernel.h>
 
 TinServerSocketThread::TinServerSocketThread(Kernel &kernel) : 
-		ActionQueue(this), log("ServerSocketThread"), serverSocket( Constants::communicationPort), kernel(kernel){
+		ActionQueue(this, "ServerSocketThread"), log("ServerSocketThread"), serverSocket( Constants::communicationPort), kernel(kernel){
 }
 
 void TinServerSocketThread::init() {

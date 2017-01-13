@@ -8,7 +8,7 @@
 TinConnectedServerThread::TinConnectedServerThread(Kernel &kernel,
                                                    std::shared_ptr<TinConnectedServerSocket> connectedServerSocket,
                                                    int threadId)
-		: ActionQueue(this), log(Help::Str("ConnectedServerThread ", threadId)), 
+		: ActionQueue(this, Help::Str("ConnectedServerThread ", threadId)), log(Help::Str("ConnectedServerThread ", threadId)),
 		  kernel(kernel), connectedServerSocket(connectedServerSocket), threadId(threadId){
 }
 

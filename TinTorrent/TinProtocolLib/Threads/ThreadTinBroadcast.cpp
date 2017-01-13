@@ -5,7 +5,7 @@
 #include "ThreadTinBroadcast.h"
 #include "Kernel/Kernel.h"
 
-ThreadTinBroadcast::ThreadTinBroadcast(TinAddress broadcastAddress, Kernel &kernel) : ActionQueue(this), log("BroadcastThread"),
+ThreadTinBroadcast::ThreadTinBroadcast(TinAddress broadcastAddress, Kernel &kernel) : ActionQueue(this, "BroadcastThread"), log("BroadcastThread"),
                                                                                       broadcastSocket(broadcastAddress), kernel(kernel){
 
 }

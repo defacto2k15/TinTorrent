@@ -5,7 +5,7 @@
 #include "ThreadTinUdpListeningSocket.h"
 
 ThreadTinUdpListeningSocket::ThreadTinUdpListeningSocket(Kernel &kernel) 
-		: ActionQueue(this), log("TinUdpListeningSocket"), kernel(kernel){
+		: ActionQueue(this, "TinUdpListeningSocket"), log("TinUdpListeningSocket"), kernel(kernel){
 }
 
 void ThreadTinUdpListeningSocket::init() {

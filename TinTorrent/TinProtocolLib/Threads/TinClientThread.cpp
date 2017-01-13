@@ -5,7 +5,7 @@
 #include "TinClientThread.h"
 #include <Kernel/Kernel.h>
 
-TinClientThread::TinClientThread(TinAddress &addressToConnect, Kernel &kernel) : ActionQueue(this), 
+TinClientThread::TinClientThread(TinAddress &addressToConnect, Kernel &kernel) : ActionQueue(this, Help::Str("TinClientThread of ",addressToConnect)),
                                                                                  log(Help::Str("TinClientThread of ",addressToConnect)), 
                                                  clientSocket(addressToConnect), addressToConnect(addressToConnect), kernel(kernel){
 }
