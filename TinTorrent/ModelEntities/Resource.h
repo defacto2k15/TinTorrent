@@ -44,7 +44,21 @@ struct ResourceCompare
 {
 	bool operator() (const Resource& lhs, const Resource& rhs) const
 	{
-		return lhs.getResourceName() < rhs.getResourceName() || lhs.getResourceSize() < rhs.getResourceSize();
+		if( lhs.getResourceName() < rhs.getResourceName() ){
+			return true;
+		}
+		if( rhs.getResourceName() < lhs.getResourceName() ){
+			return false;
+		}
+
+		if( lhs.getResourceSize() < rhs.getResourceSize() ){
+			return true;
+		}
+		if( rhs.getResourceSize() < lhs.getResourceSize() ){
+			return false;
+		}
+
+		return false;
 	}
 };
 

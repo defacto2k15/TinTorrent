@@ -34,7 +34,7 @@ TEST_F( KernelTest, FileInWorkingDirectoryAtStartAreAccesible){
 	}
 
 	Kernel kernel;
-	kernel.startApp( workingDirectory, "");
+	kernel.startApp( workingDirectory);
 	std::this_thread::sleep_for( 2s);
 	auto localResources = kernel.getProgramInfoProvider().getLocalResources();
 	kernel.closeKernel();
@@ -65,7 +65,7 @@ TEST_F( KernelTest, BroadcastedResourcesAreBeingNoticed){
 	auto otherFuture = otherBroadcastingThread1.run();
 
 	Kernel kernel;
-	kernel.startApp( workingDirectory, "");
+	kernel.startApp( workingDirectory);
 	std::this_thread::sleep_for(3s);
 	sequence[currentSequenceName]->unlock();
 	sequence[currentSequenceName+"2"]->waitForUnlock();

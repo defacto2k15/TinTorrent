@@ -16,9 +16,9 @@ class WorkingDirectoryState {
 public:
 	void init( std::vector<FileInfo> &initialFiles );
 
-	bool isDownloaded( const Resource &resource);
+	bool isDownloaded( const Resource resource);
 
-	bool contains(Resource &resource);
+	bool contains(Resource resource);
 
 	void deallocateSegmentRange(Resource resource, SegmentRange range);
 

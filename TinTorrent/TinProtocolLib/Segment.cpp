@@ -15,6 +15,6 @@ const SegmentInfo Segment::getSegmentInfo() const {
 }
 
 std::ostream &operator<<(std::ostream &os, const Segment &segment) {
-	os << "segmentInfo: " << segment.segmentInfo;
+	os << "segmentInfo: " << segment.segmentInfo << " payload size " << segment.payload->getSize();
 	return os;
 }

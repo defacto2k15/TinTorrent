@@ -58,9 +58,9 @@ public:
 		TinClientSocket clientSocket(TinAddress("127.0.0.1", portNumber));
 		clientSocket.initSocket();
 		sequence[currentSequenceName]->waitForUnlock();
-		auto connectedSocket = clientSocket.connect();
-		T result = action(connectedSocket);
-		connectedSocket.closeSocket();
+		auto connectedSocket = std::make_shared<TinConnectedClientSocket>(clientSocket.connect());
+		T result = action(*connectedSocket);
+		connectedSocket->closeSocket();
 		clientSocket.closeSocket();
 		return result;
 	}
@@ -88,8 +88,8 @@ TEST_F(TinSocketTest, SocketsCanGetConnected) {
 		TinClientSocket clientSocket(TinAddress("127.0.0.1", portNumber));
 		clientSocket.initSocket();
 		sequence[currentSequenceName]->waitForUnlock();
-		auto connectedSocket = clientSocket.connect();
-		connectedSocket.closeSocket();
+		auto connectedSocket = std::make_shared<TinConnectedClientSocket>(clientSocket.connect());
+		connectedSocket->closeSocket();
 		clientSocket.closeSocket();
 		return true;
 	});

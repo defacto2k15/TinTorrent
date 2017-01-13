@@ -25,7 +25,7 @@ class ActionQueue  {
 	T *castedThis;
 	std::thread workingThread;
 protected:
-	ActionQueue( T* castedThis, std::string ancestorPrefix ) : log(ancestorPrefix+"ActionQueue"), castedThis(castedThis){
+	ActionQueue( T* castedThis, std::string ancestorPrefix ) : log(ancestorPrefix+":ActionQueue"), castedThis(castedThis){
 	}
 
 	bool threadShouldRun = true;
@@ -55,7 +55,7 @@ public:
 				while (threadShouldRun) { //todo create some thread closing
 					performAction(*castedThis);
 				}
-			} catch( std::exception e){
+			} catch( std::exception &e){
 				std::string descr = e.what();
 				log.warn( " caught exception " , descr );
 			}
@@ -83,9 +83,8 @@ public:
 		log.debug(" Destructor called ");
 		if(threadShouldRun){
 			log.debug(" threadShouldRun is still true. Should have told me to kill myself. Ending myself ");
+			killYourself();
 		}
-		killYourself();
-		join();
 	}
 
 protected:

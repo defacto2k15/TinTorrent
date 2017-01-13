@@ -11,13 +11,16 @@ void ClientThreadsCollection::clearThread(TinAddress address) {
 }
 
 void ClientThreadsCollection::removeThread(TinAddress &address) {
+	std::shared_ptr<TinClientThread> sharedPtr = clientThreads[address];
 	clientThreads[address]->add( []( TinClientThread &t){
 		t.genericCloseConnection();
 	});
-	clientThreads[address]->add( []( TinClientThread &t){
+	clientThreads[address]->add( [sharedPtr]( TinClientThread &t){
 		t.killYourself();
+		sharedPtr.unique(); // to disable warn
 	});
 	clientThreads.erase(address);
+	sharedPtr->join();
 }
 
 std::shared_ptr<TinClientThread> ClientThreadsCollection::get(TinAddress address) {
@@ -54,9 +57,9 @@ bool ClientThreadsCollection::isBusy(const TinAddress &address) {
 	if( clientThreads.count(address) == 0 ){
 		return false;
 	} else if ( clientThreads[address]->hasOpenedConnection()){
-		return false;
+		return true;
 	}
-	return true;
+	return false;
 }
 
 std::vector<OutClientConnectionInfo> ClientThreadsCollection::getConnectionsInfo() {

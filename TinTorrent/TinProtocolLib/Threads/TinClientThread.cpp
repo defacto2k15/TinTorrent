@@ -56,7 +56,7 @@ void TinClientThread::recieveSegments(SegmentRange segmentRange, MessageStartSen
 		for(unsigned segmentIndex = segmentRange.getMin(); segmentIndex < segmentRange.getMax(); segmentIndex++){
 			SegmentInfo requestedInfo((uint16_t)segmentIndex, SegmentUtils::SegmentSize(requestedResource.getResourceSize(), (uint16_t )segmentIndex));
 			connectedSocket->sendStartSendingRequest(requestedInfo, prevStatus);
-			log.debug(" sent segment: ", segmentRange," waiting for response" );
+			log.debug(" sent segment request: ", segmentIndex," waiting for response" );
 			SegmentResponse *segmentResponse = connectedSocket->listenForSegmentResponse();
 			log.debug(" got response. Info: ",
 			                       segmentResponse->getSegmentInfo().toJson().dump() );
@@ -76,7 +76,7 @@ void TinClientThread::recieveSegments(SegmentRange segmentRange, MessageStartSen
 			} else {
 				badRecievedSegmentsCount = 0;
 				std::shared_ptr<Buffer> segmentPayload = std::make_shared<InMemoryBuffer>(Constants::segmentSize);
-				segmentPayload->setData( segmentResponse->payload, Constants::segmentSize);
+				segmentPayload->setData( segmentResponse->payload, segmentResponse->payloadLength);
 				outSegmentsVec.push_back(Segment(segmentPayload, requestedInfo));
 			}
 		}
@@ -126,5 +126,6 @@ void TinClientThread::handleException(std::function<void()> func) { //ugly code 
 }
 
 bool TinClientThread::hasOpenedConnection () {
+	std::cerr << " DBG123 IS BUSY 3 ConnectedSocket "<< ((bool)connectedSocket) << " Is open "<<isConnectionOpen <<   std::endl;
 	return  ( connectedSocket && isConnectionOpen);
 }

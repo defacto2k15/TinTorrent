@@ -10,13 +10,13 @@ void ServerThreadsCollection::add(std::shared_ptr<TinConnectedServerThread> thre
 }
 
 void ServerThreadsCollection::closeThread(int threadId) {
-	threads[threadId]->add( [](TinConnectedServerThread &c ){
-		c.genericClose();
-	});
-	threads[threadId]->add( [](TinConnectedServerThread &c ){
+	std::shared_ptr<TinConnectedServerThread> keepAlivePtr = threads[threadId];
+	threads[threadId]->add( [keepAlivePtr](TinConnectedServerThread &c ){
 		c.killYourself();
+		keepAlivePtr.unique();
 	});
 	threads.erase(threadId);
+	keepAlivePtr->join();
 }
 
 std::shared_ptr<TinConnectedServerThread> ServerThreadsCollection::get(int threadId) {

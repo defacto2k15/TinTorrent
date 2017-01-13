@@ -126,6 +126,7 @@ void TinConnectedServerThread::internalKillYourself() {
 	log.debug(" Got message internalKillYourself");
 	if( connectedServerSocket ){
 		connectedServerSocket->shutdownSocket();
+		connectedServerSocket.reset();
 	}
 }
 

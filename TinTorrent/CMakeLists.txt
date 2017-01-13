@@ -45,7 +45,16 @@ set(SOURCE_FILES main.cpp TinProtocolLib/TinServerSocket.cpp TinProtocolLib/TinS
 		  View/StatusScreen.h View/StatusScreen.cpp
         FileManager/FileManagerThread.h Kernel/WorkingDirectoryState.cpp Kernel/WorkingDirectoryState.h Kernel/TinNetworkState.cpp
         Kernel/TinNetworkState.h Kernel/SegmentState.h Kernel/ClientThreadsCollection.cpp Kernel/ClientThreadsCollection.h
-        Kernel/ServerThreadsCollection.cpp Kernel/ServerThreadsCollection.h ProgramInfoProvider/outStructures/OutLocalResource.cpp ProgramInfoProvider/outStructures/OutLocalResource.h ProgramInfoProvider/ProgramInfoProvider.cpp ProgramInfoProvider/ProgramInfoProvider.h TinProtocolLib/SocketCommunicationException.cpp TinProtocolLib/SocketCommunicationException.h Multithreading/ActionThread.cpp Multithreading/ActionThread.h Test/FileTestingBase.cpp Test/FileTestingBase.h ProgramInfoProvider/outStructures/OutTinResourcesInOtherClients.cpp ProgramInfoProvider/outStructures/OutTinResourcesInOtherClients.h ProgramInfoProvider/outStructures/OutClientConnectionInfo.cpp ProgramInfoProvider/outStructures/OutClientConnectionInfo.h ProgramInfoProvider/outStructures/OutServerConnectionInfo.cpp ProgramInfoProvider/outStructures/OutServerConnectionInfo.h Logging/LogBase.cpp Logging/LogBase.h Logging/LoggingMain.cpp Logging/LoggingMain.h ProgramInfoProvider/outStructures/OutResourcesBeingDownloaded.cpp ProgramInfoProvider/outStructures/OutResourcesBeingDownloaded.h Common/ConfigLoader.cpp Common/ConfigLoader.h)
+        Kernel/ServerThreadsCollection.cpp Kernel/ServerThreadsCollection.h ProgramInfoProvider/outStructures/OutLocalResource.cpp
+        ProgramInfoProvider/outStructures/OutLocalResource.h ProgramInfoProvider/ProgramInfoProvider.cpp ProgramInfoProvider/ProgramInfoProvider.h
+        TinProtocolLib/SocketCommunicationException.cpp TinProtocolLib/SocketCommunicationException.h Multithreading/ActionThread.cpp
+        Multithreading/ActionThread.h Test/FileTestingBase.cpp Test/FileTestingBase.h
+        ProgramInfoProvider/outStructures/OutTinResourcesInOtherClients.cpp ProgramInfoProvider/outStructures/OutTinResourcesInOtherClients.h
+        ProgramInfoProvider/outStructures/OutClientConnectionInfo.cpp ProgramInfoProvider/outStructures/OutClientConnectionInfo.h
+        ProgramInfoProvider/outStructures/OutServerConnectionInfo.cpp ProgramInfoProvider/outStructures/OutServerConnectionInfo.h
+        Logging/LogBase.cpp Logging/LogBase.h Logging/LoggingMain.cpp Logging/LoggingMain.h
+        ProgramInfoProvider/outStructures/OutResourcesBeingDownloaded.cpp ProgramInfoProvider/outStructures/OutResourcesBeingDownloaded.h
+        Common/ConfigLoader.cpp Common/ConfigLoader.h )
 add_executable(TinTorrent ${SOURCE_FILES})
 
 target_compile_options( TinTorrent PRIVATE -Wall -Wextra )
@@ -57,7 +66,11 @@ option(BuildTests "BuildTests" OFF)
 if(BuildTests)
 
     set(TEST_EXECUTABLE_NAME "tests")
-    set(TEST_FILES  Test/MessagesTest/MessageResourceRequestTest.cpp  Test/TinProtocolLib/TinSocketTest.cpp Test/TinProtocolLib/TinSocketTest.h Test/testMain.cpp Test/FileManager/FileManagerTest.cpp Test/TinProtocolLib/TinBroadcastSocketTest.cpp Test/ThreadInTest.cpp Test/ThreadInTest.h Test/Kernel/KernelTest.cpp Test/Kernel/KernelTest.h)
+    set(TEST_FILES  Test/MessagesTest/MessageResourceRequestTest.cpp  Test/TinProtocolLib/TinSocketTest.cpp
+            Test/TinProtocolLib/TinSocketTest.h Test/testMain.cpp Test/FileManager/FileManagerTest.cpp
+            Test/TinProtocolLib/TinBroadcastSocketTest.cpp Test/ThreadInTest.cpp Test/ThreadInTest.h
+            Test/Kernel/KernelTest.cpp Test/Kernel/KernelTest.h Test/Kernel/WorkingDirectoryStateTest.cpp
+            Test/Kernel/WorkingDirectoryStateTest.h)
     # remove main.cpp file
     list(REMOVE_ITEM SOURCE_FILES "main.cpp")
 
@@ -66,4 +79,5 @@ if(BuildTests)
     target_link_libraries("${TEST_EXECUTABLE_NAME}" ${CMAKE_SOURCE_DIR}/lib/libgtest.a)
     target_link_libraries("${TEST_EXECUTABLE_NAME}" ${CMAKE_SOURCE_DIR}/lib/libgmock.a)
     target_link_libraries ("${TEST_EXECUTABLE_NAME}" ${CMAKE_THREAD_LIBS_INIT})
+    target_link_libraries ("${TEST_EXECUTABLE_NAME}" ${CURSES_LIBRARIES})
 endif()

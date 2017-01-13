@@ -103,11 +103,14 @@ void Kernel::recievedBroadcast(std::pair<BroadcastMessage, TinAddress> pair) {
 				tinNetworkState.addResource(pair.second, resource);
 				if (workingDirectoryState.isDownloaded(resource)) {
 					log.debug(" resource  ", resource.toJson().dump(), " is arleady downloaded");
-				} else if (!workingDirectoryState.contains(resource)) {
-					log.debug(" i want to start download of  ", resource.toJson().dump());
+				} else {
 					resourcesToDownload.push_back(resource);
-					workingDirectoryState.addEmptyResource(resource);
-					fileManagerThread->createEmptyResource(resource);
+					if (!workingDirectoryState.contains(resource)) {
+						log.debug(" i want to start download of  ", resource.toJson().dump());
+
+						workingDirectoryState.addEmptyResource(resource);
+						fileManagerThread->createEmptyResource(resource);
+					}
 				}
 			}
 		}
@@ -152,7 +155,9 @@ void Kernel::clientCommunicationFailure(TinAddress address) {
 
 void Kernel::recievedSegments(TinAddress address, Resource resource, SegmentsSet segmentsSet) {
 	log.warn(" recievedSegments set: ",segmentsSet);
-	fileManagerThread->add([&resource, &segmentsSet]( FileManagerThread &f){ f.setSegments(resource, segmentsSet);} );
+	fileManagerThread->add([resource, segmentsSet]( FileManagerThread &f)mutable{
+		f.setSegments(resource, segmentsSet);
+	} );
 	workingDirectoryState.setSegmentsAsDownloaded( resource, segmentsSet.getRange());
 
 	std::shared_ptr<TinClientThread> clientThread = clientThreads.get(address);
@@ -160,7 +165,9 @@ void Kernel::recievedSegments(TinAddress address, Resource resource, SegmentsSet
 	if( segmentsToDownload.empty()){
 		log.debug(" no segments to download for client ",address," will now close it" );
 		clientThread->add( [](TinClientThread &t){ t.closeConnection(MessageClose::CloseReason::OK);});
-		clientThreads.clearThread(address);
+		clientThreads.clearThread(address); //todo close with ok
+		ContainerUtils::remove(resourcesToDownload, resource);
+		log.debug("Download of resource ",resource," completed " );
 	} else {
 		log.debug(" telling ",address," to download ",segmentsToDownload );
 		clientThread->add( [segmentsToDownload](TinClientThread &t){ t.recieveSegments(segmentsToDownload, MessageStartSendingRequest::PreviousStatus::OK);});
@@ -172,6 +179,7 @@ void Kernel::recievedConnection(std::shared_ptr<TinConnectedServerSocket> connec
 	auto connectedServerThread = std::make_shared<TinConnectedServerThread>(*this, connectedServerSocket, serverThreads.getNextThreadId());
 	serverThreads.add(connectedServerThread);
 	connectedServerThread->add( []( TinConnectedServerThread &t){ t.listenForResourceRequest();});
+	connectedServerThread->startThread();
 }
 
 void Kernel::gotResourceRequest(int threadId, Resource resource) {
@@ -205,7 +213,7 @@ void Kernel::gotStartSendingRequest(int threadId, MessageStartSendingRequest sta
 		serverThreads.closeThread(threadId);
 	}else {
 		auto segmentInfo = startSendingRequest.getSegmentInfo();
-		fileManagerThread->add( [threadId, &resource, segmentInfo]( FileManagerThread &t){
+		fileManagerThread->add( [=]( FileManagerThread &t){
 			Resource res = resource;
 			t.requestSegments(threadId, res, segmentInfo);
 		});

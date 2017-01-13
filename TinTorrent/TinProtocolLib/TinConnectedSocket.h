@@ -56,10 +56,9 @@ protected:
 		json serializedAsJson = message.toJson();
 		std::string jsonDump = serializedAsJson.dump();
 		buffer.setData( serializedMessageSizeOffset, (uint8_t *)jsonDump.c_str(), jsonDump.length()+1);
-
 		size_t serializedDataSize = buffer.getSize();
-		//todo 4096 from configuration
-		Assertions::check(serializedDataSize <= 4096 + serializedMessageSizeOffset, "Serialized data is too big to fit in message");
+
+		Assertions::check(serializedDataSize <= Constants::segmentSize + serializedMessageSizeOffset, "Serialized data is too big to fit in message");
 		*((uint16_t *)buffer.getData()) = (uint16_t)(serializedDataSize);
 	}
 

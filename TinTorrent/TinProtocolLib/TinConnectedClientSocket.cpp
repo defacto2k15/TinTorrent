@@ -5,5 +5,4 @@
 #include "TinConnectedClientSocket.h"
 
 TinConnectedClientSocket::TinConnectedClientSocket(socket_descriptor_t socket) : TinConnectedSocket(socket) {
-
 }

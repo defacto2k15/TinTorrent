@@ -34,12 +34,17 @@ public:
 	}
 
 	std::pair<BroadcastMessage, TinAddress> listenForMessages(){
-		auto senderAddress = readToBuffer();
+		auto senderUdpAddress = readToBuffer();
 		std::string jsonString((const char*) (messagesBuffer.getData()));
 		Assertions::check<SocketCommunicationException>([&jsonString, this](){ return jsonString.length() < messagesBuffer.getSize();}, //todo change to equal
 		                  "BroadcastMessage deserialization. InString bigger than buffer");
 		json j = json::parse(jsonString);
-		return std::make_pair(BroadcastMessage(j), TinAddress(senderAddress));
+
+		sockaddr_in senderTcpAddress;
+		senderTcpAddress.sin_family = AF_INET;
+		senderTcpAddress.sin_addr.s_addr = senderUdpAddress.sin_addr.s_addr;
+		senderTcpAddress.sin_port = htons(Constants::communicationPort);
+		return std::make_pair(BroadcastMessage(j), TinAddress(senderTcpAddress));
 	}
 private:
 	sockaddr_in readToBuffer(){

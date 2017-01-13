@@ -4,7 +4,7 @@
 
 #include "WorkingDirectoryState.h"
 
-bool WorkingDirectoryState::isDownloaded(const Resource &resource) {
+bool WorkingDirectoryState::isDownloaded(const Resource resource) {
 	if( resources.count(resource) == 0 ){
 		return false;
 	}
@@ -17,7 +17,7 @@ bool WorkingDirectoryState::isDownloaded(const Resource &resource) {
 }
 
 SegmentRange WorkingDirectoryState::allocateSegmentsToDownload(Resource resource) {
-	auto stateVec = resources[resource];
+	auto &stateVec = resources[resource];
 	unsigned rangeMin = (unsigned)-1;
 	unsigned rangeMax = (unsigned)-1;
 	for( auto i = 0u; i < stateVec.size(); i++ ){
@@ -32,19 +32,24 @@ SegmentRange WorkingDirectoryState::allocateSegmentsToDownload(Resource resource
 				continue;
 			}
 		} else{
-			if( rangeMin == (unsigned)-1){
+			if( rangeMin != (unsigned)-1){
 				rangeMax = i;
+				break;
 			} else {
 				continue;
 			}
 		}
 	}
-
-	if( rangeMin == (unsigned)-1){
-		Assertions::fail("There is no segments left to download");
+	if( rangeMin == (unsigned)-1 ){
+		return SegmentRange(0,0);
 	}
+
 	if( rangeMax == (unsigned)-1){
 		rangeMax = (unsigned )stateVec.size();
+	}
+
+	for( int i = rangeMin; i < rangeMax; i++){
+		resources[resource][i] = SegmentState ::BEING_DOWNLOADED;
 	}
 	return SegmentRange(rangeMin, rangeMax);
 }
@@ -72,12 +77,12 @@ void WorkingDirectoryState::init(std::vector<FileInfo> &initialFiles) {
 	}
 }
 
-bool WorkingDirectoryState::contains(Resource &resource) {
+bool WorkingDirectoryState::contains(Resource resource) {
 	return resources.count(resource) != 0;
 }
 
 void WorkingDirectoryState::deallocateSegmentRange(Resource resource, SegmentRange range) {
-	auto stateVec = resources[resource];
+	auto &stateVec = resources[resource];
 	for( auto i = range.getMin(); i < range.getMax(); i++ ){
 		stateVec[i] = SegmentState ::MISSING;
 	}
@@ -92,7 +97,7 @@ bool WorkingDirectoryState::removeResource(Resource resource) {
 }
 
 void WorkingDirectoryState::setSegmentsAsDownloaded(Resource resource, SegmentRange range) {
-	auto stateVec = resources[resource];
+	auto &stateVec = resources[resource];
 	for( auto i = range.getMin(); i < range.getMax(); i++ ){
 		stateVec[i] = SegmentState::PRESENT;
 	}
