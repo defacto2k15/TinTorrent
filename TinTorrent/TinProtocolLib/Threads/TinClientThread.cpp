@@ -125,7 +125,3 @@ void TinClientThread::handleException(std::function<void()> func) { //ugly code 
 	}
 }
 
-bool TinClientThread::hasOpenedConnection () {
-	std::cerr << " DBG123 IS BUSY 3 ConnectedSocket "<< ((bool)connectedSocket) << " Is open "<<isConnectionOpen <<   std::endl;
-	return  ( connectedSocket && isConnectionOpen);
-}

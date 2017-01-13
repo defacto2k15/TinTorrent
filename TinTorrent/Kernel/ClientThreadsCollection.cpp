@@ -41,25 +41,14 @@ void ClientThreadsCollection::closeThoseWorkingWith(Resource &resource) {
 
 void ClientThreadsCollection::addNewThread(TinAddress &address, Kernel &kernel, std::function<void(TinClientThread&)> threadFunc) {
 	Assertions::check(clientThreads.count(address) == 0, Help::Str(" There arleady is one thread with address ", address) );
-	std::shared_ptr<TinClientThread> ptr;
-	if( clientThreads.count(address) == 0){
-		ptr = std::make_shared<TinClientThread>(address, kernel);
-		clientThreads[address] = ptr;
-		ptr->startThread();
-	} else {
-		Assertions::check( !clientThreads[address]->hasOpenedConnection(), Help::Str("Error: connection thread to ",address," is still open"));
-		ptr = clientThreads[address];
-	}
+	auto ptr = std::make_shared<TinClientThread>(address, kernel);
+	clientThreads[address] = ptr;
+	ptr->startThread();
 	ptr->add(threadFunc);
 }
 
 bool ClientThreadsCollection::isBusy(const TinAddress &address) {
-	if( clientThreads.count(address) == 0 ){
-		return false;
-	} else if ( clientThreads[address]->hasOpenedConnection()){
-		return true;
-	}
-	return false;
+	return clientThreads.count(address) != 0;
 }
 
 std::vector<OutClientConnectionInfo> ClientThreadsCollection::getConnectionsInfo() {

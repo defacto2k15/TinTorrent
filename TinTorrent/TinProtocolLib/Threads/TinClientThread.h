@@ -38,8 +38,6 @@ public:
 
 	void genericCloseConnection();
 
-	bool hasOpenedConnection();
-
 private:
 	void handleException( std::function<void()> func );
 };
