@@ -30,6 +30,8 @@ public:
 	static int serverBacklogSize;
 	static bool guiActive;
 	static unsigned connectTimeout;
+	static bool automaticAnnouncement;
+	static bool automaticDownload;
 
 };
 

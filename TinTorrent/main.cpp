@@ -8,14 +8,15 @@ int main(int argc, const char **argv) {
 	if (argc != 2 && argc != 3 && argc != 4) {
 		std::cout << "Arguments: [workingDirecory] (configuration file)" << std::endl;
 	}
+
 	std::string configurationPath;
-	if( argc== 3 ){
+	if( argc>= 3 ){
 		configurationPath = std::string(argv[2]);
 	}
 	LogBase log("main");
 
 	// set configuration
-	log.debug("setting configuration");
+	log.debug(Help::Str("setting configuration. ConfigurationPath ",configurationPath));
 	ConfigLoader loader;
 	loader.loadConfigs(configurationPath);
 

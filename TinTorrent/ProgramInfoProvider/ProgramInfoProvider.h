@@ -13,11 +13,13 @@
 #include <ProgramInfoProvider/outStructures/OutServerConnectionInfo.h>
 #include <ProgramInfoProvider/outStructures/OutResourcesBeingDownloaded.h>
 #include <ProgramInfoProvider/outStructures/OutClientConnectionInfo.h>
+#include <Logging/LogBase.h>
 
 class Kernel;
 
 class ProgramInfoProvider{
 	Kernel &kernel;
+	LogBase log;
 public:
 	ProgramInfoProvider( Kernel &kernel );
 
@@ -35,21 +37,15 @@ public:
 	
 	void changeResourceBlockState(Resource);
 
-	std::vector<Resource> getResourcesThatCanBeAnnounced(){
-		return getResourcesToDownload();//todo
-	}
+	std::vector<Resource> getResourcesThatCanBeAnnounced();
 
-	void changeResourceAnnouncementState( Resource &resource){
-		//todo
-	}
+	void changeResourceAnnouncementState( Resource &resource);
 
 	std::vector<Resource> getResourcesThatCanBeDownloaded(){
 		return getResourcesToDownload();//todo
 	}
 
-	void orderResourceDownload(Resource resource){
-		//todo
-	}
+	void orderResourceDownload(Resource resource);
 
 };
 

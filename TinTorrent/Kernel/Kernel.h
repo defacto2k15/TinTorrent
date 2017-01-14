@@ -126,10 +126,11 @@ public:
 
 	 std::vector<Resource> getRevertedResources();
 
-private:
-	void tryToDownloadResources();
+	 LocalResourcesStateInfo &getLocalResourcesStateInfo();
 
 	void removeRevertedResource(Resource &resource);
+private:
+	void tryToDownloadResources();
 
 	void removeConnectionToClient( TinAddress &address);
 

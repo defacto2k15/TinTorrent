@@ -142,3 +142,11 @@ void WorkingDirectoryState::createResourceFilledWith(Resource resource, SegmentS
 void WorkingDirectoryState::assertResourceExists( Resource resource, std::string actionName){
 	Assertions::check(contains(resource), Help::Str("Error. There is no resource ",resource," but action ",actionName," was taken"));
 }
+
+std::vector<Resource> WorkingDirectoryState::getAllResources() {
+	std::vector<Resource> outVec;
+	for( auto &pair : resources){
+		outVec.push_back(pair.first);
+	}
+	return outVec;
+}

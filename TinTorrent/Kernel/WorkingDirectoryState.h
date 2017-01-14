@@ -36,6 +36,8 @@ public:
 
 	std::vector<OutLocalResource> getOutLocalResource();
 
+	std::vector<Resource> getAllResources();
+
 private:
 	uint8_t calculatePresencePercent( std::vector<SegmentState> &vec );
 

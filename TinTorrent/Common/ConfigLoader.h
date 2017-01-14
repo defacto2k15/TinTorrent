@@ -57,6 +57,8 @@ private:
 			Constants::serverBacklogSize = getElement<int >(j, "serverBacklogSize", Constants::serverBacklogSize);
 			Constants::guiActive = getElement<bool >(j, "guiActive", Constants::guiActive);
 			Constants::connectTimeout = getElement<unsigned >(j, "connectTimeout", Constants::connectTimeout);
+			Constants::automaticAnnouncement = getElement<bool >(j, "automaticAnnouncement", Constants::automaticAnnouncement);
+			Constants::automaticDownload = getElement<bool >(j, "automaticDownload", Constants::automaticDownload);
 		} catch( std::exception &ex){
 			std::cout << " Loading configuration failed: "<<ex.what() << std::endl;
 			return false;

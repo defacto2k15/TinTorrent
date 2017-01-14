@@ -1,0 +1,12 @@
+[
+	{ "delay":10, "action": "getLocalResources", "target":"/tmp/getLocalResources.txt" },
+	{ "delay":15, "action": "getResourcesInOtherClients", "target":"/tmp/getResourcesInOtherClients.txt"  },
+	{ "delay":10, "action": "getRevertedResources", "target":"/tmp/getRevertedResources.txt"  },
+	{ "delay":10, "action": "getConnectionsToOtherServersInfo", "target":"/tmp/getConnectionsToOtherServersInfo.txt" },
+	{ "delay":10, "action": "getConnectionsToUsInfo", "target":"/tmp/getConnectionsToUsInfo.txt" },
+	{ "delay":10, "action": "changeResourceBlockState", "value": { "Name":"file1", "Size":10001}, "target":"/tmp/changeResourceBlockState.txt"  },
+	{ "delay":10, "action": "getResourcesThatCanBeAnnounced", "target":"/tmp/getResourcesThatCanBeAnnounced.txt"   },
+	{ "delay":10, "action": "changeResourceAnnouncementState",  "value": { "Name":"file1", "Size":10001}, "target":"/tmp/changeResourceAnnouncementState.txt"  },
+	{ "delay":10, "action": "getResourcesThatCanBeDownloaded", "target":"/tmp/getResourcesThatCanBeDownloaded.txt"  },
+	{ "delay":10, "action": "orderResourceDownload",  "value": { "Name":"file1", "Size":10001} , "target":"/tmp/orderResourceDownload.txt" }
+]

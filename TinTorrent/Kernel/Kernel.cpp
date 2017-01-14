@@ -110,8 +110,13 @@ void Kernel::recievedBroadcast(std::pair<BroadcastMessage, TinAddress> pair) {
 
 					localResourcesStateInfo.setToDownload(resource);
 					if (!localResourcesStateInfo.containsLocalResource(resource)) {
-						log.debug(" i want to start download of  ", resource.toJson().dump());
-						localResourcesStateInfo.addEmptyLocalResource(resource);
+						log.debug(" Can I  start download of  ", resource.toJson().dump());
+						if( Constants::automaticDownload ){
+							log.debug("Ok, i can do it");
+							localResourcesStateInfo.addEmptyLocalResource(resource);
+						} else {
+							log.debug("Nope, start is non-automatic");
+						}
 						fileManagerThread->createEmptyResource(resource);
 					}
 				}
@@ -256,7 +261,7 @@ void Kernel::serverCommunicationFailure(int threadId) {
 
 void Kernel::broadcastResources() {
 	log.debug("Broadcasting resources ");
-	auto downloadedResources = localResourcesStateInfo.getDownloadedResources();
+	auto downloadedResources = localResourcesStateInfo.getBroadcastableResources();
 	if( !downloadedResources.empty()){
 		threadTinBroadcast->add( [this, downloadedResources]( ThreadTinBroadcast &b ){
 			b.sendAnnounceMessage(downloadedResources);
@@ -291,7 +296,7 @@ void Kernel::workingDirectoryChanged(UpdateInfo updateInfo) {
 				t.removeResource(res);
 			});
 		} else {
-			localResourcesStateInfo.addLocalResource(res);
+			localResourcesStateInfo.addNewlyFoundLocalResource(res);
 		}
 	}
 	for( FileInfo &info : updateInfo.getDeletedFiles() ){
@@ -364,6 +369,9 @@ std::vector<Resource> Kernel::getRevertedResources() {
 	return localResourcesStateInfo.getReverted();
 }
 
+LocalResourcesStateInfo &Kernel::getLocalResourcesStateInfo(){
+	return localResourcesStateInfo;
+}
 
 void Kernel::tryToDownloadResources() {
 	log.debug(" tryToDownloadResources ") ;
@@ -393,6 +401,7 @@ void Kernel::tryToDownloadResources() {
 }
 
 void Kernel::removeRevertedResource(Resource &resource) {
+	log.debug(Help::Str("Removing revertedResource ", resource));
 	tinNetworkState.removeResource(resource);
 	bool wasResourcePresent = localResourcesStateInfo.isLocalResourcePresent(resource);
 	localResourcesStateInfo.setAsReverted(resource);

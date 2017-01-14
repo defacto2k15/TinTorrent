@@ -7,32 +7,60 @@
 
 
 #include <Utils/ContainerUtils.h>
+#include <Logging/LogBase.h>
 #include "WorkingDirectoryState.h"
 
 class  LocalResourcesStateInfo
 {
+private:
+	enum ResourceState {
+		ERROR_DONTUSE, REVERTED, NOT_INTRESTING, CAN_BE_DOWNLOADED, DOWNLOADED_BROADCASTABLE, DOWNLOADED_NONBROADCASTABLE
+	};
+
 	WorkingDirectoryState workingDirectoryState;
-	std::vector<Resource> revertedResources;
-	std::vector<Resource> resourcesToDownload;
+	std::map<Resource, ResourceState, ResourceCompare> resourceStates;
+	LogBase log;
 protected:
 	LocalResourcesStateInfo(LocalResourcesStateInfo const &) = delete;
 	void operator=(LocalResourcesStateInfo const &x) = delete;
 public:
-	LocalResourcesStateInfo() = default;
+	LocalResourcesStateInfo() : log("LocalResourcesStateInfo"){
+	}
 
 	void init(std::vector<FileInfo> fileInfos ){
 		workingDirectoryState.init(fileInfos);
+		for( auto &res : workingDirectoryState.getAllResources()){
+			if( workingDirectoryState.isDownloaded(res) && Constants::automaticDownload ){
+				if( Constants::automaticAnnouncement ){
+					resourceStates[res] = ResourceState::DOWNLOADED_BROADCASTABLE;
+				} else {
+					resourceStates[res] = ResourceState::DOWNLOADED_NONBROADCASTABLE;
+				}
+
+			} else {
+				resourceStates[res] = ResourceState ::CAN_BE_DOWNLOADED;
+			}
+		}
 	}
 
 	bool isReverted( Resource resource ){
-		return ContainerUtils::Contains(revertedResources, resource);
+		if( resourceStates.count(resource) == 0 ){
+			return false;
+		}
+		return resourceStates[resource] == ResourceState::REVERTED;
 	}
 
-	void addLocalResource( Resource resource ){
+	void addNewlyFoundLocalResource( Resource resource ){
+		if( Constants::automaticAnnouncement ){
+			resourceStates[resource] = ResourceState::DOWNLOADED_BROADCASTABLE;
+		} else {
+			resourceStates[resource] = ResourceState::DOWNLOADED_NONBROADCASTABLE;
+		}
 		workingDirectoryState.addResource(resource);
 	}
 
 	void addEmptyLocalResource( Resource resource ){
+		resourceStates[resource] = ResourceState ::CAN_BE_DOWNLOADED;
 		workingDirectoryState.addEmptyResource(resource);
 	}
 
@@ -41,7 +69,7 @@ public:
 	}
 
 	void setToDownload( Resource resource ){
-		ContainerUtils::addWithoutDuplicate(resourcesToDownload, resource);
+		resourceStates[resource] = ResourceState ::CAN_BE_DOWNLOADED;
 	}
 
 	bool containsLocalResource( Resource resource ){
@@ -61,12 +89,16 @@ public:
 	}
 
 	void setAsDownloaded( Resource resource ){
-		ContainerUtils::addWithoutDuplicate(resourcesToDownload, resource);
+		if( Constants::automaticAnnouncement ){
+			resourceStates[resource] = ResourceState::DOWNLOADED_BROADCASTABLE;
+		} else {
+			resourceStates[resource] = ResourceState::DOWNLOADED_NONBROADCASTABLE;
+		}
 	}
 
 	void removeLocalResource( Resource resource ){
+		resourceStates.erase(resource);
 		workingDirectoryState.removeResource(resource);
-		ContainerUtils::remove(resourcesToDownload, resource);
 	}
 
 	std::vector<Resource> getDownloadedResources(){
@@ -74,11 +106,33 @@ public:
 	}
 
 	std::vector<Resource> getReverted(){
-		return revertedResources;
+		std::vector<Resource> outVec;
+		for( auto &pair : resourceStates ){
+			if( pair.second == ResourceState::REVERTED){
+				outVec.push_back(pair.first);
+			}
+		}
+		return outVec;
 	}
 
 	std::vector<Resource> getResourcesToDownload(){
-		return resourcesToDownload;
+		std::vector<Resource> outVec;
+		for( auto &pair : resourceStates ){
+			if( pair.second == ResourceState::CAN_BE_DOWNLOADED){
+				outVec.push_back(pair.first);
+			}
+		}
+		return outVec;
+	}
+
+	std::vector<Resource> getBroadcastableResources(){
+		std::vector<Resource> outVec;
+		for( auto &pair : resourceStates ){
+			if( pair.second == ResourceState::DOWNLOADED_BROADCASTABLE){
+				outVec.push_back(pair.first);
+			}
+		}
+		return outVec;
 	}
 
 	WorkingDirectoryState& getWorkingDirectoryState(){
@@ -91,9 +145,38 @@ public:
 
 	void setAsReverted(Resource resource ){
 		workingDirectoryState.removeResource(resource);
-		ContainerUtils::remove(resourcesToDownload, resource);
-		ContainerUtils::addWithoutDuplicate(revertedResources, resource);
+		resourceStates[resource] = ResourceState ::REVERTED;
 	}
+
+	void changeResourceAnnouncementState(Resource resource ){
+		if( resourceStates.count(resource ) == 0){
+			log.warn(Help::Str("Soft Error. There is no info about resource ",resource," so i cant change announcement"));
+		}
+		if( resourceStates[resource] == DOWNLOADED_BROADCASTABLE ){
+			resourceStates[resource] = DOWNLOADED_NONBROADCASTABLE;
+		} else if(resourceStates[resource] == DOWNLOADED_NONBROADCASTABLE  ){
+			resourceStates[resource] = DOWNLOADED_BROADCASTABLE;
+		} else {
+			log.warn(Help::Str("Soft Error. Resource ",resource," has state ", resourceStates[resource], " so i cant change announcement"));
+		}
+
+	}
+
+	void changeResourceDownloadabilityState(Resource resource ){
+		if( resourceStates.count(resource ) == 0){
+			log.warn(Help::Str("Soft Error. There is no info about resource ",resource," so i cant change Downloadability"));
+		}
+		if( resourceStates[resource] == NOT_INTRESTING ){
+			resourceStates[resource] = CAN_BE_DOWNLOADED;
+		} else if(resourceStates[resource] == CAN_BE_DOWNLOADED  ){
+			resourceStates[resource] = NOT_INTRESTING;
+		} else {
+			log.warn(Help::Str("Soft Error. Resource ",resource," has state ", resourceStates[resource], " so i cant change Downloadability"));
+		}
+
+	}
+
+
 
 };
 

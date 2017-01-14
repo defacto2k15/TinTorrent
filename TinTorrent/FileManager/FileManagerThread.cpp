@@ -63,6 +63,7 @@ void FileManagerThread::setSegments(Resource &resource, SegmentsSet segmentsSet)
 }
 
 void FileManagerThread::removeResource(Resource resource) {
+	log.debug(Help::Str(" removeResource ",resource));
 	fileManager.removeResource(resource);
 }
 
