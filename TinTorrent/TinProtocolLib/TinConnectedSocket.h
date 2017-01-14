@@ -95,7 +95,7 @@ private:
 		Buffer bufferToDeserialize = buffer.getBufferWithOffset(serializedMessageSizeOffset);
 		std::string jsonString((const char*) (buffer.getData()+serializedMessageSizeOffset));
 		Assertions::check<SocketCommunicationException>([&jsonString, this](){ return jsonString.length() < buffer.getSize();}, //todo change to equal
-		                  "Message deserialization. InString bigger than buffer");
+		                  Help::Str("Message deserialization. InString ",jsonString.length()," bigger than buffer ",buffer.getSize()));
 		// todo throw other exception - something like Model logic exception
 		json j = json::parse(jsonString);
 		return j;

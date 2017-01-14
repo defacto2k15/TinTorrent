@@ -21,3 +21,4 @@ bool Constants::advancedLoggingActive = false;
 int Constants::serverBacklogSize = 10;
 unsigned Constants::secondsBetweenStartingDownloads = 10;
 bool Constants::guiActive = true;
+unsigned Constants::connectTimeout = 8;

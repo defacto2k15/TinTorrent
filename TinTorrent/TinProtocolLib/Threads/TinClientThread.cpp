@@ -88,7 +88,9 @@ void TinClientThread::recieveSegments(SegmentRange segmentRange, MessageStartSen
 void TinClientThread::closeConnection(MessageClose::CloseReason closeReason) {
 	log.debug(" closing connection with reason ", closeReason.getValue() );
 	handleException([closeReason, this](){
-		connectedSocket->closeConnection(closeReason);
+		if( connectedSocket) {
+			connectedSocket->closeConnection(closeReason);
+		}
 	});
 	isConnectionOpen = false;
 }
@@ -103,7 +105,9 @@ SegmentRange TinClientThread::getRequestedSegments() const {
 
 void TinClientThread::genericCloseConnection() {
 	try{
-		connectedSocket->closeConnection(MessageClose::CloseReason::OK);
+		if( connectedSocket) {
+			connectedSocket->closeConnection(MessageClose::CloseReason::OK);
+		}
 		isConnectionOpen = false;
 	} catch (...){
 		// swallowing exception
@@ -120,7 +124,9 @@ void TinClientThread::handleException(std::function<void()> func) { //ugly code 
 	} catch( std::exception &e){
 		log.debug(" listening resource request failed: ", e.what());
 		kernel.add([this](Kernel &k){ k.clientCommunicationFailure(addressToConnect);});
-		connectedSocket->closeConnection( MessageClose::CloseReason::JSON_DESERIALIZATION);
+		if( connectedSocket) {
+			connectedSocket->closeConnection(MessageClose::CloseReason::JSON_DESERIALIZATION);
+		}
 		isConnectionOpen = false;
 	}
 }

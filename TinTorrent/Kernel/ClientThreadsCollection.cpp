@@ -12,8 +12,9 @@ void ClientThreadsCollection::clearThread(TinAddress address) {
 
 void ClientThreadsCollection::removeThread(TinAddress &address) {
 	std::shared_ptr<TinClientThread> sharedPtr = clientThreads[address];
-	clientThreads[address]->add( []( TinClientThread &t){
+	clientThreads[address]->add( [sharedPtr]( TinClientThread &t){
 		t.genericCloseConnection();
+		sharedPtr.unique(); // to disable warn
 	});
 	clientThreads[address]->add( [sharedPtr]( TinClientThread &t){
 		t.killYourself();

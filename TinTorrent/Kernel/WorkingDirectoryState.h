@@ -40,6 +40,8 @@ private:
 	uint8_t calculatePresencePercent( std::vector<SegmentState> &vec );
 
 	void createResourceFilledWith( Resource resource, SegmentState state );
+
+	void assertResourceExists( Resource resource, std::string actionName);
 };
 
 

@@ -54,7 +54,8 @@ set(SOURCE_FILES main.cpp TinProtocolLib/TinServerSocket.cpp TinProtocolLib/TinS
         ProgramInfoProvider/outStructures/OutServerConnectionInfo.cpp ProgramInfoProvider/outStructures/OutServerConnectionInfo.h
         Logging/LogBase.cpp Logging/LogBase.h Logging/LoggingMain.cpp Logging/LoggingMain.h
         ProgramInfoProvider/outStructures/OutResourcesBeingDownloaded.cpp ProgramInfoProvider/outStructures/OutResourcesBeingDownloaded.h
-        Common/ConfigLoader.cpp Common/ConfigLoader.h Test/ScenarioLoader/ScenarioRunner.cpp Test/ScenarioLoader/ScenarioRunner.h Test/ScenarioLoader/ScenarioAction.cpp Test/ScenarioLoader/ScenarioAction.h)
+        Common/ConfigLoader.cpp Common/ConfigLoader.h Test/ScenarioLoader/ScenarioRunner.cpp Test/ScenarioLoader/ScenarioRunner.h Test/ScenarioLoader/ScenarioAction.cpp Test/ScenarioLoader/ScenarioAction.h
+        Kernel/LocalResourcesStateInfo.cpp Kernel/LocalResourcesStateInfo.h)
 add_executable(TinTorrent ${SOURCE_FILES})
 
 target_compile_options( TinTorrent PRIVATE -Wall -Wextra )

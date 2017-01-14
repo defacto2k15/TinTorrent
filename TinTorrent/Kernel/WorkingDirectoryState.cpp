@@ -17,6 +17,7 @@ bool WorkingDirectoryState::isDownloaded(const Resource resource) {
 }
 
 SegmentRange WorkingDirectoryState::allocateSegmentsToDownload(Resource resource) {
+	assertResourceExists(resource,"allocateSegmentsToDownload");
 	auto &stateVec = resources[resource];
 	unsigned rangeMin = (unsigned)-1;
 	unsigned rangeMax = (unsigned)-1;
@@ -82,6 +83,7 @@ bool WorkingDirectoryState::contains(Resource resource) {
 }
 
 void WorkingDirectoryState::deallocateSegmentRange(Resource resource, SegmentRange range) {
+	assertResourceExists(resource, "deallocateSegmentRange");
 	auto &stateVec = resources[resource];
 	for( auto i = range.getMin(); i < range.getMax(); i++ ){
 		stateVec[i] = SegmentState ::MISSING;
@@ -97,6 +99,7 @@ bool WorkingDirectoryState::removeResource(Resource resource) {
 }
 
 void WorkingDirectoryState::setSegmentsAsDownloaded(Resource resource, SegmentRange range) {
+	assertResourceExists(resource, "setSegmentsAsDownloaded");
 	auto &stateVec = resources[resource];
 	for( auto i = range.getMin(); i < range.getMax(); i++ ){
 		stateVec[i] = SegmentState::PRESENT;
@@ -134,4 +137,8 @@ void WorkingDirectoryState::createResourceFilledWith(Resource resource, SegmentS
 		segmentStateVec[i] =  state;
 	}
 	resources[resource] = segmentStateVec;
+}
+
+void WorkingDirectoryState::assertResourceExists( Resource resource, std::string actionName){
+	Assertions::check(contains(resource), Help::Str("Error. There is no resource ",resource," but action ",actionName," was taken"));
 }

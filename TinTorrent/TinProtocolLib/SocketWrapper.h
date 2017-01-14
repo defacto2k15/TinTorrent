@@ -13,8 +13,8 @@
 #include "../Assertions/Assertions.h"
 
 class SocketWrapper {
-	const socket_descriptor_t INVALID = -1;
 protected:
+	const socket_descriptor_t INVALID = -1;
 	socket_descriptor_t  socketDescriptor;
 	SocketWrapper() : socketDescriptor(INVALID){
 	};

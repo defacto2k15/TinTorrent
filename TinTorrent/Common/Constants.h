@@ -29,6 +29,7 @@ public:
 	static bool advancedLoggingActive;
 	static int serverBacklogSize;
 	static bool guiActive;
+	static unsigned connectTimeout;
 
 };
 

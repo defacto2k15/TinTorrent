@@ -57,7 +57,7 @@ void FileManagerThread::setSegments(Resource &resource, SegmentsSet segmentsSet)
 	try{
 		fileManager.setSegments(resource, segmentsSet);
 	} catch (MissingRequiredFile ex ){
-		log.warn(" segment was missing");
+		log.warn("SetSegments: segment was missing");
 		kernel.add( [ resource]( Kernel &k){ k.resourceMissing( resource);});
 	}
 }

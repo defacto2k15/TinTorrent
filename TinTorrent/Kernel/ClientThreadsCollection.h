@@ -27,6 +27,16 @@ public:
 	bool isBusy(const TinAddress &address);
 
 	std::vector<OutClientConnectionInfo> getConnectionsInfo();
+
+	void removeAllThreads(){
+		std::vector<TinAddress> addressesToRemove;
+		for( auto &pair : clientThreads ){
+			addressesToRemove.push_back(pair.first);
+		}
+		for( auto &address : addressesToRemove){
+			removeThread(address);
+		}
+	}
 };
 
 

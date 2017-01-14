@@ -19,6 +19,7 @@
 #include "TinNetworkState.h"
 #include "ClientThreadsCollection.h"
 #include "ServerThreadsCollection.h"
+#include "LocalResourcesStateInfo.h"
 #include <Kernel/Kernel.h>
 #include <ProgramInfoProvider/outStructures/OutLocalResource.h>
 #include <future>
@@ -35,13 +36,10 @@ class Kernel : public ActionQueue<Kernel> {
 	std::unique_ptr<FileManagerThread> fileManagerThread;
 	std::unique_ptr<ProgramInfoProvider> programInfoProvider;
 
-	WorkingDirectoryState workingDirectoryState;
+	LocalResourcesStateInfo localResourcesStateInfo;
 	TinNetworkState tinNetworkState;
 	ClientThreadsCollection clientThreads;
 	ServerThreadsCollection serverThreads;
-
-	std::vector<Resource> resourcesToDownload;
-	std::vector<Resource> revertedResources;
 
 	std::unique_ptr<ActionThread> broadcastingThread;
 	std::unique_ptr<ActionThread> downloadStartingThread;

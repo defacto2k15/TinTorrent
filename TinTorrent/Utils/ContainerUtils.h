@@ -48,6 +48,20 @@ public:
 	static void remove( std::vector<T> &vec, T &elemToRemove){
 		vec.erase(std::remove(vec.begin(), vec.end(), elemToRemove), vec.end());
 	}
+
+	template <typename T>
+	static void addWithoutDuplicate( std::vector<T> &inVec, T elem ){
+		if( !Contains(inVec, elem)){
+			inVec.push_back(elem);
+		}
+	}
+
+	template <typename T>
+	static void removeIfPresent( std::vector<T> &inVec, T elem ){
+		if( Contains(inVec, elem)){
+			remove(inVec, elem);
+		}
+	}
 };
 
 

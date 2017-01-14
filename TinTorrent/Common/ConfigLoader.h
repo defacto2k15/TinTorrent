@@ -56,6 +56,7 @@ private:
 			Constants::advancedLoggingActive = getElement<bool >(j, "advancedLoggingActive", Constants::advancedLoggingActive);
 			Constants::serverBacklogSize = getElement<int >(j, "serverBacklogSize", Constants::serverBacklogSize);
 			Constants::guiActive = getElement<bool >(j, "guiActive", Constants::guiActive);
+			Constants::connectTimeout = getElement<unsigned >(j, "connectTimeout", Constants::connectTimeout);
 		} catch( std::exception &ex){
 			std::cout << " Loading configuration failed: "<<ex.what() << std::endl;
 			return false;

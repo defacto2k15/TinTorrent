@@ -28,6 +28,16 @@ public:
 	void closeThoseWorkingWith(Resource &resource);
 
 	std::vector<OutServerConnectionInfo> getConnectionsInfo();
+
+	void removeAllThreads(){
+		std::vector<int> idsToRemove;
+		for( auto &pair : threads ){
+			idsToRemove.push_back(pair.first);
+		}
+		for( auto &id : idsToRemove){
+			closeThread(id);
+		}
+	}
 };
 
 
