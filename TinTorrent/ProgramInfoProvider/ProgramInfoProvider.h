@@ -12,6 +12,7 @@
 #include <experimental/optional>
 #include <ProgramInfoProvider/outStructures/OutServerConnectionInfo.h>
 #include <ProgramInfoProvider/outStructures/OutResourcesBeingDownloaded.h>
+#include <ProgramInfoProvider/outStructures/OutClientConnectionInfo.h>
 
 class Kernel;
 
@@ -38,7 +39,7 @@ public:
 		return getResourcesToDownload();//todo
 	}
 
-	void orderResourceAnnouncement( Resource &resource){
+	void changeResourceAnnouncementState( Resource &resource){
 		//todo
 	}
 
@@ -46,7 +47,7 @@ public:
 		return getResourcesToDownload();//todo
 	}
 
-	void orderResourceDownload(){
+	void orderResourceDownload(Resource resource){
 		//todo
 	}
 

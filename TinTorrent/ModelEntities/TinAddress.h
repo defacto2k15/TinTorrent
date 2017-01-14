@@ -21,6 +21,8 @@ public:
 
 	friend std::ostream &operator<<(std::ostream &os, const TinAddress &address);
 
+	std::string toString();
+
 	bool operator==(const TinAddress &rhs) const;
 
 	bool operator!=(const TinAddress &rhs) const;

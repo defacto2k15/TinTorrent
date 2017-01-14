@@ -21,6 +21,15 @@ public:
 	bool isResourceBeingDownloaded();
 
 	Resource getResource();
+
+	json toJson(){
+		json j;
+		j["address"] = address.toString();
+		if( downloadedResource) {
+			j["downloadedResource"] = downloadedResource->toJson();
+		}
+		return j;
+	}
 };
 
 

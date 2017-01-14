@@ -1,7 +1,7 @@
 //
 // Created by defacto on 09.12.16.
 //
-
+#include <sstream>
 #include "TinAddress.h"
 
 bool TinAddress::operator==(const TinAddress &rhs) const {
@@ -33,6 +33,11 @@ std::ostream &operator<<(std::ostream &os, const TinAddress &address) {
 	inet_ntop(AF_INET, &(address.sockaddr.sin_addr), str, INET_ADDRSTRLEN);
 	os << "sockaddr: " << str;
 	return os;
+}
+std::string TinAddress::toString(){
+	std::stringstream ss;
+	ss << *this;
+	return ss.str();
 }
 
 bool TinAddressCompare::operator()(const TinAddress &lhs, const TinAddress &rhs) const {

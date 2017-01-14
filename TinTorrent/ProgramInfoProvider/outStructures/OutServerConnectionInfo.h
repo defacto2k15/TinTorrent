@@ -18,6 +18,13 @@ public:
 	const TinAddress &getAddress() const;
 
 	const Resource &getResource() const;
+
+	json toJson(){
+		json j;
+		j["address"] = address.toString();
+		j["resource"] = resource.toJson();
+		return j;
+	}
 };
 
 
