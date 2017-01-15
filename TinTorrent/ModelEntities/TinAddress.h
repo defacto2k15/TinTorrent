@@ -19,6 +19,8 @@ public:
 
 	sockaddr_in getSockaddr() const;
 
+	bool ipEqual( TinAddress other );
+
 	friend std::ostream &operator<<(std::ostream &os, const TinAddress &address);
 
 	std::string toString();

@@ -40,6 +40,10 @@ std::string TinAddress::toString() {
 	return ss.str();
 }
 
+bool TinAddress::ipEqual(TinAddress other) {
+	return sockaddr.sin_addr.s_addr == other.sockaddr.sin_addr.s_addr;
+}
+
 bool TinAddressCompare::operator()(const TinAddress &lhs, const TinAddress &rhs) const {
 	return lhs.getSockaddr().sin_addr.s_addr < rhs.getSockaddr().sin_addr.s_addr;
 }

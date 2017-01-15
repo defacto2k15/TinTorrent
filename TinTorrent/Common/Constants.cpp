@@ -24,3 +24,4 @@ bool Constants::guiActive = true;
 unsigned Constants::connectTimeout = 8;
 bool Constants::automaticAnnouncement = true;
 bool Constants::automaticDownload = true;
+std::string Constants::interfaceName = "eth0";

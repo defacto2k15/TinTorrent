@@ -2,6 +2,7 @@
 // Created by defacto on 01.01.17.
 //
 
+#include <TinProtocolLib/OwnIpGetter.h>
 #include "Kernel.h"
 
 Kernel::Kernel() : ActionQueue(this, "Kernel"), log("Kernel"){
@@ -15,6 +16,9 @@ void Kernel::startApp(std::string workingDirectory) {
 	// logging
 	log.debug("Starting logging");
 	loggingMain.init();
+
+	/// get own ip
+	//ourAddress = std::make_unique<TinAddress>(OwnIpGetter::getIp("docker0"));
 
 	/// start of initialization
 	programInfoProvider = std::make_unique<ProgramInfoProvider>(*this);
@@ -94,6 +98,14 @@ void Kernel::applicationInit2() {
 
 void Kernel::recievedBroadcast(std::pair<BroadcastMessage, TinAddress> pair) {
 	log.debug(" RecievedBroadcast of ",pair);
+	if( ourAddress){
+		auto first = ourAddress->toString();
+		auto second = pair.second.toString();
+		if( pair.second.ipEqual(*ourAddress.get())){
+			log.debug("Its from us, dont do anything");
+			return;
+		}
+	}
 	tinNetworkState.addAddress(pair.second);
 	if( pair.first.getType() == BroadcastMessage::BroadcastType::ANNOUNCE) {
 		for (Resource &resource : pair.first.getResources()) {

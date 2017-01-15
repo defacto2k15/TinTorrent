@@ -32,6 +32,7 @@ public:
 	static unsigned connectTimeout;
 	static bool automaticAnnouncement;
 	static bool automaticDownload;
+	static std::string interfaceName;
 
 };
 

@@ -21,7 +21,12 @@ int main(int argc, const char **argv) {
 	loader.loadConfigs(configurationPath);
 
 	Kernel kernel;
-	kernel.startApp(std::string(argv[1]));
+	try {
+		kernel.startApp(std::string(argv[1]));
+	} catch( std::exception &e){
+		log.warn(" kernel start failed ", e.what(), " Closing.");
+		return -1;
+	}
 
 	if( argc == 4 ){
 		log.debug("Using scenario file ", argv[3]);

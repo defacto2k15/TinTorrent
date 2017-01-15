@@ -59,6 +59,7 @@ private:
 			Constants::connectTimeout = getElement<unsigned >(j, "connectTimeout", Constants::connectTimeout);
 			Constants::automaticAnnouncement = getElement<bool >(j, "automaticAnnouncement", Constants::automaticAnnouncement);
 			Constants::automaticDownload = getElement<bool >(j, "automaticDownload", Constants::automaticDownload);
+			Constants::interfaceName = getElement<std::string >(j, "interfaceName", Constants::interfaceName);
 		} catch( std::exception &ex){
 			std::cerr << " Loading configuration failed: "<<ex.what() << std::endl;
 			return false;

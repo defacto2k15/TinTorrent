@@ -43,6 +43,8 @@ class Kernel : public ActionQueue<Kernel> {
 
 	std::unique_ptr<ActionThread> broadcastingThread;
 	std::unique_ptr<ActionThread> downloadStartingThread;
+
+	std::unique_ptr<TinAddress> ourAddress;
 public:
 	LogBase log;
 
