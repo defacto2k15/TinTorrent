@@ -30,7 +30,7 @@ FileSegmentsInfo::FileSegmentsInfo(size_t segmentCount, std::string metadataFile
 	std::ifstream source(metadataFilePath.c_str(), std::ios_base::binary);
 
 	size_t  bufferSize = Constants::metadataFileReadingBlockSize;
-	std::unique_ptr<char[]> buffer( new char(bufferSize ));
+	std::unique_ptr<char[]> buffer( new char[bufferSize ]);
 	segmentPresence.resize(segmentCount, false);
 	ssize_t  readBytes = 0;
 	int i = 0;
