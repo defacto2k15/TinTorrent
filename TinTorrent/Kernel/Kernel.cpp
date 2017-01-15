@@ -11,6 +11,7 @@ void Kernel::startApp(std::string workingDirectory) {
 	/// read workingDirectory
 	log.debug("Kernel starts with workingDir: ",workingDirectory);
 
+	setSignalHandler();
 	// logging
 	log.debug("Starting logging");
 	loggingMain.init();
@@ -105,7 +106,7 @@ void Kernel::recievedBroadcast(std::pair<BroadcastMessage, TinAddress> pair) {
 					log.debug(" resource  ", resource.toJson().dump(), " is arleady downloaded");
 				} else {
 					if( resource == Resource()){
-						std::cout << "TODOXXX222 CULPRIT OF BAD RESOURCCE " << std::endl;
+						std::cerr << "TODOXXX222 CULPRIT OF BAD RESOURCCE " << std::endl;
 					}
 
 					localResourcesStateInfo.setToDownload(resource);
@@ -288,7 +289,7 @@ void Kernel::workingDirectoryChanged(UpdateInfo updateInfo) {
 
 		Resource res = info.getResource();
 		if( res == Resource()){
-			std::cout << "TODOXXX CULPRIT OF BAD RESOURCCE " << std::endl;
+			std::cerr << "TODOXXX CULPRIT OF BAD RESOURCCE " << std::endl;
 		}
 		if( localResourcesStateInfo.isReverted(res)){
 			log.debug(" : ", res, " is in reverted resources. Will be removed");
@@ -350,6 +351,7 @@ WorkingDirectoryState &Kernel::getWorkingDirectoryState() {
 }
 
 TinNetworkState &Kernel::getTinNetworkState() {
+	log.debug("TIN NETWORK SETATE");
 	return tinNetworkState;
 }
 
@@ -424,6 +426,35 @@ void Kernel::killApplication() {
 	log.info(" killing application." );
 
 	std::exit(-1);
+}
+
+void Kernel::sig_handler(int sig, siginfo_t *info, void *context) {
+	char buf[400];
+	if( sig == 2 ){
+		std::exit(-1);
+	}
+
+	if (sig == SIGILL || sig == SIGFPE || sig == SIGSEGV || sig == SIGBUS || sig == SIGCHLD || sig == SIGTRAP || sig == SIGPOLL)
+		sprintf(buf, "Signal = %d, subcode = %d, pid = %d, uid = %d, address = %p, errno = %d\n", sig, info->si_code, info->si_pid, info->si_uid, info->si_addr, info->si_errno);
+	else
+		sprintf(buf, "Signal = %d, pid = %d, uid = %d, address = %p, errno = %d\n", sig, info->si_pid, info->si_uid, info->si_addr, info->si_errno);
+
+	std::cerr << "HANDLED SIGNAL " << buf << std::endl;
+}
+
+void Kernel::setSignalHandler() {
+	struct sigaction act;
+	sigemptyset(&act.sa_mask); // or sigfillset(&act.sa_mask);
+	act.sa_flags = SA_SIGINFO;
+	act.sa_sigaction = sig_handler;
+
+	sigaction(SIGABRT, &act, 0);
+	sigaction(SIGALRM, &act, 0);
+	sigaction(SIGFPE, &act, 0);
+	sigaction(SIGHUP, &act, 0);
+	sigaction(SIGILL, &act, 0);
+	sigaction(SIGINT, &act, 0);
+	sigaction(SIGPIPE, &act, 0);
 }
 
 

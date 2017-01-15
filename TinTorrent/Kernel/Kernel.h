@@ -47,6 +47,8 @@ public:
 	Kernel();
 
 	void startApp(std::string workingDirectory);
+
+
 // INIT 1.5 /////////////////////////////////
 	void broadcastThreadStartOk();
 
@@ -135,6 +137,10 @@ private:
 	void removeConnectionToClient( TinAddress &address);
 
 	void killApplication();
+
+	void setSignalHandler();
+
+	static void sig_handler(int sig, siginfo_t * info, void * context);
 };
 
 

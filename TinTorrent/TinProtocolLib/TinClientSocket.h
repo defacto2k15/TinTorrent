@@ -29,7 +29,8 @@ public:
 		Assertions::check<SocketCommunicationException>( [this](){return socketDescriptor != INVALID;}, Help::Str("Socket not initialized as it is ", socketDescriptor));
 		sockaddr_in server = addressToConnect.getSockaddr();
 
-		connectWithTimeout (server);
+		int connectResult = ::connect(socketDescriptor, (struct sockaddr *)&server, sizeof(server));
+		Assertions::check( [connectResult](){ return connectResult == 0;}, "Connect failed");
 		//Assertions::check<SocketCommunicationException>( [connectResult](){ return connectResult == 0;}, "Connect failed");
 		socket_descriptor_t  tempSocket = socketDescriptor;
 		socketDescriptor = 0;
