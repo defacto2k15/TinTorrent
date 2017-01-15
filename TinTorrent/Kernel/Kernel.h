@@ -29,7 +29,7 @@
 
 class Kernel : public ActionQueue<Kernel> {
 	LoggingMain loggingMain;
-	LogBase log;
+
 	std::unique_ptr<ThreadTinBroadcast> threadTinBroadcast;
 	std::unique_ptr<ThreadTinUdpListeningSocket> threadUdpListening;
 	std::unique_ptr<TinServerSocketThread> serverSocketThread;
@@ -44,6 +44,8 @@ class Kernel : public ActionQueue<Kernel> {
 	std::unique_ptr<ActionThread> broadcastingThread;
 	std::unique_ptr<ActionThread> downloadStartingThread;
 public:
+	LogBase log;
+
 	Kernel();
 
 	void startApp(std::string workingDirectory);

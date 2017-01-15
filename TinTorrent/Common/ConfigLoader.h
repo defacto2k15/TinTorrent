@@ -60,7 +60,7 @@ private:
 			Constants::automaticAnnouncement = getElement<bool >(j, "automaticAnnouncement", Constants::automaticAnnouncement);
 			Constants::automaticDownload = getElement<bool >(j, "automaticDownload", Constants::automaticDownload);
 		} catch( std::exception &ex){
-			std::cout << " Loading configuration failed: "<<ex.what() << std::endl;
+			std::cerr << " Loading configuration failed: "<<ex.what() << std::endl;
 			return false;
 		}
 		return true;
@@ -69,7 +69,7 @@ private:
 	template<typename T>
 	T getElement(json &json, std::string elementName, T defaultValue){
 		if( json.count(elementName) == 0){
-			std::cout << " In configuration file there is no element set of name " << elementName << " Reverting to default " << defaultValue << std::endl;
+			std::cerr << " In configuration file there is no element set of name " << elementName << " Reverting to default " << defaultValue << std::endl;
 			return defaultValue;
 		}else{
 			try{
@@ -77,7 +77,7 @@ private:
 				log.debug("Element ",elementName," has value ",value);
 				return value;
 			} catch( std::exception e ){
-				std::cout << "Failed reading configuration element "<<elementName<<" Revering to default "<<defaultValue << std::endl;
+				std::cerr << "Failed reading configuration element "<<elementName<<" Revering to default "<<defaultValue << std::endl;
 				return defaultValue;
 			}
 		}

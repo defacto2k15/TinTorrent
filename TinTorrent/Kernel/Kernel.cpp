@@ -431,7 +431,8 @@ void Kernel::killApplication() {
 void Kernel::sig_handler(int sig, siginfo_t *info, void *context) {
 	char buf[400];
 	if( sig == 2 ){
-		std::exit(-1);
+		std::cerr << "SIGINT caught" << std::endl;
+		std::exit(0);
 	}
 
 	if (sig == SIGILL || sig == SIGFPE || sig == SIGSEGV || sig == SIGBUS || sig == SIGCHLD || sig == SIGTRAP || sig == SIGPOLL)

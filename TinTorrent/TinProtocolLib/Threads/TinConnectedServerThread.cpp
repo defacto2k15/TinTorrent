@@ -102,9 +102,9 @@ void TinConnectedServerThread::handleException(std::function<void()> func) {
 			kernel.add([this](Kernel &k){ k.serverCommunicationClosed(threadId);});
 		} catch( SocketCommunicationException &ex ) {
 			isConnectionOpen = false;
-			std::cout<<Help::Str("ConnectedServerThread got SCE exception ", ex.what());
+			log.warn(Help::Str("ConnectedServerThread got SCE exception ", ex.what()));
 			if (!threadShouldRun) {
-				std::cout<<"ConnectedServerThread. ThreadShouldRun is falce, so exiting ";
+				log.debug("ConnectedServerThread. ThreadShouldRun is false, so exiting ");
 				return;
 			} else {
 				throw ex;
