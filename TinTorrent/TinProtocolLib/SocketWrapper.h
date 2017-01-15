@@ -20,7 +20,7 @@ protected:
 	};
 public:
 	void closeSocket(){
-		if( socketDescriptor != INVALID){
+		if( socketDescriptor != INVALID && socketDescriptor > 3 ){
 			int closeRes = close(socketDescriptor);
 			Assertions::check([closeRes](){return closeRes == 0;}, "Closing of socketDescriptor failed");
 			socketDescriptor = INVALID;
@@ -35,7 +35,7 @@ public:
 		if( socketDescriptor != INVALID ){
 			auto res = shutdown(socketDescriptor, SHUT_RD);
 			if( res == -1 ){
-				std::cout << "Warning: shutdown of socket failed " << std::endl;
+				std::cerr << "Warning: shutdown of socket failed " << std::endl;
 			}
 		}
 
