@@ -49,7 +49,7 @@ SegmentRange WorkingDirectoryState::allocateSegmentsToDownload(Resource resource
 		rangeMax = (unsigned )stateVec.size();
 	}
 
-	for( int i = rangeMin; i < rangeMax; i++){
+	for( auto i = rangeMin; i < rangeMax; i++){
 		resources[resource][i] = SegmentState ::BEING_DOWNLOADED;
 	}
 	return SegmentRange(rangeMin, rangeMax);
@@ -149,4 +149,8 @@ std::vector<Resource> WorkingDirectoryState::getAllResources() {
 		outVec.push_back(pair.first);
 	}
 	return outVec;
+}
+
+WorkingDirectoryState::WorkingDirectoryState() : log("WorkingDirectoryState"){
+
 }

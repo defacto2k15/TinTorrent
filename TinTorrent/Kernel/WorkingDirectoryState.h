@@ -9,11 +9,15 @@
 #include <FileManager/ModelEntities/FileInfo.h>
 #include <Common/SegmentRange.h>
 #include <ProgramInfoProvider/outStructures/OutLocalResource.h>
+#include <Logging/LogBase.h>
 #include "SegmentState.h"
 
 class WorkingDirectoryState {
 	std::map<Resource, std::vector<SegmentState>, ResourceCompare > resources;
+	LogBase log;
 public:
+	WorkingDirectoryState();
+
 	void init( std::vector<FileInfo> &initialFiles );
 
 	bool isDownloaded( const Resource resource);
