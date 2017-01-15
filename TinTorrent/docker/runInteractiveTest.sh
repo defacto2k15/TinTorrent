@@ -13,6 +13,8 @@ echo "--------------------------------------------"
 echo "|   Interactive test, play with ncurses    |"
 echo "--------------------------------------------"
 
+docker rm -f a1 a2 &> /dev/null
+
 docker run --name a1 -v $(pwd)/..:/workVol test1 /bin/bash -c "sleep 9999" &
 docker run --name a2 -v $(pwd)/..:/workVol test1 /bin/bash -c "sleep 9999" &
 

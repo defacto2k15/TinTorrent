@@ -14,3 +14,9 @@ const TinAddress &OutServerConnectionInfo::getAddress() const {
 const Resource &OutServerConnectionInfo::getResource() const {
 	return resource;
 }
+
+std::ostream &operator<<(std::ostream &os, const OutServerConnectionInfo &info) {
+	auto otherInfo = info;
+	os << otherInfo.toJson().dump();
+	return os;
+}

@@ -8,6 +8,7 @@
 
 #include <ModelEntities/TinAddress.h>
 #include <ModelEntities/Resource.h>
+#include <ostream>
 
 class OutServerConnectionInfo {
 	TinAddress address;
@@ -19,12 +20,14 @@ public:
 
 	const Resource &getResource() const;
 
-	json toJson(){
+	json toJson() {
 		json j;
 		j["address"] = address.toString();
 		j["resource"] = resource.toJson();
 		return j;
 	}
+
+	friend std::ostream &operator<<(std::ostream &os, const OutServerConnectionInfo &info);
 };
 
 

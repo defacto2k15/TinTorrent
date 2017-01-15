@@ -34,7 +34,7 @@ std::ostream &operator<<(std::ostream &os, const TinAddress &address) {
 	os << "sockaddr: " << str;
 	return os;
 }
-std::string TinAddress::toString(){
+std::string TinAddress::toString() {
 	std::stringstream ss;
 	ss << *this;
 	return ss.str();

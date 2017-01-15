@@ -9,6 +9,7 @@
 #include <ModelEntities/Resource.h>
 #include <ModelEntities/TinAddress.h>
 #include <Common/SegmentRange.h>
+#include <ostream>
 
 class OutLocalResource {
 public:
@@ -27,6 +28,8 @@ public:
 		j["resource"] = resource.toJson();
 		return j;
 	}
+
+	friend std::ostream &operator<<(std::ostream &os, const OutLocalResource &resource);
 };
 
 

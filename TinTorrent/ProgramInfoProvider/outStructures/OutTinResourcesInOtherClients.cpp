@@ -16,3 +16,8 @@ OutTinResourcesInOtherClients::OutTinResourcesInOtherClients(const TinAddress &a
  std::vector<Resource> OutTinResourcesInOtherClients::getResources()  {
 	return resources;
 }
+
+std::ostream &operator<<(std::ostream &os, const OutTinResourcesInOtherClients &clients) {
+	os << Help::Str("OutTinResourcesInOtherCities: address: ",clients.address, " resources: ", clients.resources);
+	return os;
+}

@@ -12,3 +12,9 @@ OutLocalResource::OutLocalResource(const Resource &resource, uint8_t percentDown
                                    const std::map<TinAddress, SegmentRange, TinAddressCompare> &serversBeingDownloadedInfo)
 		: resource(resource), percentDownloaded(percentDownloaded),
 		  serversBeingDownloadedInfo(serversBeingDownloadedInfo) {}
+
+std::ostream &operator<<(std::ostream &os, const OutLocalResource &resource) {
+	os << Help::Str("resource: ", resource.resource.toJson().dump(), " percentDownloaded: ", resource.percentDownloaded,
+	    " serversBeingDownloadedInfo: ", resource.serversBeingDownloadedInfo);
+	return os;
+}

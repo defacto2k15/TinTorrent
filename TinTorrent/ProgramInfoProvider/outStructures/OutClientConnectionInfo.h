@@ -9,6 +9,7 @@
 #include <ModelEntities/TinAddress.h>
 #include <experimental/optional>
 #include <ModelEntities/Resource.h>
+#include <ostream>
 
 class OutClientConnectionInfo {
 	TinAddress address;
@@ -30,6 +31,8 @@ public:
 		}
 		return j;
 	}
+
+	friend std::ostream &operator<<(std::ostream &os, const OutClientConnectionInfo &info);
 };
 
 

@@ -8,6 +8,7 @@
 
 #include <ModelEntities/TinAddress.h>
 #include <ModelEntities/Resource.h>
+#include <ostream>
 
 class OutTinResourcesInOtherClients {
 	TinAddress address;
@@ -30,6 +31,8 @@ public:
 		j["resources"] = resourcesVec;
 		return j;
 	}
+
+	friend std::ostream &operator<<(std::ostream &os, const OutTinResourcesInOtherClients &clients);
 };
 
 

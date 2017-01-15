@@ -9,6 +9,8 @@
 #include <sstream>
 #include <vector>
 #include <iostream>
+#include <map>
+#include <experimental/optional>
 
 class Help {
 	template<typename T>
@@ -39,6 +41,31 @@ private:
 	static void addToStream( std::stringstream &ss, T onlyElem, identity<const char*> id ){
 		ss << std::string(onlyElem);
 	}
+
+	template<typename T, typename  ID>
+	static void addToStream( std::stringstream &ss, std::vector<T> &onlyElem, identity<ID>){
+		ss << writeVecContents(onlyElem);
+	}
+
+	template<typename K, typename V, typename L, typename  ID>
+	static void addToStream( std::stringstream &ss, std::map<K, V, L> &onlyElem, identity<ID>){
+		for( auto &pair :onlyElem ){
+			addToStream(ss, pair.first, identity<K>());
+			ss << " : ";
+			addToStream(ss, pair.second, identity<V>());
+			ss << std::endl;
+		}
+	}
+
+	template<typename T, typename  ID>
+	static void addToStream( std::stringstream &ss, std::experimental::optional<T> &onlyElem, identity<ID>){
+		if( onlyElem){
+			addToStream(ss, onlyElem.value(), identity<T>());
+		} else {
+			ss << "[EMPTY]";
+		}
+	}
+
 	template<typename T, typename  ID>
 	static void addToStream( std::stringstream &ss, T &onlyElem, identity<ID>){
 		ss << onlyElem;
