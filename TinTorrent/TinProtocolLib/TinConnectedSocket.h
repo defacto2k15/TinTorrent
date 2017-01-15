@@ -76,13 +76,11 @@ protected:
 	void assertBufferHasSizePrefix(){
 		// todo UWAGA : na razie sizePrefix nie bierze pod uwage wielkosci samego siebie, czyli tych 2b
 		uint16_t sizePrefix = *((uint16_t *)buffer.getData());
-		//todo throw other, business logic exception
 		Assertions::check<SocketCommunicationException>( sizePrefix == buffer.getSize(), "SizePrefix is not equal to buffer content length");
 	}
 
 public:
-	// TODO buffer size from configuration
-	TinConnectedSocket( socket_descriptor_t socket ) : socket(socket ), buffer( 5000){};
+	TinConnectedSocket( socket_descriptor_t socket ) : socket(socket ), buffer( Constants::segmentSize+300){};
 
 	void closeConnection( MessageClose::CloseReason closeReason ){
 		MessageClose messageClose(closeReason);
@@ -96,8 +94,12 @@ private:
 		std::string jsonString((const char*) (buffer.getData()+serializedMessageSizeOffset));
 		Assertions::check<SocketCommunicationException>([&jsonString, this](){ return jsonString.length() < buffer.getSize();}, //todo change to equal
 		                  Help::Str("Message deserialization. InString ",jsonString.length()," bigger than buffer ",buffer.getSize()));
-		// todo throw other exception - something like Model logic exception
-		json j = json::parse(jsonString);
+		json j;
+		try {
+			j = json::parse(jsonString);
+		} catch( std::exception &e){
+			throw SocketCommunicationException(e);
+		}
 		return j;
 	}
 };
