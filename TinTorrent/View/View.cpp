@@ -2,6 +2,7 @@
 #include <View/MainMenuScreen.h>
 #include <View/LocalResourcesScreen.h>
 #include <View/OtherClientsScreen.h>
+#include <View/ResourcesToDownloadScreen.h>
 #include <View/StatusScreen.h>
 #include <iostream>
 #include <ncurses.h>
@@ -20,6 +21,8 @@ View::View(Kernel *k) : kernel(k)
 	screens.push_back(screen3);
 	StatusScreen *screen4 = new StatusScreen("status", kernel);
 	screens.push_back(screen4);
+	ResourcesToDownloadScreen *screen5 = new ResourcesToDownloadScreen("remote_resources", kernel);
+	screens.push_back(screen5);
 	activeScreen = screens.front();
 }
 

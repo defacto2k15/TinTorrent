@@ -20,13 +20,17 @@ void MainMenuScreen::drawScreen()
 	if(choisePos == 1) attron( A_UNDERLINE);
 	printw( "2. Wyswietlenie wezlow\n" );
 	attroff( A_UNDERLINE);
-
+	
 	if(choisePos == 2) attron( A_UNDERLINE);
-	printw( "3. Status\n" );
+	printw( "3. Zasoby do pobrania\n" );
+	attroff( A_UNDERLINE);
+
+	if(choisePos == 3) attron( A_UNDERLINE);
+	printw( "4. Status\n" );
 	attroff( A_UNDERLINE);
 	
-	if(choisePos == 3) attron( A_UNDERLINE);
-	printw( "4. Wyjscie\n" );
+	if(choisePos == 4) attron( A_UNDERLINE);
+	printw( "5. Wyjscie\n" );
 	attroff( A_UNDERLINE);
 }
 
@@ -53,9 +57,13 @@ std::string MainMenuScreen::inputHandle()
 			}
 			else if(choisePos == 2)
 			{
-				return "status";
+				return "remote_resources";
 			}
 			else if(choisePos == 3)
+			{
+				return "status";
+			}
+			else if(choisePos == 4)
 			{
 				return "exit";
 			}

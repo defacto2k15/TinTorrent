@@ -42,7 +42,7 @@ std::string OtherClientsScreen::inputHandle()
 			break;
 		case 10:
 		{
-			// TODO pokaz zasoby wybranego wezla
+			// TODO pokaz zasoby wybranego wezla albo cos
 			break;
 		}
 		case KEY_RIGHT:

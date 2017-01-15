@@ -30,7 +30,7 @@ int main(int argc, const char **argv) {
 	} else if (Constants::guiActive) {
 		View view(&kernel);
 		view.start();
-		kernel.closeKernel();
+		//kernel.closeKernel();
 	}
 
 	kernel.join();

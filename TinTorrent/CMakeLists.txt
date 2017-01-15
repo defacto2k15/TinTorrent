@@ -43,6 +43,7 @@ set(SOURCE_FILES main.cpp TinProtocolLib/TinServerSocket.cpp TinProtocolLib/TinS
 		  View/LocalResourcesScreen.h View/LocalResourcesScreen.cpp
 		  View/OtherClientsScreen.h View/OtherClientsScreen.cpp
 		  View/StatusScreen.h View/StatusScreen.cpp
+		  View/ResourcesToDownloadScreen.h View/ResourcesToDownloadScreen.cpp
         FileManager/FileManagerThread.h Kernel/WorkingDirectoryState.cpp Kernel/WorkingDirectoryState.h Kernel/TinNetworkState.cpp
         Kernel/TinNetworkState.h Kernel/SegmentState.h Kernel/ClientThreadsCollection.cpp Kernel/ClientThreadsCollection.h
         Kernel/ServerThreadsCollection.cpp Kernel/ServerThreadsCollection.h ProgramInfoProvider/outStructures/OutLocalResource.cpp
