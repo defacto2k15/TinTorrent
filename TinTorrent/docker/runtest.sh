@@ -22,7 +22,7 @@ docker cp ./a1_file a1:/tin/a1_file
 sleep 120
 
 
-docker cp a2:/tin/a1_file ./a2_file
+docker cp a2:/tin/a1_file.10001 ./a2_file
 if [ -f a2_file ];
 	then
 	   echo "File $FILE exists. Test OK"
