@@ -1,6 +1,6 @@
 from ubuntu
 #ADD https://github.com/defacto2k15/TinTorrent/blob/master/TinTorrent/TinTorrent?raw=true /
-ADD ../TinTorrent /
+ADD ./TinTorrent /
 ADD ./config.json /
 RUN mkdir /tin
 RUN chmod +x TinTorrent

@@ -1,2 +1,1 @@
-cd build && cmake .. && make && cd .. && cp build/TinTorrent TinTorrent
- && TinTorrent docker/TinTorrent
+cd build && cmake .. && make && cd .. && cp build/TinTorrent TinTorrent && cp TinTorrent docker/TinTorrent
