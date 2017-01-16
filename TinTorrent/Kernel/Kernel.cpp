@@ -120,17 +120,10 @@ void Kernel::recievedBroadcast(std::pair<BroadcastMessage, TinAddress> pair) {
 					if( resource == Resource()){
 						std::cerr << "TODOXXX222 CULPRIT OF BAD RESOURCCE " << std::endl;
 					}
-
-					localResourcesStateInfo.setToDownload(resource);
-					if (!localResourcesStateInfo.containsLocalResource(resource)) {
-						log.debug(" Can I  start download of  ", resource.toJson().dump());
-						if( Constants::automaticDownload ){
-							log.debug("Ok, i can do it");
-							localResourcesStateInfo.addEmptyLocalResource(resource);
-						} else {
-							log.debug("Nope, start is non-automatic");
-						}
-						fileManagerThread->createEmptyResource(resource);
+					if( Constants::automaticDownload ){
+						addToDownload(resource);
+					} else {
+						localResourcesStateInfo.addEmptyLocalResourceNotDoDownload(resource);
 					}
 				}
 			}
@@ -433,6 +426,17 @@ void Kernel::removeConnectionToClient(TinAddress &address) {
 	clientThreads.removeThread(address);
 }
 
+void Kernel::addToDownload(Resource &resource ){
+	if (!localResourcesStateInfo.containsLocalResource(resource) && !localResourcesStateInfo.isReverted(resource)) {
+		log.debug(" Can I  start download of  ", resource.toJson().dump());
+		localResourcesStateInfo.addEmptyLocalResource(resource);
+		fileManagerThread->createEmptyResource(resource);
+		localResourcesStateInfo.setToDownload(resource);
+	} else {
+		localResourcesStateInfo.setToDownload(resource);
+	}
+}
+
 void Kernel::killApplication() {
 	log.info(" killing application." );
 
@@ -467,6 +471,16 @@ void Kernel::setSignalHandler() {
 	sigaction(SIGILL, &act, 0);
 	sigaction(SIGINT, &act, 0);
 	sigaction(SIGPIPE, &act, 0);
+}
+
+void Kernel::orderResourceDownload(Resource &resource) {
+	addToDownload(resource);
+}
+
+bool Kernel::viewResouceReverted(Resource &resource) {
+	log.debug("Got Resource reverted message from view. Resource: ",resource);
+	removeRevertedResource(resource);
+	return true;
 }
 
 

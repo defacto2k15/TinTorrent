@@ -113,11 +113,7 @@ public:
 	void closeKernel();
 
 // view talking
-	bool viewResouceReverted( Resource &resource ){
-		log.debug("Got Resource reverted message from view. Resource: ",resource);
-		removeRevertedResource(resource);
-		return true;
-	}
+	bool viewResouceReverted( Resource &resource );
 
 ///getters
 	 WorkingDirectoryState &getWorkingDirectoryState();
@@ -135,10 +131,15 @@ public:
 	 LocalResourcesStateInfo &getLocalResourcesStateInfo();
 
 	void removeRevertedResource(Resource &resource);
+
+	/// change state
+	void orderResourceDownload(Resource &resource);
 private:
 	void tryToDownloadResources();
 
 	void removeConnectionToClient( TinAddress &address);
+
+	void addToDownload(Resource &resource);
 
 	void killApplication();
 
