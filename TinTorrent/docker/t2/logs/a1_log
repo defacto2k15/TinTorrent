@@ -1,0 +1,819 @@
+main: setting configuration. ConfigurationPath /config.json
+ConfigLoader: Element metadataFileSuffix has value .metadata
+ConfigLoader: Element segmentSize has value 4096
+ConfigLoader: Element metadataFileReadingBlockSize has value 4000
+ In configuration file there is no element set of name metadataNameRegexp  Reverting to default (.*)\.[[:digit:]]+(\.metadata)$
+ConfigLoader: Element resourceNameRegexp has value (.*)\.([[:digit:]]+)$
+ConfigLoader: Element maxBroadcastMessageSize has value 4096
+ConfigLoader: Element broadcastPort has value 9999
+ConfigLoader: Element broadcastingAddress has value 172.17.255.255
+ConfigLoader: Element communicationPort has value 9998
+ConfigLoader: Element maxBadRecievedSegmentsBeforeDisconnect has value 3
+ConfigLoader: Element secondsBetweenWorkingDirectoryUpdated has value 15
+ConfigLoader: Element maxSegmentChunkSize has value 2
+ConfigLoader: Element secondsBetweenBroadcasts has value 20
+ConfigLoader: Element secondsBetweenStartingDownloads has value 10
+ConfigLoader: Element advancedLoggingActive has value 0
+ConfigLoader: Element serverBacklogSize has value 10
+ConfigLoader: Element guiActive has value 0
+ In configuration file there is no element set of name connectTimeout Reverting to default 8
+ In configuration file there is no element set of name automaticAnnouncement Reverting to default 1
+ In configuration file there is no element set of name automaticDownload Reverting to default 1
+ In configuration file there is no element set of name interfaceName Reverting to default eth0
+ConfigLoader: Loading configuration file /config.json OK
+Kernel: Kernel starts with workingDir: /tin
+Kernel: Starting logging
+Kernel: initialize working directory
+FileManagerThread:  initialCheck 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+Kernel: Found 0 files in workDir: 
+FileManagerThread:  startScheduledCheckings 
+Kernel: creating & starting threads
+Kernel:  init threadTinBroadcast 
+main: Using scenario file /scenario.json
+ScenarioRunner: Loading configuration file /scenario.json OK
+BroadcastThread: init start
+BroadcastThread: init OK
+Kernel:  broadcastThreadStartOk 
+Kernel:  init threadUdpListening 
+TinUdpListeningSocket:  init start 
+TinUdpListeningSocket:  init OK
+Kernel:  udpListeningSocketInitOk 
+Kernel:  init serverSocketThread 
+ServerSocketThread: init started 
+ServerSocketThread: init OK
+Kernel:  serverSocketInitOK 
+Kernel:  Told threads to listen for conenctions
+ServerSocketThread: listening for connections 
+TinUdpListeningSocket: . Starting listening for broadcasts 
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+Kernel:  tryToDownloadResources 
+Kernel: Broadcasting resources 
+Kernel:  tryToDownloadResources 
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name a1_file type 
+WorkingDirectoryManager: : It is regular file, can process, size is 10001
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+File: : Renaming file to proper resource name. From: /tin/a1_file to /tin/a1_file.10001
+WorkingDirectoryManager: : Found file of name a1_file.10001 type 
+WorkingDirectoryManager: : It is regular file, can process, size is 10001
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : We see a1_file.10001 as resource file
+WorkingDirectoryManager: : Created metadata file
+FileManagerThread:  updateInfo newFiles: [0] : resource: {"Name":"a1_file","Size":10001} fileSegmentsInfo: segmentPresence: [0] : 1
+[1] : 1
+[2] : 1
+
+ deletedFiles: 
+Kernel:  workingDirectoryChanged: newFiles: [0] : resource: {"Name":"a1_file","Size":10001} fileSegmentsInfo: segmentPresence: [0] : 1
+[1] : 1
+[2] : 1
+
+ deletedFiles: 
+Kernel:  tryToDownloadResources 
+Kernel: Broadcasting resources 
+BroadcastThread: sendAnnounceMessage with [0] : {"Name":"a1_file","Size":10001}
+
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.2 >
+ServerSocketThread: got connection from sockaddr: 172.17.0.9
+ServerSocketThread: got connection from sockaddr: 172.17.0.4
+ServerSocketThread: got connection from sockaddr: 172.17.0.7
+ServerSocketThread: got connection from sockaddr: 172.17.0.10
+ServerSocketThread: got connection from sockaddr: 172.17.0.5
+ServerSocketThread: got connection from sockaddr: 172.17.0.3
+ServerSocketThread: got connection from sockaddr: 172.17.0.8
+ServerSocketThread: got connection from sockaddr: 172.17.0.11
+ServerSocketThread: got connection from sockaddr: 172.17.0.6
+BroadcastThread: sendAnnounceMessage ok
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.2 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel: Recieved connection of connectedServerSocket  sockaddr: 172.17.0.9
+Kernel: Recieved connection of connectedServerSocket  sockaddr: 172.17.0.4
+Kernel: Recieved connection of connectedServerSocket  sockaddr: 172.17.0.7
+Kernel: Recieved connection of connectedServerSocket  sockaddr: 172.17.0.10
+Kernel: Recieved connection of connectedServerSocket  sockaddr: 172.17.0.5
+Kernel: Recieved connection of connectedServerSocket  sockaddr: 172.17.0.3
+Kernel: Recieved connection of connectedServerSocket  sockaddr: 172.17.0.8
+Kernel: Recieved connection of connectedServerSocket  sockaddr: 172.17.0.11
+Kernel: Recieved connection of connectedServerSocket  sockaddr: 172.17.0.6
+ConnectedServerThread 6:  starting listening for resource request
+ConnectedServerThread 6:  got request: {"Resource":{"Name":"a1_file","Size":10001},"Type":"ResourceRequest"}
+Kernel:  gotResourceRequest of 6 resource {"Name":"a1_file","Size":10001}
+Kernel:  resource is present, will say accordingly 
+ConnectedServerThread 6:  sending resource response Ok
+ConnectedServerThread 5:  starting listening for resource request
+ConnectedServerThread 5:  got request: {"Resource":{"Name":"a1_file","Size":10001},"Type":"ResourceRequest"}
+Kernel:  gotResourceRequest of 5 resource {"Name":"a1_file","Size":10001}
+Kernel:  resource is present, will say accordingly 
+ConnectedServerThread 5:  sending resource response Ok
+ConnectedServerThread 6:  listening for segment request
+ConnectedServerThread 9:  starting listening for resource request
+ConnectedServerThread 9:  got request: {"Resource":{"Name":"a1_file","Size":10001},"Type":"ResourceRequest"}
+Kernel:  gotResourceRequest of 9 resource {"Name":"a1_file","Size":10001}
+Kernel:  resource is present, will say accordingly 
+ConnectedServerThread 9:  sending resource response Ok
+ConnectedServerThread 7:  starting listening for resource request
+ConnectedServerThread 7:  got request: {"Resource":{"Name":"a1_file","Size":10001},"Type":"ResourceRequest"}
+Kernel:  gotResourceRequest of 7 resource {"Name":"a1_file","Size":10001}
+Kernel:  resource is present, will say accordingly 
+ConnectedServerThread 7:  sending resource response Ok
+ConnectedServerThread 8:  starting listening for resource request
+ConnectedServerThread 8:  got request: {"Resource":{"Name":"a1_file","Size":10001},"Type":"ResourceRequest"}
+Kernel:  gotResourceRequest of 8 resource {"Name":"a1_file","Size":10001}
+Kernel:  resource is present, will say accordingly 
+ConnectedServerThread 8:  sending resource response Ok
+ConnectedServerThread 9:  listening for segment request
+ConnectedServerThread 9:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 9 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 9 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 0 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 9 segmentsSet is range: min: 0 max: 1 segments: [0] : segmentInfo: segmentIndex: 0 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 9:  sending segments of rangemin: 0 max: 1
+ConnectedServerThread 9:  sending segment of index 0
+ConnectedServerThread 4:  starting listening for resource request
+ConnectedServerThread 4:  got request: {"Resource":{"Name":"a1_file","Size":10001},"Type":"ResourceRequest"}
+Kernel:  gotResourceRequest of 4 resource {"Name":"a1_file","Size":10001}
+Kernel:  resource is present, will say accordingly 
+ConnectedServerThread 9:  segment sent, now listening for start sending request
+ConnectedServerThread 9:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 9 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 9 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 1 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 9 segmentsSet is range: min: 1 max: 2 segments: [0] : segmentInfo: segmentIndex: 1 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 5:  listening for segment request
+ConnectedServerThread 5:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 5 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 5 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 0 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 5 segmentsSet is range: min: 0 max: 1 segments: [0] : segmentInfo: segmentIndex: 0 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 5:  sending segments of rangemin: 0 max: 1
+ConnectedServerThread 5:  sending segment of index 0
+ConnectedServerThread 7:  listening for segment request
+ConnectedServerThread 7:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 7 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 7 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 0 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 7 segmentsSet is range: min: 0 max: 1 segments: [0] : segmentInfo: segmentIndex: 0 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 7:  sending segments of rangemin: 0 max: 1
+ConnectedServerThread 7:  sending segment of index 0
+ConnectedServerThread 7:  segment sent, now listening for start sending request
+ConnectedServerThread 7:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 7 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 7 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 1 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 7 segmentsSet is range: min: 1 max: 2 segments: [0] : segmentInfo: segmentIndex: 1 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 7:  sending segments of rangemin: 1 max: 2
+ConnectedServerThread 7:  sending segment of index 1
+ConnectedServerThread 8:  listening for segment request
+ConnectedServerThread 8:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 8 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 8 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 0 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 8 segmentsSet is range: min: 0 max: 1 segments: [0] : segmentInfo: segmentIndex: 0 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 8:  sending segments of rangemin: 0 max: 1
+ConnectedServerThread 8:  sending segment of index 0
+ConnectedServerThread 8:  segment sent, now listening for start sending request
+ConnectedServerThread 8:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 8 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 8 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 1 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 8 segmentsSet is range: min: 1 max: 2 segments: [0] : segmentInfo: segmentIndex: 1 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 9:  sending segments of rangemin: 1 max: 2
+ConnectedServerThread 9:  sending segment of index 1
+ConnectedServerThread 9:  segment sent, now listening for start sending request
+ConnectedServerThread 9:  got segment request: {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 9 request {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 9 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 2 payloadLength: 1809
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 9 segmentsSet is range: min: 2 max: 3 segments: [0] : segmentInfo: segmentIndex: 2 payloadLength: 1809 payload size 1809
+
+ConnectedServerThread 6:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 6 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 6 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 0 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 6 segmentsSet is range: min: 0 max: 1 segments: [0] : segmentInfo: segmentIndex: 0 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 6:  sending segments of rangemin: 0 max: 1
+ConnectedServerThread 6:  sending segment of index 0
+ConnectedServerThread 6:  segment sent, now listening for start sending request
+ConnectedServerThread 6:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 6 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 6 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 1 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 6 segmentsSet is range: min: 1 max: 2 segments: [0] : segmentInfo: segmentIndex: 1 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 6:  sending segments of rangemin: 1 max: 2
+ConnectedServerThread 6:  sending segment of index 1
+ConnectedServerThread 8:  sending segments of rangemin: 1 max: 2
+ConnectedServerThread 8:  sending segment of index 1
+ConnectedServerThread 7:  segment sent, now listening for start sending request
+ConnectedServerThread 3:  starting listening for resource request
+ConnectedServerThread 3:  got request: {"Resource":{"Name":"a1_file","Size":10001},"Type":"ResourceRequest"}
+Kernel:  gotResourceRequest of 3 resource {"Name":"a1_file","Size":10001}
+Kernel:  resource is present, will say accordingly 
+ConnectedServerThread 4:  sending resource response Ok
+ConnectedServerThread 4:  listening for segment request
+ConnectedServerThread 4:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 4 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 4 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 0 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 4 segmentsSet is range: min: 0 max: 1 segments: [0] : segmentInfo: segmentIndex: 0 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 4:  sending segments of rangemin: 0 max: 1
+ConnectedServerThread 4:  sending segment of index 0
+ConnectedServerThread 4:  segment sent, now listening for start sending request
+ConnectedServerThread 4:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 4 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 4 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 1 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 4 segmentsSet is range: min: 1 max: 2 segments: [0] : segmentInfo: segmentIndex: 1 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 8:  segment sent, now listening for start sending request
+ConnectedServerThread 8:  got segment request: {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 8 request {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 8 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 2 payloadLength: 1809
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 8 segmentsSet is range: min: 2 max: 3 segments: [0] : segmentInfo: segmentIndex: 2 payloadLength: 1809 payload size 1809
+
+ConnectedServerThread 7:  got segment request: {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 7 request {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 7 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 2 payloadLength: 1809
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 7 segmentsSet is range: min: 2 max: 3 segments: [0] : segmentInfo: segmentIndex: 2 payloadLength: 1809 payload size 1809
+
+ConnectedServerThread 7:  sending segments of rangemin: 2 max: 3
+ConnectedServerThread 7:  sending segment of index 2
+ConnectedServerThread 3:  sending resource response Ok
+ConnectedServerThread 9:  sending segments of rangemin: 2 max: 3
+ConnectedServerThread 9:  sending segment of index 2
+ConnectedServerThread 6:  segment sent, now listening for start sending request
+ConnectedServerThread 6:  got segment request: {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 6 request {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 6 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 2 payloadLength: 1809
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 6 segmentsSet is range: min: 2 max: 3 segments: [0] : segmentInfo: segmentIndex: 2 payloadLength: 1809 payload size 1809
+
+ConnectedServerThread 6:  sending segments of rangemin: 2 max: 3
+ConnectedServerThread 6:  sending segment of index 2
+ConnectedServerThread 5:  segment sent, now listening for start sending request
+ConnectedServerThread 5:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 5 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 5 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 1 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 5 segmentsSet is range: min: 1 max: 2 segments: [0] : segmentInfo: segmentIndex: 1 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 5:  sending segments of rangemin: 1 max: 2
+ConnectedServerThread 5:  sending segment of index 1
+ConnectedServerThread 5:  segment sent, now listening for start sending request
+ConnectedServerThread 5:  got segment request: {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 5 request {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 5 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 2 payloadLength: 1809
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 5 segmentsSet is range: min: 2 max: 3 segments: [0] : segmentInfo: segmentIndex: 2 payloadLength: 1809 payload size 1809
+
+ConnectedServerThread 3:  listening for segment request
+ConnectedServerThread 3:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 3 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 3 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 0 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 3 segmentsSet is range: min: 0 max: 1 segments: [0] : segmentInfo: segmentIndex: 0 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 6:  segment sent, now listening for start sending request
+ConnectedServerThread 9:  segment sent, now listening for start sending request
+ConnectedServerThread 7:  segment sent, now listening for start sending request
+ConnectedServerThread 5:  sending segments of rangemin: 2 max: 3
+ConnectedServerThread 5:  sending segment of index 2
+ConnectedServerThread 8:  sending segments of rangemin: 2 max: 3
+ConnectedServerThread 8:  sending segment of index 2
+ConnectedServerThread 4:  sending segments of rangemin: 1 max: 2
+ConnectedServerThread 4:  sending segment of index 1
+ConnectedServerThread 8:  segment sent, now listening for start sending request
+ConnectedServerThread 4:  segment sent, now listening for start sending request
+ConnectedServerThread 4:  got segment request: {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 4 request {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 4 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 2 payloadLength: 1809
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 4 segmentsSet is range: min: 2 max: 3 segments: [0] : segmentInfo: segmentIndex: 2 payloadLength: 1809 payload size 1809
+
+ConnectedServerThread 3:  sending segments of rangemin: 0 max: 1
+ConnectedServerThread 3:  sending segment of index 0
+ConnectedServerThread 3:  segment sent, now listening for start sending request
+ConnectedServerThread 3:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 3 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 3 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 1 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 3 segmentsSet is range: min: 1 max: 2 segments: [0] : segmentInfo: segmentIndex: 1 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 7:  recieved close message {"Reason":"Ok","Type":"Close"}
+Kernel:  serverCommunicationClosed of thread 7
+ConnectedServerThread 7:ActionQueue:  got kill yourself request
+ConnectedServerThread 7:  Got message internalKillYourself
+ConnectedServerThread 7:ActionQueue:  terminates thread 
+ConnectedServerThread 7:ActionQueue:  Destructor called 
+ConnectedServerThread 8:  recieved close message {"Reason":"Ok","Type":"Close"}
+Kernel:  serverCommunicationClosed of thread 8
+ConnectedServerThread 8:ActionQueue:  got kill yourself request
+ConnectedServerThread 8:  Got message internalKillYourself
+ConnectedServerThread 8:ActionQueue:  terminates thread 
+ConnectedServerThread 8:ActionQueue:  Destructor called 
+ConnectedServerThread 6:  recieved close message {"Reason":"Ok","Type":"Close"}
+Kernel:  serverCommunicationClosed of thread 6
+ConnectedServerThread 5:  segment sent, now listening for start sending request
+ConnectedServerThread 5:  recieved close message {"Reason":"Ok","Type":"Close"}
+ConnectedServerThread 9:  recieved close message {"Reason":"Ok","Type":"Close"}
+ConnectedServerThread 2:  starting listening for resource request
+ConnectedServerThread 2:  got request: {"Resource":{"Name":"a1_file","Size":10001},"Type":"ResourceRequest"}
+ConnectedServerThread 6:ActionQueue:  got kill yourself request
+ConnectedServerThread 6:  Got message internalKillYourself
+ConnectedServerThread 6:ActionQueue:  terminates thread 
+ConnectedServerThread 6:ActionQueue:  Destructor called 
+Kernel:  serverCommunicationClosed of thread 5
+ConnectedServerThread 4:  sending segments of rangemin: 2 max: 3
+ConnectedServerThread 4:  sending segment of index 2
+ConnectedServerThread 5:ActionQueue:  got kill yourself request
+ConnectedServerThread 5:  Got message internalKillYourself
+ConnectedServerThread 5:ActionQueue:  terminates thread 
+ConnectedServerThread 4:  segment sent, now listening for start sending request
+ConnectedServerThread 4:  recieved close message {"Reason":"Ok","Type":"Close"}ConnectedServerThread 5:ActionQueue:  Destructor called 
+Kernel:  serverCommunicationClosed of thread 9
+ConnectedServerThread 9:ActionQueue:  got kill yourself request
+ConnectedServerThread 9:  Got message internalKillYourself
+ConnectedServerThread 9:ActionQueue:  terminates thread 
+ConnectedServerThread 9:ActionQueue:  Destructor called 
+Kernel:  gotResourceRequest of 2 resource {"Name":"a1_file","Size":10001}
+Kernel:  resource is present, will say accordingly 
+ConnectedServerThread 2:  sending resource response Ok
+ConnectedServerThread 3:  sending segments of rangemin: 1 max: 2
+ConnectedServerThread 3:  sending segment of index 1
+ConnectedServerThread 2:  listening for segment request
+
+Kernel:  serverCommunicationClosed of thread 4
+ConnectedServerThread 4:ActionQueue:  got kill yourself request
+ConnectedServerThread 4:  Got message internalKillYourself
+ConnectedServerThread 4:ActionQueue:  terminates thread 
+ConnectedServerThread 4:ActionQueue:  Destructor called 
+ConnectedServerThread 3:  segment sent, now listening for start sending request
+ConnectedServerThread 3:  got segment request: {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 3 request {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 3 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 2 payloadLength: 1809
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 3 segmentsSet is range: min: 2 max: 3 segments: [0] : segmentInfo: segmentIndex: 2 payloadLength: 1809 payload size 1809
+
+ConnectedServerThread 2:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 2 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 2 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 0 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 2 segmentsSet is range: min: 0 max: 1 segments: [0] : segmentInfo: segmentIndex: 0 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 3:  sending segments of rangemin: 2 max: 3
+ConnectedServerThread 3:  sending segment of index 2
+ConnectedServerThread 2:  sending segments of rangemin: 0 max: 1
+ConnectedServerThread 2:  sending segment of index 0
+ConnectedServerThread 3:  segment sent, now listening for start sending request
+ConnectedServerThread 3:  recieved close message {"Reason":"Ok","Type":"Close"}
+Kernel:  serverCommunicationClosed of thread 3
+ConnectedServerThread 2:  segment sent, now listening for start sending request
+ConnectedServerThread 2:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+ConnectedServerThread 3:ActionQueue:  got kill yourself request
+ConnectedServerThread 3:  Got message internalKillYourself
+ConnectedServerThread 3:ActionQueue:  terminates thread 
+ConnectedServerThread 3:ActionQueue:  Destructor called 
+Kernel:  gotStartSendingRequest threadId 2 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 2 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 1 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 2 segmentsSet is range: min: 1 max: 2 segments: [0] : segmentInfo: segmentIndex: 1 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 2:  sending segments of rangemin: 1 max: 2
+ConnectedServerThread 2:  sending segment of index 1
+ConnectedServerThread 2:  segment sent, now listening for start sending request
+ConnectedServerThread 2:  got segment request: {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 2 request {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 2 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 2 payloadLength: 1809
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 2 segmentsSet is range: min: 2 max: 3 segments: [0] : segmentInfo: segmentIndex: 2 payloadLength: 1809 payload size 1809
+
+ConnectedServerThread 1:  starting listening for resource request
+ConnectedServerThread 1:  got request: {"Resource":{"Name":"a1_file","Size":10001},"Type":"ResourceRequest"}
+Kernel:  gotResourceRequest of 1 resource {"Name":"a1_file","Size":10001}
+Kernel:  resource is present, will say accordingly 
+ConnectedServerThread 2:  sending segments of rangemin: 2 max: 3
+ConnectedServerThread 2:  sending segment of index 2
+ConnectedServerThread 2:  segment sent, now listening for start sending request
+ConnectedServerThread 2:  recieved close message {"Reason":"Ok","Type":"Close"}
+Kernel:  serverCommunicationClosed of thread 2
+ConnectedServerThread 1:  sending resource response Ok
+ConnectedServerThread 1:  listening for segment request
+ConnectedServerThread 2:ActionQueue:  got kill yourself request
+ConnectedServerThread 2:  Got message internalKillYourself
+ConnectedServerThread 2:ActionQueue:  terminates thread 
+ConnectedServerThread 2:ActionQueue:  Destructor called 
+ConnectedServerThread 1:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 1 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":0},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 1 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 0 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 1 segmentsSet is range: min: 0 max: 1 segments: [0] : segmentInfo: segmentIndex: 0 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 1:  sending segments of rangemin: 0 max: 1
+ConnectedServerThread 1:  sending segment of index 0
+ConnectedServerThread 1:  segment sent, now listening for start sending request
+ConnectedServerThread 1:  got segment request: {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 1 request {"Previous":"First","SegmentInfo":{"PayloadLength":4096,"SegmentIndex":1},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 1 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 1 payloadLength: 4096
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 1 segmentsSet is range: min: 1 max: 2 segments: [0] : segmentInfo: segmentIndex: 1 payloadLength: 4096 payload size 4096
+
+ConnectedServerThread 1:  sending segments of rangemin: 1 max: 2
+ConnectedServerThread 1:  sending segment of index 1
+ConnectedServerThread 1:  segment sent, now listening for start sending request
+ConnectedServerThread 1:  got segment request: {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+Kernel:  gotStartSendingRequest threadId 1 request {"Previous":"Ok","SegmentInfo":{"PayloadLength":1809,"SegmentIndex":2},"Type":"StartSendingRequest"}
+FileManagerThread:  requestSegments threadId: 1 resource {"Name":"a1_file","Size":10001} segment info segmentIndex: 2 payloadLength: 1809
+FileManagerThread:  segment was present
+Kernel:  requestedSegmentProvided of thread 1 segmentsSet is range: min: 2 max: 3 segments: [0] : segmentInfo: segmentIndex: 2 payloadLength: 1809 payload size 1809
+
+ConnectedServerThread 1:  sending segments of rangemin: 2 max: 3
+ConnectedServerThread 1:  sending segment of index 2
+ConnectedServerThread 1:  segment sent, now listening for start sending request
+ConnectedServerThread 1:  recieved close message {"Reason":"Ok","Type":"Close"}
+Kernel:  serverCommunicationClosed of thread 1
+ConnectedServerThread 1:ActionQueue:  got kill yourself request
+ConnectedServerThread 1:  Got message internalKillYourself
+ConnectedServerThread 1:ActionQueue:  terminates thread 
+ConnectedServerThread 1:ActionQueue:  Destructor called 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.3 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.3 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.9 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.9 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.5 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.7 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.10 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.8 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.5 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.7 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.10 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.8 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.6 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.4 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.11 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.6 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.4 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.11 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name a1_file.10001.metadata type 
+WorkingDirectoryManager: : It is regular file, can process, size is 1
+WorkingDirectoryManager: : Found file of name a1_file.10001 type 
+WorkingDirectoryManager: : It is regular file, can process, size is 10001
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name a1_file.10001.metadata type 
+WorkingDirectoryManager: : It is regular file, can process, size is 1
+WorkingDirectoryManager: : Found file of name a1_file.10001 type 
+WorkingDirectoryManager: : It is regular file, can process, size is 10001
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+Kernel:  tryToDownloadResources 
+WorkingDirectoryManager: :: We see a1_file.10001.metadata as metadata file
+WorkingDirectoryManager: : There is resource file for it
+WorkingDirectoryManager: : We see a1_file.10001 as resource file
+WorkingDirectoryManager: : Found a1_file.10001.metadata as metadata file
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+Kernel:  tryToDownloadResources 
+Kernel: Broadcasting resources 
+BroadcastThread: sendAnnounceMessage with [0] : {"Name":"a1_file","Size":10001}
+
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.2 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.2 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+BroadcastThread: sendAnnounceMessage ok
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.3 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.3 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.9 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.9 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.5 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.7 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.10 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.8 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.5 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.7 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.10 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.8 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.4 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.6 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.11 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.4 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.6 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.11 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name a1_file.10001.metadata type 
+WorkingDirectoryManager: : It is regular file, can process, size is 1
+WorkingDirectoryManager: : Found file of name a1_file.10001 type 
+WorkingDirectoryManager: : It is regular file, can process, size is 10001
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name a1_file.10001.metadata type 
+WorkingDirectoryManager: : It is regular file, can process, size is 1
+WorkingDirectoryManager: : Found file of name a1_file.10001 type 
+WorkingDirectoryManager: : It is regular file, can process, size is 10001
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: :: We see a1_file.10001.metadata as metadata file
+WorkingDirectoryManager: : There is resource file for it
+WorkingDirectoryManager: : We see a1_file.10001 as resource file
+WorkingDirectoryManager: : Found a1_file.10001.metadata as metadata file
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+ScenarioRunner: W Mon Jan 16 22:07:17 2017
+ wykonujemy akcje  delay: 50 outputFileTarget:  resource: {"Name":"a1_file","Size":10001}
+Kernel: InfoProvider changeResourceBlockState {"Name":"a1_file","Size":10001}
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+FileManagerThread:  removeResource {"Name":"a1_file","Size":10001}
+Kernel:  tryToDownloadResources 
+ScenarioRunner: W Mon Jan 16 22:07:22 2017
+ wykonujemy akcje  delay: 55 outputFileTarget: /getRevertedResources.txt resource: {"Name":"UNSET","Size":0}
+Kernel: InfoProvider getRevertedResources [0] : {"Name":"a1_file","Size":10001}
+
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+Kernel:  tryToDownloadResources 
+Kernel: Broadcasting resources 
+BroadcastThread: sendRevertMessage with [0] : {"Name":"a1_file","Size":10001}
+
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+BroadcastThread: sendRevertMessage ok
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  tryToDownloadResources 
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+Kernel:  tryToDownloadResources 
+Kernel: Broadcasting resources 
+BroadcastThread: sendRevertMessage with [0] : {"Name":"a1_file","Size":10001}
+
+BroadcastThread: sendRevertMessage ok
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+Kernel:  tryToDownloadResources 
+Kernel:  tryToDownloadResources 
+Kernel: Broadcasting resources 
+BroadcastThread: sendRevertMessage with [0] : {"Name":"a1_file","Size":10001}
+
+BroadcastThread: sendRevertMessage ok
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 

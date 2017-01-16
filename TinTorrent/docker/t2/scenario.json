@@ -1,0 +1,5 @@
+[
+	{ "delay":50, "action": "changeResourceBlockState", "value": { "Name":"a1_file", "Size":10001} },
+	{ "delay":55, "action":"getRevertedResources", "target":"/getRevertedResources.txt"}
+]
+
