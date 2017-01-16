@@ -7,13 +7,12 @@ StoppedResourcesScreen::StoppedResourcesScreen(std::string name, Kernel *k) : Sc
 	choisePos = 0;
 	pageNumber = 1;
 	ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
-	localResources = infoProvider.getResourcesThatCanBeAnnounced();
+	localResources = infoProvider.getRevertedResources();
 }
 
 void StoppedResourcesScreen::drawScreen()
 {
-	printw( "<- Q-powrót | Strzalki - wybor zasobu/strony\n" );
-	printw( "   ENTER - usuniecie z listy zakazanych\n" );
+	printw( "<- Q-powrót \n" );
 	printw( "Zakazane zasoby: %d [Strona %d/%d]\n", localResources.size(),
 			  pageNumber, localResources.size()/PAGE_SIZE+1 );
 	printw( "%20s%12s\n", "Nazwa:", "Rozmiar:" );
@@ -42,16 +41,6 @@ std::string StoppedResourcesScreen::inputHandle()
 			choisePos--;
 			if(choisePos < 0) choisePos = (pageNumber*PAGE_SIZE < localResources.size() ? PAGE_SIZE-1 : localResources.size()-(pageNumber-1)*PAGE_SIZE-1);
 			break;
-		case 10:	// ENTER
-		{
-			if(localResources.size() > 0)
-			{	
-				ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
-				infoProvider.changeResourceAnnouncementState(localResources.at(pageNumber*PAGE_SIZE-PAGE_SIZE+choisePos));
-				localResources = infoProvider.getResourcesThatCanBeAnnounced();
-			}
-			break;
-		}
 		case KEY_RIGHT:
 			if(pageNumber < localResources.size()/PAGE_SIZE+1) pageNumber++;
 			break;
@@ -62,7 +51,7 @@ std::string StoppedResourcesScreen::inputHandle()
 		{
 			choisePos = 0;
 			ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
-			localResources = infoProvider.getResourcesThatCanBeAnnounced();
+			localResources = infoProvider.getRevertedResources();
 			break;
 		}
 		case 113:	// KEY_Q
@@ -74,6 +63,6 @@ std::string StoppedResourcesScreen::inputHandle()
 void StoppedResourcesScreen::refresh()
 {
 	ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
-	localResources = infoProvider.getResourcesThatCanBeAnnounced();
+	localResources = infoProvider.getRevertedResources();
 	if((unsigned)choisePos > (pageNumber*PAGE_SIZE < localResources.size() ? PAGE_SIZE : localResources.size()-(pageNumber-1)*PAGE_SIZE)) choisePos = (pageNumber*PAGE_SIZE < localResources.size() ? PAGE_SIZE-1 : localResources.size()-(pageNumber-1)*PAGE_SIZE-1);
 }

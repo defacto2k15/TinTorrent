@@ -14,7 +14,7 @@ OutLocalResource::OutLocalResource(const Resource &resource, uint8_t percentDown
 		  serversBeingDownloadedInfo(serversBeingDownloadedInfo) {}
 
 std::ostream &operator<<(std::ostream &os, const OutLocalResource &resource) {
-	os << Help::Str("resource: ", resource.resource.toJson().dump(), " percentDownloaded: ", resource.percentDownloaded,
+	os << Help::Str("resource: ", resource.resource.toJson().dump(), " percentDownloaded: ", (int)resource.percentDownloaded,
 	    " serversBeingDownloadedInfo: ", resource.serversBeingDownloadedInfo);
 	return os;
 }

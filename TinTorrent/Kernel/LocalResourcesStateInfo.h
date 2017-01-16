@@ -17,6 +17,25 @@ private:
 		ERROR_DONTUSE, REVERTED, NOT_INTRESTING, CAN_BE_DOWNLOADED, DOWNLOADED_BROADCASTABLE, DOWNLOADED_NONBROADCASTABLE
 	};
 
+	std::string resourceStateToString(ResourceState state){
+		switch(state){
+			case ERROR_DONTUSE:
+				return "ERROR_DONTUSE";
+			case REVERTED:
+				return "REVERTED";
+			case NOT_INTRESTING:
+				return "NOT_INTRESTING";
+			case CAN_BE_DOWNLOADED:
+				return "CAN_BE_DOWNLOADED";
+			case DOWNLOADED_BROADCASTABLE:
+				return "DOWNLOADED_BROADCASTABLE";
+			case DOWNLOADED_NONBROADCASTABLE:
+				return "DOWNLOADED_NONBROADCASTABLE";
+			default:
+				return "DEFAULT VALUE";
+		}
+	}
+
 	WorkingDirectoryState workingDirectoryState;
 	std::map<Resource, ResourceState, ResourceCompare> resourceStates;
 	LogBase log;
@@ -143,6 +162,16 @@ public:
 		return outVec;
 	}
 
+	std::vector<Resource> getResourcesThatAreNotYetDownloaded(){
+		std::vector<Resource> outVec;
+		for( auto &pair : resourceStates ){
+			if( pair.second == ResourceState::NOT_INTRESTING){
+				outVec.push_back(pair.first);
+			}
+		}
+		return outVec;
+	}
+
 	WorkingDirectoryState& getWorkingDirectoryState(){
 		return workingDirectoryState;
 	}
@@ -188,7 +217,11 @@ public:
 		resourceStates[res] = ResourceState ::NOT_INTRESTING;
 	}
 
+	void writeResourceStatesInfoToLog(){
+		for( auto &pair : resourceStates ){
+			log.warn(Help::Str("[",pair.first.toJson().dump(),"] = ", resourceStateToString(pair.second)));
+		}
+	}
 };
-
 
 #endif //TINTORRENT_LOCALRESOURCESSTATEINFO_H

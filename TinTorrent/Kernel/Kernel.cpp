@@ -267,6 +267,7 @@ void Kernel::serverCommunicationFailure(int threadId) {
 
 void Kernel::broadcastResources() {
 	log.debug("Broadcasting resources ");
+	localResourcesStateInfo.writeResourceStatesInfoToLog();
 	auto downloadedResources = localResourcesStateInfo.getBroadcastableResources();
 	if( !downloadedResources.empty()){
 		threadTinBroadcast->add( [this, downloadedResources]( ThreadTinBroadcast &b ){
@@ -367,8 +368,8 @@ ServerThreadsCollection &Kernel::getServerThreads() {
 	return serverThreads;
 }
 
-std::vector<Resource> Kernel::getResourcesToDownload() {
-	return localResourcesStateInfo.getResourcesToDownload();
+std::vector<Resource> Kernel::getResourcesThatAreNotYetDownloaded() {
+	return localResourcesStateInfo.getResourcesThatAreNotYetDownloaded();
 }
 
 std::vector<Resource> Kernel::getRevertedResources() {

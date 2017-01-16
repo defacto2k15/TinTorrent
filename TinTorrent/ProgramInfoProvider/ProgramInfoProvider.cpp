@@ -33,7 +33,7 @@ std::vector<OutTinResourcesInOtherClients> ProgramInfoProvider::getResourcesInOt
 std::vector<Resource> ProgramInfoProvider::getResourcesToDownload(){
 	std::promise< std::vector<Resource>> elementPromise;
 	kernel.add( [&]( Kernel &k) {
-		auto outValue =  k.getResourcesToDownload();
+		auto outValue =  k.getResourcesThatAreNotYetDownloaded();
 		k.log.debug("InfoProvider getResourcesToDownload ",outValue);
 		elementPromise.set_value( outValue);
 	});

@@ -24,7 +24,7 @@ public:
 
 	json toJson(){
 		json j;
-		j["percentDownloaded"] = percentDownloaded;
+		j["percentDownloaded"] = (int)percentDownloaded;
 		j["resource"] = resource.toJson();
 		return j;
 	}

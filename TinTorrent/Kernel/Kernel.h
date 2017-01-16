@@ -124,7 +124,7 @@ public:
 
 	 ServerThreadsCollection &getServerThreads();
 
-	 std::vector<Resource> getResourcesToDownload();
+	 std::vector<Resource> getResourcesThatAreNotYetDownloaded();
 
 	 std::vector<Resource> getRevertedResources();
 

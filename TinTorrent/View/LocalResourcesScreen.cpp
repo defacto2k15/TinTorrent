@@ -17,10 +17,11 @@ void LocalResourcesScreen::drawScreen()
 	std::vector<Resource> v =  infoProvider.getResourcesThatCanBeAnnounced();
 
 	printw( "<- Q-powrót | Strzalki - wybor zasobu/strony | F5 - reczne odswiezenie\n" );
+	printw( "   R-zakazanie zasobu\n" );
 	printw( "   ENTER - zakazanie pobierania wybranego zasobu\n" );
 	printw( "\n\nLokalne zasoby: %d [Strona %d/%d]\n", localResources.size(),
 			  pageNumber, localResources.size()/PAGE_SIZE+1 );
-	printw( "%20s%12s%20s\n", "Nazwa:", "Rozmiar:", "Zakazany:");
+	printw( "%20s%12s%20s%20s\n", "Nazwa:", "Rozmiar:", "Rozglaszany:", "Pobrany w");
 	std::vector<OutLocalResource>::iterator resEnd = (pageNumber * PAGE_SIZE < localResources.size() ? localResources.begin() + (pageNumber-1)*PAGE_SIZE + PAGE_SIZE : localResources.end());  
 	int i = 0;	
 	for(std::vector<OutLocalResource>::iterator it = localResources.begin()+(pageNumber-1)*PAGE_SIZE;
@@ -28,9 +29,10 @@ void LocalResourcesScreen::drawScreen()
 	{
 		std::string resourceName = StringHelp::toUtf8((*it).resource.getResourceName());
 		if(i == choisePos) { attron( A_UNDERLINE); attron(COLOR_PAIR(2)); }
-		printw( "%20.20s%12d%20s\n", resourceName.c_str(), 
+		printw( "%20.20s%12d%20s%12d%%\n", resourceName.c_str(),
 										 	  (*it).resource.getResourceSize(),
-										 	  (std::find(v.begin(), v.end(), (*it).resource) != v.end()) ? "true" : "false");
+										 	  (std::find(v.begin(), v.end(), (*it).resource) != v.end()) ? "true" : "false",
+												      (*it).percentDownloaded);
 		attroff( A_UNDERLINE); attron(COLOR_PAIR(3));
 		i++;
 	}
@@ -51,6 +53,13 @@ std::string LocalResourcesScreen::inputHandle()
 		{
 			ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
 			infoProvider.changeResourceAnnouncementState(localResources.at(pageNumber*PAGE_SIZE-PAGE_SIZE+choisePos).resource);
+			break;
+		}
+		case 'r':	// ENTER
+		case 'R':
+		{
+			ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
+			infoProvider.changeResourceBlockState(localResources.at(pageNumber*PAGE_SIZE-PAGE_SIZE+choisePos).resource);
 			break;
 		}
 		case KEY_RIGHT:
