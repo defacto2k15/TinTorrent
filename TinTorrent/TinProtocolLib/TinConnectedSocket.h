@@ -77,10 +77,14 @@ protected:
 	}
 
 	void sendBuffer(){
-		ssize_t sendBytes = send(socket, buffer.getData(), buffer.getSize(), 0);
-		auto &varBuffer = buffer;
-		Assertions::check<SocketCommunicationException>([sendBytes, &varBuffer]{return sendBytes == (ssize_t)varBuffer.getSize();}, "Sending failed");
-		Assertions::check<SocketCommunicationException>(sendBytes != 0 , "Has sent 0 bytes, as were in buffer. Propably a mistake as there was 0 in buffer");
+		ssize_t bytesToSend = buffer.getSize();
+		while (bytesToSend > 0){
+			ssize_t sendBytes = send(socket, buffer.getData()+buffer.getSize()-bytesToSend, bytesToSend , 0);
+			Assertions::check<SocketCommunicationException>(sendBytes > 0, Help::Str( "Error sending. Sent ",sendBytes," bytes") );
+			Assertions::check<SocketCommunicationException>(
+					sendBytes <= bytesToSend, Help::Str( "Error sending. Sent ",sendBytes," bytes when wonted to send only",bytesToSend) );
+			bytesToSend -= sendBytes;
+		}
 	}
 
 	// todo there should be constantId taken into consideration
