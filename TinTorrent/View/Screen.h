@@ -4,6 +4,8 @@
 #pragma once
 #include <Kernel/Kernel.h>
 
+#define PAGE_SIZE 10
+
 class Screen {
 private:
 	std::string screenName;
@@ -15,4 +17,5 @@ public:
 
 	virtual void drawScreen()=0;
 	virtual std::string inputHandle()=0;
+	virtual void refresh()=0;
 };

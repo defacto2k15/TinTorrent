@@ -12,7 +12,7 @@ ResourcesToDownloadScreen::ResourcesToDownloadScreen(std::string name, Kernel *k
 
 void ResourcesToDownloadScreen::drawScreen()
 {
-	printw( "<- Q-powrót\tF5-odswiez\n" );
+	printw( "<- Q-powrót\tENTER - rozpoczecie pobierania wybranego zasobu\n" );
 	printw( "\nZasoby do pobrania: %d [Strona %d/%d]\n", remoteResources.size(),
 			  pageNumber, remoteResources.size()/PAGE_SIZE+1 );
 	printw( "%20s%20s%20s\n", "Nazwa:", "Segmenty:", "Rozmiar:" );
@@ -24,8 +24,8 @@ void ResourcesToDownloadScreen::drawScreen()
 		std::string resourceName = StringHelp::toUtf8((*it).getResourceName());
 		if(i == choisePos) attron( A_UNDERLINE);
 		printw( "%20.20s%20d%20d\n", resourceName.c_str(),
-															(*it).getSegmentCount(),
-															(*it).getResourceSize());
+											  (*it).getSegmentCount(),
+											  (*it).getResourceSize());
 		attroff( A_UNDERLINE);
 		i++;
 	}
@@ -36,16 +36,16 @@ std::string ResourcesToDownloadScreen::inputHandle()
 	int input = getch();
 	switch(input) {
 		case KEY_DOWN:
-			if((unsigned)++choisePos >= remoteResources.size()) choisePos = 0;
+			if((unsigned)++choisePos >= (pageNumber*PAGE_SIZE < remoteResources.size() ? PAGE_SIZE : remoteResources.size()-(pageNumber-1)*PAGE_SIZE)) choisePos = 0;
 			break;
 		case KEY_UP:
 			choisePos--;
-			if(choisePos < 0) choisePos = remoteResources.size()-1;
+			if(choisePos < 0) choisePos = (pageNumber*PAGE_SIZE < remoteResources.size() ? PAGE_SIZE-1 : remoteResources.size()-(pageNumber-1)*PAGE_SIZE-1);
 			break;
 		case 10:	// ENTER
 		{
 			ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
-			infoProvider.orderResourceDownload(remoteResources[choisePos]);
+			infoProvider.orderResourceDownload(remoteResources[pageNumber*PAGE_SIZE-PAGE_SIZE+choisePos]);
 			break;
 		}
 		case KEY_RIGHT:
@@ -65,4 +65,11 @@ std::string ResourcesToDownloadScreen::inputHandle()
 			return "main_menu";
 	}
 	return "";
+}
+
+void ResourcesToDownloadScreen::refresh()
+{
+	ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
+	remoteResources = infoProvider.getResourcesThatCanBeDownloaded();
+	if((unsigned)choisePos > (pageNumber*PAGE_SIZE < remoteResources.size() ? PAGE_SIZE : remoteResources.size()-(pageNumber-1)*PAGE_SIZE)) choisePos = (pageNumber*PAGE_SIZE < remoteResources.size() ? PAGE_SIZE-1 : remoteResources.size()-(pageNumber-1)*PAGE_SIZE-1);
 }

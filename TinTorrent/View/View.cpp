@@ -36,18 +36,23 @@ View::~View()
 
 void View::start()
 {
+	int cycles = 0;
 	while(1)
 	{
 		if(activeScreen != nullptr)
 		{
 			clear();
+			if ( ++cycles > CYCLES_TO_REFRESH )
+			{
+				activeScreen->refresh();
+				cycles = 0;
+			}
 			activeScreen->drawScreen();
 			fflush(stdout);
 			std::string submit = activeScreen->inputHandle();
 			std::string empty = "";			
 			
 			if(submit.compare("exit") == 0) {
-				// TODO stop kernel or not?
 				break;
 			}
 

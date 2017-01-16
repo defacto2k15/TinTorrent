@@ -5,8 +5,6 @@
 #include <ProgramInfoProvider/outStructures/OutServerConnectionInfo.h>
 #include <Common/StringHelp.h>
 
-#define PAGE_SIZE 20
-
 class ResourcesToDownloadScreen: virtual public Screen {
 private:
 	int choisePos;
@@ -17,4 +15,5 @@ public:
 	ResourcesToDownloadScreen(std::string name, Kernel *k);
 	void drawScreen();
 	std::string inputHandle();
+	void refresh();
 };

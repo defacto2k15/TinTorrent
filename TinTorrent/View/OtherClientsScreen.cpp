@@ -34,11 +34,11 @@ std::string OtherClientsScreen::inputHandle()
 	int input = getch();
 	switch(input) {
 		case KEY_DOWN:
-			if((unsigned)++choisePos >= remoteResources.size()) choisePos = 0;
+			if((unsigned)++choisePos >= (pageNumber*PAGE_SIZE < remoteResources.size() ? PAGE_SIZE : remoteResources.size()-(pageNumber-1)*PAGE_SIZE)) choisePos = 0;
 			break;
 		case KEY_UP:
 			choisePos--;
-			if(choisePos < 0) choisePos = remoteResources.size()-1;
+			if(choisePos < 0) choisePos = (pageNumber*PAGE_SIZE < remoteResources.size() ? PAGE_SIZE-1 : remoteResources.size()-(pageNumber-1)*PAGE_SIZE-1);
 			break;
 		case 10:
 		{
@@ -62,4 +62,11 @@ std::string OtherClientsScreen::inputHandle()
 			return "main_menu";
 	}
 	return "";
+}
+
+void OtherClientsScreen::refresh()
+{
+	ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
+	remoteResources = infoProvider.getResourcesInOtherClients();
+	if((unsigned)choisePos > (pageNumber*PAGE_SIZE < remoteResources.size() ? PAGE_SIZE : remoteResources.size()-(pageNumber-1)*PAGE_SIZE)) choisePos = (pageNumber*PAGE_SIZE < remoteResources.size() ? PAGE_SIZE-1 : remoteResources.size()-(pageNumber-1)*PAGE_SIZE-1);
 }

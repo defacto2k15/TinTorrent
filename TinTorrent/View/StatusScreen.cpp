@@ -18,13 +18,13 @@ void StatusScreen::drawScreen()
 	for(std::vector<OutClientConnectionInfo>::iterator it = outConnections.begin();
 		 it != outConnections.end(); ++it)
 	{
-		printw("conn\n");
+		printw("  - conn\n");
 	}
 	printw( "- polaczenia przychodzace: %d\n", outConnections.size() );
 	for(std::vector<OutServerConnectionInfo>::iterator it = inConnections.begin();
 		 it != inConnections.end(); ++it)
 	{
-		printw("conn\n");
+		printw("  - conn\n");
 	}
 }
 
@@ -50,6 +50,15 @@ std::string StatusScreen::inputHandle()
 		}
 		case 113:	// KEY_Q
 			return "main_menu";
+		default:
+			break;
 	}
 	return "";
+}
+
+void StatusScreen::refresh()
+{
+	ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
+	outConnections = infoProvider.getConnectionsToOtherServersInfo();
+	inConnections = infoProvider.getConnectionsToUsInfo();
 }

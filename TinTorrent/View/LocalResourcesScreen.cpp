@@ -2,6 +2,7 @@
 #include <iostream>
 #include <ncurses.h>
 
+
 LocalResourcesScreen::LocalResourcesScreen(std::string name, Kernel *k) : Screen(name, k)
 {
 	choisePos = 0;
@@ -12,10 +13,14 @@ LocalResourcesScreen::LocalResourcesScreen(std::string name, Kernel *k) : Screen
 
 void LocalResourcesScreen::drawScreen()
 {
-	printw( "<- Q-powrót\tF5-odswiez\n" );
+	ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
+	std::vector<Resource> v =  infoProvider.getResourcesThatCanBeAnnounced();
+
+	printw( "<- Q-powrót | Strzalki - wybor zasobu/strony\n" );
+	printw( "   ENTER - zakazanie pobierania wybranego zasobu\n" );
 	printw( "\nLokalne zasoby: %d [Strona %d/%d]\n", localResources.size(),
 			  pageNumber, localResources.size()/PAGE_SIZE+1 );
-	printw( "%12s%20s%12s%20s\n", "Zablokowany:", "Nazwa:", "Rozmiar:", "Pobrany procent:" );
+	printw( "%20s%12s%20s\n", "Nazwa:", "Rozmiar:", "Zakazany:");
 	std::vector<OutLocalResource>::iterator resEnd = (pageNumber * PAGE_SIZE < localResources.size() ? localResources.begin() + (pageNumber-1)*PAGE_SIZE + PAGE_SIZE : localResources.end());  
 	int i = 0;	
 	for(std::vector<OutLocalResource>::iterator it = localResources.begin()+(pageNumber-1)*PAGE_SIZE;
@@ -23,10 +28,9 @@ void LocalResourcesScreen::drawScreen()
 	{
 		std::string resourceName = StringHelp::toUtf8((*it).resource.getResourceName());
 		if(i == choisePos) attron( A_UNDERLINE);
-		printw( "%12s%20.20s%12d\t[%d/100%]\n", (*it).resource.isBlocked() ? "true" : "false",
-													resourceName.c_str(),
-													(*it).resource.getResourceSize(),												      
-													(*it).percentDownloaded);
+		printw( "%20.20s%12d%20s\n", resourceName.c_str(), 
+										 	  (*it).resource.getResourceSize(),
+										 	  (std::find(v.begin(), v.end(), (*it).resource) != v.end()) ? "true" : "false");
 		attroff( A_UNDERLINE);
 		i++;
 	}
@@ -37,16 +41,16 @@ std::string LocalResourcesScreen::inputHandle()
 	int input = getch();
 	switch(input) {
 		case KEY_DOWN:
-			if((unsigned)++choisePos >= localResources.size()) choisePos = 0;
+			if((unsigned)++choisePos >= (pageNumber*PAGE_SIZE < localResources.size() ? PAGE_SIZE : localResources.size()-(pageNumber-1)*PAGE_SIZE)) choisePos = 0;
 			break;
 		case KEY_UP:
 			choisePos--;
-			if(choisePos < 0) choisePos = localResources.size()-1;
+			if(choisePos < 0) choisePos = (pageNumber*PAGE_SIZE < localResources.size() ? PAGE_SIZE-1 : localResources.size()-(pageNumber-1)*PAGE_SIZE-1);
 			break;
 		case 10:	// ENTER
 		{
 			ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
-			infoProvider.changeResourceBlockState(localResources.at(choisePos).resource);
+			infoProvider.changeResourceAnnouncementState(localResources.at(pageNumber*PAGE_SIZE-PAGE_SIZE+choisePos).resource);
 			break;
 		}
 		case KEY_RIGHT:
@@ -66,4 +70,11 @@ std::string LocalResourcesScreen::inputHandle()
 			return "main_menu";
 	}
 	return "";
+}
+
+void LocalResourcesScreen::refresh()
+{
+	ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
+	localResources = infoProvider.getLocalResources();
+	if((unsigned)choisePos > (pageNumber*PAGE_SIZE < localResources.size() ? PAGE_SIZE : localResources.size()-(pageNumber-1)*PAGE_SIZE)) choisePos = (pageNumber*PAGE_SIZE < localResources.size() ? PAGE_SIZE-1 : localResources.size()-(pageNumber-1)*PAGE_SIZE-1);
 }

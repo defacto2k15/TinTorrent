@@ -7,6 +7,8 @@
 #include <Kernel/Kernel.h>
 #include <list>
 
+#define CYCLES_TO_REFRESH 10
+
 class View {
 private:
 	Kernel *kernel;

@@ -4,7 +4,6 @@
 #include <ProgramInfoProvider/outStructures/OutServerConnectionInfo.h>
 #include <Common/StringHelp.h>
 
-#define PAGE_SIZE 20
 #define NO_OF_OPTIONS 6
 
 class MainMenuScreen: virtual public Screen {
@@ -17,4 +16,5 @@ public:
 	MainMenuScreen(std::string name, Kernel *k);
 	void drawScreen();
 	std::string inputHandle();
+	void refresh() {};
 };
