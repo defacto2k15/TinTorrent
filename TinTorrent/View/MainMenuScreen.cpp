@@ -14,23 +14,27 @@ void MainMenuScreen::drawScreen()
 {
    printw( "TinTorrent - menu:\n\n" ); //tekst
 	if(choisePos == 0) attron( A_UNDERLINE);
-   printw( "1. Wyswietlenie lokalnych zasobow\n" );
+   printw( "1. Lokalne zasoby\n" );
 	attroff( A_UNDERLINE);
 	
 	if(choisePos == 1) attron( A_UNDERLINE);
-	printw( "2. Wyswietlenie wezlow\n" );
-	attroff( A_UNDERLINE);
-	
-	if(choisePos == 2) attron( A_UNDERLINE);
-	printw( "3. Zasoby do pobrania\n" );
+   printw( "2. Zakazane zasoby\n" );
 	attroff( A_UNDERLINE);
 
-	if(choisePos == 3) attron( A_UNDERLINE);
-	printw( "4. Status\n" );
+	if(choisePos == 2) attron( A_UNDERLINE);
+	printw( "3. Wyswietlenie wezlow\n" );
 	attroff( A_UNDERLINE);
 	
+	if(choisePos == 3) attron( A_UNDERLINE);
+	printw( "4. Zasoby do pobrania\n" );
+	attroff( A_UNDERLINE);
+
 	if(choisePos == 4) attron( A_UNDERLINE);
-	printw( "5. Wyjscie\n" );
+	printw( "5. Status\n" );
+	attroff( A_UNDERLINE);
+	
+	if(choisePos == 5) attron( A_UNDERLINE);
+	printw( "6. Wyjscie\n" );
 	attroff( A_UNDERLINE);
 }
 
@@ -53,17 +57,21 @@ std::string MainMenuScreen::inputHandle()
 			}
 			else if(choisePos == 1)
 			{
-				return "other_clients";
+				return "stopped_resources";
 			}
 			else if(choisePos == 2)
 			{
-				return "remote_resources";
+				return "other_clients";
 			}
 			else if(choisePos == 3)
 			{
-				return "status";
+				return "remote_resources";
 			}
 			else if(choisePos == 4)
+			{
+				return "status";
+			}
+			else if(choisePos == 5)
 			{
 				return "exit";
 			}

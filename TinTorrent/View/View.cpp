@@ -4,6 +4,7 @@
 #include <View/OtherClientsScreen.h>
 #include <View/ResourcesToDownloadScreen.h>
 #include <View/StatusScreen.h>
+#include <View/StoppedResourcesScreen.h>
 #include <iostream>
 #include <ncurses.h>
 
@@ -23,6 +24,8 @@ View::View(Kernel *k) : kernel(k)
 	screens.push_back(screen4);
 	ResourcesToDownloadScreen *screen5 = new ResourcesToDownloadScreen("remote_resources", kernel);
 	screens.push_back(screen5);
+	StoppedResourcesScreen *screen6 = new StoppedResourcesScreen("stopped_resources", kernel);
+	screens.push_back(screen6);
 	activeScreen = screens.front();
 }
 

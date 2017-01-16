@@ -15,5 +15,6 @@
    "advancedLoggingActive":			false,
    "serverBacklogSize":				10,
    "secondsBetweenStartingDownloads":		10,
-   "guiActive":					true
+   "guiActive":					true,
+	"automaticDownload":			false
 }

@@ -5,7 +5,7 @@
 #include <Common/StringHelp.h>
 
 #define PAGE_SIZE 20
-#define NO_OF_OPTIONS 5
+#define NO_OF_OPTIONS 6
 
 class MainMenuScreen: virtual public Screen {
 private:
