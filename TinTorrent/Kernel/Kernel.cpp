@@ -363,7 +363,6 @@ WorkingDirectoryState &Kernel::getWorkingDirectoryState() {
 }
 
 TinNetworkState &Kernel::getTinNetworkState() {
-	log.debug("TIN NETWORK SETATE");
 	return tinNetworkState;
 }
 
