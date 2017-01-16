@@ -10,10 +10,20 @@
 
 View::View(Kernel *k) : kernel(k)
 {	
+	// ncurses stuff
 	initscr();
+	start_color();
 	keypad( stdscr, TRUE );
 	noecho();
 
+	// colors
+	init_color(COLOR_RED, 1000, 750, 0);
+	init_pair(1, COLOR_BLUE, COLOR_BLACK);
+	init_pair(2, COLOR_RED, COLOR_BLACK);
+   init_pair(3, COLOR_GREEN, COLOR_BLACK);
+	attron(COLOR_PAIR(3));
+
+	// screens
 	MainMenuScreen *screen1 = new MainMenuScreen("main_menu", kernel);
 	screens.push_back(screen1);
 	LocalResourcesScreen *screen2 = new LocalResourcesScreen("local_resources", kernel);

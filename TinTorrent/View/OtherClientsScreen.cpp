@@ -23,9 +23,9 @@ void OtherClientsScreen::drawScreen()
 	{
 		std::stringstream ss;
 		ss << (*it).getAddress();
-		if(i == choisePos) attron( A_UNDERLINE);
+		if(i == choisePos) { attron( A_UNDERLINE); attron(COLOR_PAIR(2)); }
 		printw( "%20.20s%20d\n", ss.str().c_str(), (*it).getResources().size());
-		attroff( A_UNDERLINE);
+		attroff( A_UNDERLINE); attron(COLOR_PAIR(3));
 	}
 }
 

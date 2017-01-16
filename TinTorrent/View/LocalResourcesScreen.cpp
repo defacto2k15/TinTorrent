@@ -16,9 +16,9 @@ void LocalResourcesScreen::drawScreen()
 	ProgramInfoProvider infoProvider = kernel->getProgramInfoProvider();
 	std::vector<Resource> v =  infoProvider.getResourcesThatCanBeAnnounced();
 
-	printw( "<- Q-powrót | Strzalki - wybor zasobu/strony\n" );
+	printw( "<- Q-powrót | Strzalki - wybor zasobu/strony | F5 - reczne odswiezenie\n" );
 	printw( "   ENTER - zakazanie pobierania wybranego zasobu\n" );
-	printw( "\nLokalne zasoby: %d [Strona %d/%d]\n", localResources.size(),
+	printw( "\n\nLokalne zasoby: %d [Strona %d/%d]\n", localResources.size(),
 			  pageNumber, localResources.size()/PAGE_SIZE+1 );
 	printw( "%20s%12s%20s\n", "Nazwa:", "Rozmiar:", "Zakazany:");
 	std::vector<OutLocalResource>::iterator resEnd = (pageNumber * PAGE_SIZE < localResources.size() ? localResources.begin() + (pageNumber-1)*PAGE_SIZE + PAGE_SIZE : localResources.end());  
@@ -27,11 +27,11 @@ void LocalResourcesScreen::drawScreen()
 		 it != resEnd; ++it)
 	{
 		std::string resourceName = StringHelp::toUtf8((*it).resource.getResourceName());
-		if(i == choisePos) attron( A_UNDERLINE);
+		if(i == choisePos) { attron( A_UNDERLINE); attron(COLOR_PAIR(2)); }
 		printw( "%20.20s%12d%20s\n", resourceName.c_str(), 
 										 	  (*it).resource.getResourceSize(),
 										 	  (std::find(v.begin(), v.end(), (*it).resource) != v.end()) ? "true" : "false");
-		attroff( A_UNDERLINE);
+		attroff( A_UNDERLINE); attron(COLOR_PAIR(3));
 		i++;
 	}
 }

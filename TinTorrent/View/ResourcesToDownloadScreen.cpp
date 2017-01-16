@@ -22,11 +22,11 @@ void ResourcesToDownloadScreen::drawScreen()
 		 it != resEnd; ++it)
 	{
 		std::string resourceName = StringHelp::toUtf8((*it).getResourceName());
-		if(i == choisePos) attron( A_UNDERLINE);
+		if(i == choisePos) { attron( A_UNDERLINE); attron(COLOR_PAIR(2)); }
 		printw( "%20.20s%20d%20d\n", resourceName.c_str(),
 											  (*it).getSegmentCount(),
 											  (*it).getResourceSize());
-		attroff( A_UNDERLINE);
+		attroff( A_UNDERLINE); attron(COLOR_PAIR(3));
 		i++;
 	}
 }

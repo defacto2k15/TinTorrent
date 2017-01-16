@@ -12,30 +12,31 @@ MainMenuScreen::MainMenuScreen(std::string name, Kernel *k) : Screen(name, k)
 
 void MainMenuScreen::drawScreen()
 {
+	attron(COLOR_PAIR(3));
    printw( "TinTorrent - menu:\n\n" ); //tekst
-	if(choisePos == 0) attron( A_UNDERLINE);
+	if(choisePos == 0) { attron( A_UNDERLINE); attron(COLOR_PAIR(2)); }
    printw( "1. Lokalne zasoby\n" );
-	attroff( A_UNDERLINE);
+	attroff( A_UNDERLINE); attron(COLOR_PAIR(3));
 	
-	if(choisePos == 1) attron( A_UNDERLINE);
+	if(choisePos == 1) { attron( A_UNDERLINE); attron(COLOR_PAIR(2)); }
    printw( "2. Zakazane zasoby\n" );
-	attroff( A_UNDERLINE);
+	attroff( A_UNDERLINE); attron(COLOR_PAIR(3));
 
-	if(choisePos == 2) attron( A_UNDERLINE);
+	if(choisePos == 2) { attron( A_UNDERLINE); attron(COLOR_PAIR(2)); }
 	printw( "3. Wyswietlenie wezlow\n" );
-	attroff( A_UNDERLINE);
+	attroff( A_UNDERLINE); attron(COLOR_PAIR(3));
 	
-	if(choisePos == 3) attron( A_UNDERLINE);
+	if(choisePos == 3) { attron( A_UNDERLINE); attron(COLOR_PAIR(2)); }
 	printw( "4. Zasoby do pobrania\n" );
-	attroff( A_UNDERLINE);
+	attroff( A_UNDERLINE); attron(COLOR_PAIR(3));
 
-	if(choisePos == 4) attron( A_UNDERLINE);
+	if(choisePos == 4) { attron( A_UNDERLINE); attron(COLOR_PAIR(2)); }
 	printw( "5. Status\n" );
-	attroff( A_UNDERLINE);
+	attroff( A_UNDERLINE); attron(COLOR_PAIR(3));
 	
-	if(choisePos == 5) attron( A_UNDERLINE);
+	if(choisePos == 5) { attron( A_UNDERLINE); attron(COLOR_PAIR(2)); }
 	printw( "6. Wyjscie\n" );
-	attroff( A_UNDERLINE);
+	attroff( A_UNDERLINE); attron(COLOR_PAIR(3));
 }
 
 std::string MainMenuScreen::inputHandle() 
