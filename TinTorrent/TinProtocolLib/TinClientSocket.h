@@ -22,6 +22,11 @@ public:
 
 	void initSocket(){
 		socketDescriptor = socket(AF_INET, SOCK_STREAM, 0);
+//		if( !Constants::interfaceName.empty()){
+//			const char *interfaceName =  Constants::interfaceName.c_str();
+//			int res = setsockopt(socketDescriptor, SOL_SOCKET, SO_BINDTODEVICE, interfaceName, strlen(interfaceName));
+//			Assertions::check(res != -1, "Failed binding socket to ")
+//		}
 		Assertions::check<SocketCommunicationException>( [this](){ return socketDescriptor != -1;}, "Opening socketDescriptor failed");
 	}
 
@@ -56,7 +61,7 @@ public:
 		res = ::connect(socketDescriptor, (struct sockaddr *)&server, sizeof(server));
 		if (res < 0) {
 			Assertions::check<SocketCommunicationException>( errno == EINPROGRESS, "Error connecting as errno is not set to in progress");
-			tv.tv_sec = 10; //todo configure
+			tv.tv_sec = Constants::connectTimeout;
 			tv.tv_usec = 0;
 			FD_ZERO(&myset);
 			FD_SET(socketDescriptor, &myset);

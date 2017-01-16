@@ -5,3 +5,4 @@
 #include <cstring>
 #include "SegmentResponse.h"
 
+size_t SegmentResponse::prefixSize = sizeof(constantId) + sizeof(payloadLength)+sizeof(segmentIndex);

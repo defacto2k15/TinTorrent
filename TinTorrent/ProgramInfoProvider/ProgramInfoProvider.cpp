@@ -104,7 +104,8 @@ void ProgramInfoProvider::orderResourceDownload(Resource resource) {
 	BlockingElement element;
 	kernel.add( [&]( Kernel &k){
 		k.log.debug("InfoProvider orderResourceDownload ",resource);
-		k.getLocalResourcesStateInfo().changeResourceDownloadabilityState(resource);
+		k.orderResourceDownload(resource);
+		//k.getLocalResourcesStateInfo().changeResourceDownloadabilityState(resource);
 		element.unlock();
 	});
 	element.waitForUnlock();

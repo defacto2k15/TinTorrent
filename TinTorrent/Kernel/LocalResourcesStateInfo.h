@@ -30,7 +30,7 @@ public:
 	void init(std::vector<FileInfo> fileInfos ){
 		workingDirectoryState.init(fileInfos);
 		for( auto &res : workingDirectoryState.getAllResources()){
-			if( workingDirectoryState.isDownloaded(res) && Constants::automaticDownload ){
+			if( workingDirectoryState.isDownloaded(res) ){
 				if( Constants::automaticAnnouncement ){
 					resourceStates[res] = ResourceState::DOWNLOADED_BROADCASTABLE;
 				} else {
@@ -38,7 +38,11 @@ public:
 				}
 
 			} else {
-				resourceStates[res] = ResourceState ::CAN_BE_DOWNLOADED;
+				if( Constants::automaticDownload ){
+					resourceStates[res] = ResourceState ::CAN_BE_DOWNLOADED;
+				} else {
+					resourceStates[res] = ResourceState ::NOT_INTRESTING;
+				}
 			}
 		}
 	}
@@ -69,7 +73,11 @@ public:
 	}
 
 	void setToDownload( Resource resource ){
-		resourceStates[resource] = ResourceState ::CAN_BE_DOWNLOADED;
+		if( (resourceStates[resource] != ResourceState::DOWNLOADED_BROADCASTABLE  )
+		    && (resourceStates[resource] != ResourceState::DOWNLOADED_NONBROADCASTABLE  )
+		    && (resourceStates[resource] != ResourceState::REVERTED)){
+			resourceStates[resource] = ResourceState ::CAN_BE_DOWNLOADED;
+		}
 	}
 
 	bool containsLocalResource( Resource resource ){
@@ -176,7 +184,9 @@ public:
 
 	}
 
-
+	void addEmptyLocalResourceNotDoDownload(Resource &res){
+		resourceStates[res] = ResourceState ::NOT_INTRESTING;
+	}
 
 };
 

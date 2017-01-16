@@ -31,7 +31,7 @@ size_t Buffer::getSize() {
 
 bool Buffer::operator==(const Buffer &rhs) const {
 	return (size == rhs.size) &&
-	       maxSize == rhs.maxSize,
+	       maxSize == rhs.maxSize &&
 			memcmp(data, rhs.data,size) == 0;
 }
 
