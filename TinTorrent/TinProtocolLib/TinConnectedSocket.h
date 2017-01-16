@@ -7,6 +7,7 @@
 
 
 #include <sys/socket.h>
+#include <TinProtocolLib/Messages/SegmentResponse.h>
 #include "SocketWrapper.h"
 #include "Messages/MessageResourceRequest.h"
 #include "Messages/MessageClose.h"
@@ -18,27 +19,59 @@ using json = nlohmann::json;
 class TinConnectedSocket : public SocketWrapper {
 	socket_descriptor_t  socket;
 	// todo from conf
-	const size_t serializedMessageSizeOffset = 2;
+	const size_t serializedMessageSizeOffset = 4;
 protected:
 	InMemoryBuffer buffer;
 
 	void readToBuffer(){
-		ssize_t readSize = recv( socket, buffer.getData(), buffer.getMaxSize(), 0);
-		Assertions::check<SocketCommunicationException>([readSize](){ return readSize != -1;}, "Recieving message failed");
-		buffer.setSize((size_t )readSize);
+		ssize_t allReadBytes = 0;
+		uint16_t declaredSize = 0;
+
+		while( true ) {
+			auto readSize = recv( socket, buffer.getData()+allReadBytes, buffer.getMaxSize()-allReadBytes, 0);
+			Assertions::check<SocketCommunicationException>([readSize](){ return readSize > 0;},
+			                                                Help::Str("Recieving message failed. Read ",readSize," bytes"));
+
+			if (allReadBytes == 0) { // first reading'
+				assertBufferHasGoodConstantPrefix();
+				if( constantPrefixIsFromSegmentResponse()){
+					declaredSize = getSizeFromBuffer() + SegmentResponse::prefixSize;
+				} else {
+					declaredSize = getSizeFromBuffer();
+				}
+				if (declaredSize == readSize) { //ok, readAllBytes
+					break;
+				}
+				allReadBytes += readSize;
+			} else {
+				allReadBytes += readSize;
+				Assertions::check(allReadBytes <= declaredSize,
+				                  Help::Str("Have read more bytes than declared. Declared ",declaredSize," got ",allReadBytes) );
+				if( allReadBytes == declaredSize){
+					break;
+				}
+			}
+		}
+		buffer.setSize((size_t )declaredSize);
 		checkIfRecievedMessageClose();
 	}
 
-	void checkIfRecievedMessageClose(){ // najpierw do jsona i sprawdz typ!!!
+	void checkIfRecievedMessageClose(){
 		uint8_t  *bufferPtr = buffer.getData();
-		if( bufferPtr[0] != 0xff && bufferPtr[1] != 0xff ) //todo from configuration
+		if( bufferPtr[0] == 0xff && bufferPtr[1] == 0xfd ) //todo from configuration
 		{
-			json j = getJsonFromBuffer();
-			MessageType type;
-			type.parseJson(j["Type"]);
-			if( type == MessageType::CLOSE){
-				MessageClose close = deserializeFromBuffer<MessageClose>();
-				throw MessageCloseException(close);
+			try {
+				json j = getJsonFromBuffer();
+				MessageType type;
+				type.parseJson(j["Type"]);
+				if (type == MessageType::CLOSE) {
+					MessageClose close = deserializeFromBuffer<MessageClose>();
+					throw MessageCloseException(close);
+				}
+			} catch( MessageCloseException &e) {
+				throw e;
+			}catch( std::exception &e ){
+				//ignore
 			}
 		}
 	}
@@ -57,14 +90,18 @@ protected:
 		std::string jsonDump = serializedAsJson.dump();
 		buffer.setData( serializedMessageSizeOffset, (uint8_t *)jsonDump.c_str(), jsonDump.length()+1);
 		size_t serializedDataSize = buffer.getSize();
+		uint8_t	*dataPtr = buffer.getData();
+		dataPtr[0] = 0xff;
+		dataPtr[1] = 0xfd;
+		*((uint16_t*)(dataPtr + 2)) = (uint16_t )serializedDataSize;
 
 		Assertions::check(serializedDataSize <= Constants::segmentSize + serializedMessageSizeOffset, "Serialized data is too big to fit in message");
-		*((uint16_t *)buffer.getData()) = (uint16_t)(serializedDataSize);
 	}
 
 	template< typename T>
 	T deserializeFromBuffer(){
-		assertBufferHasSizePrefix();
+		assertBufferHasGoodConstantPrefix();
+		assertBufferHasGoodSizePrefix();
 		json j =  getJsonFromBuffer();
 		MessageType expectedType = T::getMessageType();
 		MessageType actualType;
@@ -73,10 +110,20 @@ protected:
 		return T(j);
 	}
 
-	void assertBufferHasSizePrefix(){
-		// todo UWAGA : na razie sizePrefix nie bierze pod uwage wielkosci samego siebie, czyli tych 2b
-		uint16_t sizePrefix = *((uint16_t *)buffer.getData());
-		Assertions::check<SocketCommunicationException>( sizePrefix == buffer.getSize(), "SizePrefix is not equal to buffer content length");
+	void assertBufferHasGoodConstantPrefix(){
+		Assertions::check<SocketCommunicationException>( buffer.getData()[0] == 0xff && (buffer.getData()[1] == 0xfd || buffer.getData()[1] == 0xff),
+					Help::Str("Received data has bad constants prefix. First 4bytes are ", *((uint32_t*)buffer.getData())));
+	}
+
+	void assertBufferHasGoodSizePrefix(){
+		uint16_t sizePrefix = *((uint16_t *)(buffer.getData()+2));
+		Assertions::check<SocketCommunicationException>( sizePrefix == buffer.getSize(),
+		   Help::Str("SizePrefix ", sizePrefix, "is not equal to buffer content length ",buffer.getSize(),
+		             ". First 4 bytes are ", *((uint32_t*)buffer.getData())));
+	}
+
+	bool constantPrefixIsFromSegmentResponse(){
+		return buffer.getData()[0] == 0xff && buffer.getData()[1] == 0xff;
 	}
 
 public:
@@ -102,6 +149,15 @@ private:
 		}
 		return j;
 	}
+
+	uint16_t  getConstantPrefixFromBuffer(){
+		return *(uint16_t*)buffer.getData();
+	}
+
+	uint16_t  getSizeFromBuffer(){
+		return *(uint16_t*)(buffer.getData()+2);
+	}
+
 };
 
 
