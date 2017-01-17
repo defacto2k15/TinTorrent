@@ -14,6 +14,14 @@ MessageClose::CloseReason::CloseReason(const std::string &value) : MessageEnum(v
 
 MessageClose::CloseReason::CloseReason() : MessageEnum(""){}
 
+bool MessageClose::CloseReason::operator==(const MessageClose::CloseReason &other) const {
+	return MessageEnum::operator==(other);
+}
+
+void MessageClose::CloseReason::parseJson(std::string value) {
+	MessageEnum::parseJson(value, {OK});
+}
+
 MessageClose::MessageClose(MessageClose::CloseReason reason) :reason(reason){
 }
 
@@ -37,4 +45,12 @@ bool MessageClose::operator==(const MessageClose &rhs) const {
 
 bool MessageClose::operator!=(const MessageClose &rhs) const {
 	return !(rhs == *this);
+}
+
+MessageType MessageClose::getMessageType() {
+	return MessageType::CLOSE;
+}
+
+MessageClose::CloseReason MessageClose::getReason() {
+	return  reason;
 }

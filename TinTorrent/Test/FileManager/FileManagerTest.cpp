@@ -9,7 +9,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "FileManager/FileManager.h"
-#include "../Mocks/MockFileInformationConsumer.h"
 #include "../../Assertions/Assertions.h"
 #include "Common/SegmentsSet.h"
 

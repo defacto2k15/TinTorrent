@@ -17,36 +17,15 @@ public:
 	uint16_t segmentIndex;
 	uint8_t payload[25000]; // todo take length from constants XXX TODO
 
-	SegmentResponse(uint16_t segmentIndex, uint16_t payloadLength, uint8_t *inPayload) :
-			payloadLength(payloadLength),  segmentIndex(segmentIndex){
-		Assertions::check(payloadLength < 25000-16, "PayloadLength too big");
-		constantId[0] = 0xff; //todo take from configuration
-		constantId[1] = 0xff;
-		memcpy(payload, inPayload, payloadLength);
-	}
+	SegmentResponse(uint16_t segmentIndex, uint16_t payloadLength, uint8_t *inPayload);
 
-	void validateFields(){
-		Assertions::check(constantId[0] == 0xff, "ConstantId first byte");
-		Assertions::check(constantId[1] == 0xff, "ConstantId second byte");
-		Assertions::check(payloadLength < 25000-16, "PayloadLength too big");
-	}
+	void validateFields();
 
-	SegmentInfo getSegmentInfo(){
-		return SegmentInfo(segmentIndex, payloadLength);
-	}
+	SegmentInfo getSegmentInfo();
 
-	static void writeSegmentResponseToBuffer( SegmentInfo &segmentInfo, uint8_t *payload, Buffer &buffer){
-		uint8_t * bufferPtr = buffer.getData();
-		*((uint8_t *)bufferPtr) = 0xff; //todo
-		*((uint8_t *)bufferPtr+1) = 0xff; //todo
-		*((uint16_t *)(bufferPtr+2)) = segmentInfo.getPayloadLength();
-		*((uint16_t *)(bufferPtr+4)) = segmentInfo.getSegmentIndex();
-		buffer.setData(6, payload, segmentInfo.getPayloadLength());
-	}
+	static void writeSegmentResponseToBuffer( SegmentInfo &segmentInfo, uint8_t *payload, Buffer &buffer);
 
-	size_t getWholeResponseSize(){
-		return sizeof(constantId)+sizeof(segmentIndex)+sizeof(payloadLength) + payloadLength;
-	}
+	size_t getWholeResponseSize();
 
 	static size_t prefixSize;
 

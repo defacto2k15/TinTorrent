@@ -24,9 +24,9 @@ set(SOURCE_FILES main.cpp TinProtocolLib/TinServerSocket.cpp TinProtocolLib/TinS
         Multithreading/MultithreadingSequence.cpp Multithreading/MultithreadingSequence.h
         TinProtocolLib/Messages/MessageType.cpp TinProtocolLib/Messages/MessageType.h Common/StringHelp.cpp Common/StringHelp.h
         TinProtocolLib/Segment.cpp TinProtocolLib/Segment.h TinProtocolLib/MessageCloseException.cpp TinProtocolLib/MessageCloseException.h
-        FileManager/FileInformationConsumer.h FileManager/WorkingDirectoryManager.cpp FileManager/WorkingDirectoryManager.h
+        FileManager/WorkingDirectoryManager.cpp FileManager/WorkingDirectoryManager.h
         FileManager/ModelEntities/FileInfo.cpp FileManager/ModelEntities/FileInfo.h FileManager/ModelEntities/FileSegmentsInfo.cpp
-        FileManager/ModelEntities/FileSegmentsInfo.h Test/Mocks/MockFileInformationConsumer.h Utils/MyString.cpp Utils/MyString.h
+        FileManager/ModelEntities/FileSegmentsInfo.h Utils/MyString.cpp Utils/MyString.h
         Common/Constants.cpp Common/Constants.h Utils/ContainerUtils.cpp Utils/ContainerUtils.h Utils/StreamUtils.cpp Utils/StreamUtils.h
         Utils/BitUtils.cpp Utils/BitUtils.h Utils/SegmentUtils.cpp Utils/SegmentUtils.h Utils/FileUtils.cpp Utils/FileUtils.h
         FileManager/UpdateInfo.cpp FileManager/UpdateInfo.h FileManager/FileManager.cpp FileManager/FileManager.h Common/SegmentsSet.cpp

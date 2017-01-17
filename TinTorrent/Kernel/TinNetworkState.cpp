@@ -43,3 +43,15 @@ std::vector<OutTinResourcesInOtherClients> TinNetworkState::getResourcesInOtherC
 	}
 	return outVec;
 }
+
+void TinNetworkState::addResource(TinAddress &address, Resource &resource) {
+	if( !ContainerUtils::Contains(resourceMap[address], resource)){
+		resourceMap[address].push_back(resource);
+	}
+}
+
+void TinNetworkState::addAddress(TinAddress &address) {
+	if( resourceMap.count(address) == 0){
+		resourceMap[address] = std::vector<Resource>();
+	}
+}

@@ -10,11 +10,9 @@
 
 class SocketCommunicationException : public std::runtime_error {
 public:
-	SocketCommunicationException(std::string message ) : std::runtime_error(message){
-	}
+	SocketCommunicationException(std::string message );
 
-	SocketCommunicationException(std::exception &e ) : std::runtime_error(Help::Str("Caught exception ",e.what())){
-	}
+	SocketCommunicationException(std::exception &e );
 };
 
 #endif //TINTORRENT_SOCKETCOMMUNICATIONEXCEPTION_H

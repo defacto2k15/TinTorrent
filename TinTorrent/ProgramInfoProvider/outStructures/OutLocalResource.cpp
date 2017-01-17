@@ -18,3 +18,10 @@ std::ostream &operator<<(std::ostream &os, const OutLocalResource &resource) {
 	    " serversBeingDownloadedInfo: ", resource.serversBeingDownloadedInfo);
 	return os;
 }
+
+json OutLocalResource::toJson() {
+	json j;
+	j["percentDownloaded"] = (int)percentDownloaded;
+	j["resource"] = resource.toJson();
+	return j;
+}

@@ -3,3 +3,10 @@
 //
 
 #include "MessageCloseException.h"
+
+MessageCloseException::MessageCloseException(MessageClose &messageClose) :  std::runtime_error("MessageClose"), messageClose(messageClose){
+}
+
+MessageClose MessageCloseException::getMessageClose() {
+	return messageClose;
+}

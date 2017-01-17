@@ -10,17 +10,15 @@
 
 class MessageType : public MessageEnum {
 private:
-	MessageType( std::string value) : MessageEnum(value){};
+	MessageType( std::string value);;
 public:
-	MessageType(){}
+	MessageType();
 	static MessageType RESOURCE_REQUEST;
 	static MessageType RESOURCE_RESPONSE;
 	static MessageType START_SENDING_REQUEST;
 	static MessageType CLOSE;
 
-	void parseJson(std::string value){
-		MessageEnum::parseJson(value, {RESOURCE_RESPONSE, RESOURCE_REQUEST, START_SENDING_REQUEST, CLOSE});
-	}
+	void parseJson(std::string value);
 };
 
 

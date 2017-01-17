@@ -15,38 +15,18 @@ class MessageEnum {
 private:
     std::string value;
 protected:
-    MessageEnum ( const std::string &value ) :value(value){
-    }
-    MessageEnum (){
-    }
+    MessageEnum ( const std::string &value );
+    MessageEnum ();
 public:
-    std::string getValue() const{
-        if( value.length()==0){
-            throw std::logic_error("Message enum zainicjowany domyslnym konstruktorem, uzytecznym tylko do parsowania");
-        }
-        return value;
-    }
+    std::string getValue() const;
 
-    bool operator==( const MessageEnum &other)const{
-	    return value == other.value;
-    }
+    bool operator==( const MessageEnum &other)const;
 
-    void parseJson(std::string jsonValue, std::vector<MessageEnum> possibleValues ){
-        auto x = std::find_if(begin(possibleValues), end(possibleValues),
-                     [jsonValue](MessageEnum & messageEnum){ return messageEnum.getValue()==jsonValue;});
-        if( x == possibleValues.end()){
-            throw std::logic_error(std::string("Blad przy parsowaniu MessageEnum. Nie ma takiego o wartosci: ")+jsonValue);
-        }
-        value = jsonValue;
-    }
+    void parseJson(std::string jsonValue, std::vector<MessageEnum> possibleValues );
 
-    ~MessageEnum(){
-    }
+    ~MessageEnum();
 
-    friend std::ostream &operator<<(std::ostream &os, const MessageEnum &anEnum) {
-        os << "value: " << anEnum.value;
-        return os;
-    }
+    friend std::ostream &operator<<(std::ostream &os, const MessageEnum &anEnum);
 };
 
 

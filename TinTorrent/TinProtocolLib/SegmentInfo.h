@@ -17,21 +17,13 @@ class SegmentInfo {
 public:
     SegmentInfo( uint16_t segmentIndex, uint16_t payloadLength);
 
-	SegmentInfo(json j) :
-			  segmentIndex( j["SegmentIndex"]),
-			  payloadLength(j["PayloadLength"]){
-	}
+	SegmentInfo(json j);
 
     uint16_t getSegmentIndex() const;
 
     uint16_t getPayloadLength() const;
 
-	json toJson(){
-		return json{
-				{"SegmentIndex", segmentIndex},
-				{"PayloadLength", payloadLength}
-		};
-	}
+	json toJson();
 
 	bool operator==(const SegmentInfo &rhs) const;
 

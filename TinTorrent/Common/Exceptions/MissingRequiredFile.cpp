@@ -3,3 +3,6 @@
 //
 
 #include "MissingRequiredFile.h"
+
+MissingRequiredFile::MissingRequiredFile(std::string message) : std::runtime_error(message){
+}

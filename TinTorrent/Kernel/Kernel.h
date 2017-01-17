@@ -26,6 +26,7 @@
 #include <ProgramInfoProvider/ProgramInfoProvider.h>
 #include <Multithreading/ActionThread.h>
 #include <Logging/LoggingMain.h>
+#include "signal.h"
 
 class Kernel : public ActionQueue<Kernel> {
 	LoggingMain loggingMain;

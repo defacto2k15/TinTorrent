@@ -21,16 +21,7 @@ public:
 
 	 std::vector<Resource> getResources() ;
 
-	json toJson(){
-		json j;
-		j["address"] = address.toString();
-		std::vector<json> resourcesVec;
-		for( auto &res : resources){
-			resourcesVec.push_back(res.toJson());
-		}
-		j["resources"] = resourcesVec;
-		return j;
-	}
+	json toJson();
 
 	friend std::ostream &operator<<(std::ostream &os, const OutTinResourcesInOtherClients &clients);
 };

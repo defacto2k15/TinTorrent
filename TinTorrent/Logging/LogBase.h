@@ -16,8 +16,7 @@ class LogBase {
 	std::string prefix;
 	std::shared_ptr<spd::logger> logger;
 public:
-	LogBase( std::string prefix ) : prefix(prefix){
-	}
+	LogBase( std::string prefix );
 
 	template <class ... TArgs>
 	void debug(TArgs ... args ){
@@ -54,11 +53,7 @@ public:
 	}
 
 private:
-	void initializeLogger(){
-		if( !logger){
-			logger = spd::get("console");
-		}
-	}
+	void initializeLogger();
 };
 
 

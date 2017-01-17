@@ -110,3 +110,7 @@ void ProgramInfoProvider::orderResourceDownload(Resource resource) {
 	});
 	element.waitForUnlock();
 }
+
+std::vector<Resource> ProgramInfoProvider::getResourcesThatCanBeDownloaded() {
+	return getResourcesToDownload();//todo
+}

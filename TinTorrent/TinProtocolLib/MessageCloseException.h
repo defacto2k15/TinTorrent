@@ -12,12 +12,9 @@
 class MessageCloseException : public std::runtime_error{
 	MessageClose messageClose;
 public:
-	MessageCloseException(MessageClose &messageClose) :  std::runtime_error("MessageClose"), messageClose(messageClose){
-	}
+	MessageCloseException(MessageClose &messageClose);
 
-	MessageClose getMessageClose(){
-		return messageClose;
-	}
+	MessageClose getMessageClose();
 };
 
 

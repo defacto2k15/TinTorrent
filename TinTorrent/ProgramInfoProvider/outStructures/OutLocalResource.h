@@ -22,12 +22,7 @@ public:
 
 	OutLocalResource(const Resource &resource, uint8_t percentDownloaded);
 
-	json toJson(){
-		json j;
-		j["percentDownloaded"] = (int)percentDownloaded;
-		j["resource"] = resource.toJson();
-		return j;
-	}
+	json toJson();
 
 	friend std::ostream &operator<<(std::ostream &os, const OutLocalResource &resource);
 };

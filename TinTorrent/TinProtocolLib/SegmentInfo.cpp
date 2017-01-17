@@ -28,3 +28,15 @@ std::ostream &operator<<(std::ostream &os, const SegmentInfo &info) {
 	os << "segmentIndex: " << info.segmentIndex << " payloadLength: " << info.payloadLength;
 	return os;
 }
+
+SegmentInfo::SegmentInfo(json j) :
+		segmentIndex( j["SegmentIndex"]),
+		payloadLength(j["PayloadLength"]){
+}
+
+json SegmentInfo::toJson() {
+	return json{
+			{"SegmentIndex", segmentIndex},
+			{"PayloadLength", payloadLength}
+	};
+}

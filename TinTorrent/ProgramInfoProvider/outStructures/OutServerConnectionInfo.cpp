@@ -20,3 +20,10 @@ std::ostream &operator<<(std::ostream &os, const OutServerConnectionInfo &info) 
 	os << otherInfo.toJson().dump();
 	return os;
 }
+
+json OutServerConnectionInfo::toJson() {
+	json j;
+	j["address"] = address.toString();
+	j["resource"] = resource.toJson();
+	return j;
+}

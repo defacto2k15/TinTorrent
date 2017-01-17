@@ -42,24 +42,7 @@ public:
 
 struct ResourceCompare
 {
-	bool operator() (const Resource& lhs, const Resource& rhs) const
-	{
-		if( lhs.getResourceName() < rhs.getResourceName() ){
-			return true;
-		}
-		if( rhs.getResourceName() < lhs.getResourceName() ){
-			return false;
-		}
-
-		if( lhs.getResourceSize() < rhs.getResourceSize() ){
-			return true;
-		}
-		if( rhs.getResourceSize() < lhs.getResourceSize() ){
-			return false;
-		}
-
-		return false;
-	}
+	bool operator() (const Resource& lhs, const Resource& rhs) const;
 };
 
 

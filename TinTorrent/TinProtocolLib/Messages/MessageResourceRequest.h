@@ -17,34 +17,17 @@ class MessageResourceRequest : public Message{
 	Resource resource;
 public:
 
-	explicit MessageResourceRequest(json &j){
-		MessageType type;
-		type.parseJson(j["Type"]);
-		Assertions::check([&](){ return type==MessageType::RESOURCE_REQUEST;}, "MesageResourceRequest deserialization. Type in wrong");
-		resource.parseJson(j["Resource"]);
-	}
+	explicit MessageResourceRequest(json &j);
 
-	MessageResourceRequest(const Resource &resource) : resource(resource){
-	}
+	MessageResourceRequest(const Resource &resource);
 
-	Resource getResource() {
-		return resource;
-	}
+	Resource getResource();
 
-	json toJson() override {
-		json j;
-		j["Type"] = MessageType::RESOURCE_REQUEST.getValue();
-		j["Resource"] = resource.toJson();
-		return j;
-	}
+	json toJson() override;
 
-	bool operator==(const MessageResourceRequest &other) const{
-		return resource == other.resource;
-	}
+	bool operator==(const MessageResourceRequest &other) const;
 
-	static MessageType getMessageType(){
-		return MessageType::RESOURCE_REQUEST;
-	}
+	static MessageType getMessageType();
 };
 
 

@@ -21,3 +21,14 @@ std::ostream &operator<<(std::ostream &os, const OutTinResourcesInOtherClients &
 	os << Help::Str("OutTinResourcesInOtherCities: address: ",clients.address, " resources: ", clients.resources);
 	return os;
 }
+
+json OutTinResourcesInOtherClients::toJson() {
+	json j;
+	j["address"] = address.toString();
+	std::vector<json> resourcesVec;
+	for( auto &res : resources){
+		resourcesVec.push_back(res.toJson());
+	}
+	j["resources"] = resourcesVec;
+	return j;
+}

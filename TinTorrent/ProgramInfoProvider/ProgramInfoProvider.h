@@ -41,9 +41,7 @@ public:
 
 	void changeResourceAnnouncementState( Resource &resource);
 
-	std::vector<Resource> getResourcesThatCanBeDownloaded(){
-		return getResourcesToDownload();//todo
-	}
+	std::vector<Resource> getResourcesThatCanBeDownloaded();
 
 	void orderResourceDownload(Resource resource);
 

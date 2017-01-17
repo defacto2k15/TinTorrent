@@ -22,13 +22,9 @@ public:
         static CloseReason RESOURCE_REVERTED;
         static CloseReason RESOURCE_MISSING;
 
-        bool operator==( const CloseReason& other)const{
-            return MessageEnum::operator==(other);
-        }
+        bool operator==( const CloseReason& other)const;
 
-        void parseJson(std::string value){
-            MessageEnum::parseJson(value, {OK});
-        }
+        void parseJson(std::string value);
     };
 private:
     CloseReason reason;
@@ -44,13 +40,9 @@ public:
 
     bool operator!=(const MessageClose &rhs) const;
 
-    static MessageType getMessageType(){
-        return MessageType::CLOSE;
-    }
+    static MessageType getMessageType();
 
-    CloseReason getReason(){
-        return  reason;
-    }
+    CloseReason getReason();
 };
 
 

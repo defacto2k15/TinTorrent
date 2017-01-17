@@ -21,23 +21,13 @@ public:
 
 	std::shared_ptr<TinConnectedServerThread> get(int threadId);
 
-	int getNextThreadId(){
-		return createdThreadsCount + 1;
-	}
+	int getNextThreadId();
 
 	void closeThoseWorkingWith(Resource &resource);
 
 	std::vector<OutServerConnectionInfo> getConnectionsInfo();
 
-	void removeAllThreads(){
-		std::vector<int> idsToRemove;
-		for( auto &pair : threads ){
-			idsToRemove.push_back(pair.first);
-		}
-		for( auto &id : idsToRemove){
-			closeThread(id);
-		}
-	}
+	void removeAllThreads();
 };
 
 

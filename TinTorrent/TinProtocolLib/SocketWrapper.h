@@ -16,30 +16,13 @@ class SocketWrapper {
 protected:
 	const socket_descriptor_t INVALID = -1;
 	socket_descriptor_t  socketDescriptor;
-	SocketWrapper() : socketDescriptor(INVALID){
-	};
+	SocketWrapper();;
 public:
-	void closeSocket(){
-		if( socketDescriptor != INVALID && socketDescriptor > 3 ){
-			int closeRes = close(socketDescriptor);
-			Assertions::check([closeRes](){return closeRes == 0;}, "Closing of socketDescriptor failed");
-			socketDescriptor = INVALID;
-		}
-	}
+	void closeSocket();
 
-	virtual ~SocketWrapper() {
-		closeSocket();
-	}
+	virtual ~SocketWrapper();
 
-	void shutdownSocket(){
-		if( socketDescriptor != INVALID ){
-			auto res = shutdown(socketDescriptor, SHUT_RD);
-			if( res == -1 ){
-				std::cerr << "Warning: shutdown of socket failed " << std::endl;
-			}
-		}
-
-	}
+	void shutdownSocket();
 };
 
 

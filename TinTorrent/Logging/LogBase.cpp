@@ -3,3 +3,12 @@
 //
 
 #include "LogBase.h"
+
+LogBase::LogBase(std::string prefix) : prefix(prefix){
+}
+
+void LogBase::initializeLogger() {
+	if( !logger){
+		logger = spd::get("console");
+	}
+}

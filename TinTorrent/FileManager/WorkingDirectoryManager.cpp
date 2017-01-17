@@ -142,3 +142,67 @@ WorkingDirectoryManager::File WorkingDirectoryManager::createFileFromResource(Re
 	auto filename = Help::Str( StringHelp::toUtf8(resource.getResourceName()),".", resource.getResourceSize());
 	return File (filename, Help::Str(workingDirectory, "/", filename), resource.getResourceSize());
 }
+
+WorkingDirectoryManager::File::File(const std::string &name, const std::string &fullPath, size_t size) :
+		log("File"), name(name), fullPath(fullPath), size(size) {
+}
+
+bool WorkingDirectoryManager::File::isMetadata() {
+	return StringHelp::Matches(name, Constants::metadataNameRegexp);
+}
+
+bool WorkingDirectoryManager::File::hasFileSizeSuffix() {
+	std::string expectedFileSuffix = Help::Str(".", size);
+	return StringHelp::EndsWith(name, expectedFileSuffix);
+}
+
+std::string WorkingDirectoryManager::File::getMetadataName() {
+	Assertions::check( !isMetadata(), Help::Str("File of name ", name, " is arleady metadata"));
+	return Help::Str(name,  Constants::metadataFileSuffix);
+}
+
+std::string WorkingDirectoryManager::File::getMetadataPath() {
+	Assertions::check( !isMetadata(), Help::Str("File of name ", name, " is arleady metadata"));
+	return Help::Str(fullPath, Constants::metadataFileSuffix);
+}
+
+std::string WorkingDirectoryManager::File::getResourceName() {
+	Assertions::check( isMetadata(), Help::Str("File of name ", name, " is not metadata"));
+	return StringHelp::RemoveSuffix( name, getMetadataSuffix());
+}
+
+void WorkingDirectoryManager::File::renameFileToProperResourceName() {
+	std::string newFullPath = Help::Str(fullPath, ".", size);
+	log.debug(": Renaming file to proper resource name. From: ",fullPath, " to ", newFullPath);
+	FileUtils::renameFile(fullPath, newFullPath);
+	fullPath = newFullPath;
+	name = Help::Str(name, ".", size);
+}
+
+bool WorkingDirectoryManager::File::isResourceWithoutProperName() {
+	return !isMetadata() && !hasFileSizeSuffix();
+}
+
+bool WorkingDirectoryManager::File::isResource() {
+	return !isMetadata() && hasProperFileSuffix();
+}
+
+bool WorkingDirectoryManager::File::hasProperFileSuffix() {
+	if( !hasFileSizeSuffix()){
+		return false;
+	}
+	auto sizeInName = std::atoi(StringHelp::MatchesAndGetLastMatchGroup(name, Constants::resourceNameRegexp).c_str());
+	return size == (size_t)sizeInName;
+}
+
+std::string WorkingDirectoryManager::File::getResourceNameWithoutSizeSuffix() {
+	//Assertions::check( hasProperFileSuffix(), Help::Str("File of name ", name, " dont have proper filesize suffix"));
+	return StringHelp::removeSuffixAfter( name, ".");
+}
+
+WorkingDirectoryManager::File::~File() {
+}
+
+std::string WorkingDirectoryManager::File::getMetadataSuffix() {
+	return Help::Str( Constants::metadataFileSuffix);
+}

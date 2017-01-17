@@ -17,30 +17,13 @@ class TinConnectedClientSocket : public TinConnectedSocket{
 public:
 	TinConnectedClientSocket(socket_descriptor_t socket);
 
-	void sendResourceRequest(const Resource &resource ){
-		MessageResourceRequest request(resource);
-		serializeToBuffer(request);
-		sendBuffer();
-	}
+	void sendResourceRequest(const Resource &resource );
 
-	MessageResourceResponse::ResourceResponseValue listenForResourceResponse(){
-		readToBuffer();
-		auto response = deserializeFromBuffer<MessageResourceResponse >();
-		return response.getValue();
-	}
+	MessageResourceResponse::ResourceResponseValue listenForResourceResponse();
 
-	void sendStartSendingRequest( SegmentInfo segmentInfo, MessageStartSendingRequest::PreviousStatus prevStatus){
-		MessageStartSendingRequest request(segmentInfo, prevStatus);
-		serializeToBuffer(request);
-		sendBuffer();
-	}
+	void sendStartSendingRequest( SegmentInfo segmentInfo, MessageStartSendingRequest::PreviousStatus prevStatus);
 
-	SegmentResponse *listenForSegmentResponse(){
-		readToBuffer();
-		SegmentResponse *response = (SegmentResponse*)(buffer.getData());
-		response->validateFields();
-		return response;
-	};
+	SegmentResponse *listenForSegmentResponse();;
 };
 
 

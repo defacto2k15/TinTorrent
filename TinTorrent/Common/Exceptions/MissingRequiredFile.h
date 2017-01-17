@@ -10,8 +10,7 @@
 
 class MissingRequiredFile : std::runtime_error {
 public:
-	MissingRequiredFile(std::string message ) : std::runtime_error(message){
-	}
+	MissingRequiredFile(std::string message );
 };
 
 

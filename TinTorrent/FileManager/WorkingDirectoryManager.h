@@ -7,7 +7,6 @@
 
 #include "Common/Constants.h"
 #include <dirent.h>
-#include "../Test/Mocks/MockFileInformationConsumer.h"
 #include "../Assertions/Assertions.h"
 #include "../Utils/MyString.h"
 #include "UpdateInfo.h"
@@ -35,69 +34,31 @@ class WorkingDirectoryManager {
 		std::string fullPath;
 		size_t size;
 
-		File(const std::string &name, const std::string &fullPath, size_t size) :
-				log("File"), name(name), fullPath(fullPath), size(size) {
-		}
+		File(const std::string &name, const std::string &fullPath, size_t size);
 
-		bool isMetadata(){
-			return StringHelp::Matches(name, Constants::metadataNameRegexp);
-		}
+		bool isMetadata();
 
-		bool hasFileSizeSuffix(){
-			std::string expectedFileSuffix = Help::Str(".", size);
-			return StringHelp::EndsWith(name, expectedFileSuffix);
-		}
+		bool hasFileSizeSuffix();
 
-		std::string getMetadataName(){
-			Assertions::check( !isMetadata(), Help::Str("File of name ", name, " is arleady metadata"));
-			return Help::Str(name,  Constants::metadataFileSuffix);
-		}
+		std::string getMetadataName();
 
-		std::string getMetadataPath(){
-			Assertions::check( !isMetadata(), Help::Str("File of name ", name, " is arleady metadata"));
-			return Help::Str(fullPath, Constants::metadataFileSuffix);
-		}
+		std::string getMetadataPath();
 
-		std::string getResourceName(){
-			Assertions::check( isMetadata(), Help::Str("File of name ", name, " is not metadata"));
-			return StringHelp::RemoveSuffix( name, getMetadataSuffix());
-		}
+		std::string getResourceName();
 
-		void renameFileToProperResourceName(){
-			std::string newFullPath = Help::Str(fullPath, ".", size);
-			log.debug(": Renaming file to proper resource name. From: ",fullPath, " to ", newFullPath);
-			FileUtils::renameFile(fullPath, newFullPath);
-			fullPath = newFullPath;
-			name = Help::Str(name, ".", size);
-		}
+		void renameFileToProperResourceName();
 
-		bool isResourceWithoutProperName(){
-			return !isMetadata() && !hasFileSizeSuffix();
-		}
+		bool isResourceWithoutProperName();
 
-		bool isResource(){
-			return !isMetadata() && hasProperFileSuffix();
-		}
+		bool isResource();
 
-		bool hasProperFileSuffix(){
-			if( !hasFileSizeSuffix()){
-				return false;
-			}
-			auto sizeInName = std::atoi(StringHelp::MatchesAndGetLastMatchGroup(name, Constants::resourceNameRegexp).c_str());
-			return size == (size_t)sizeInName;
-		}
+		bool hasProperFileSuffix();
 
-		std::string getResourceNameWithoutSizeSuffix(){
-			//Assertions::check( hasProperFileSuffix(), Help::Str("File of name ", name, " dont have proper filesize suffix"));
-			return StringHelp::removeSuffixAfter( name, ".");
-		}
+		std::string getResourceNameWithoutSizeSuffix();
 
-		~File(){
-		}
+		~File();
 	private:
-		std::string getMetadataSuffix(){
-			return Help::Str( Constants::metadataFileSuffix);
-		}
+		std::string getMetadataSuffix();
 	};
 public:
 	WorkingDirectoryManager(std::string workingDirectory);

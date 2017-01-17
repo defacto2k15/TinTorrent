@@ -23,34 +23,17 @@
 class TinConnectedServerSocket  : public TinConnectedSocket {
 	sockaddr_in clientAddress;
 public:
-	TinConnectedServerSocket(socket_descriptor_t socket, sockaddr_in clientAddress)
-			: TinConnectedSocket(socket), clientAddress(clientAddress){
-	}
+	TinConnectedServerSocket(socket_descriptor_t socket, sockaddr_in clientAddress);
 
-	Resource listenForResourceRequest(){
-		readToBuffer();
-		auto request = deserializeFromBuffer<MessageResourceRequest>();
-		return request.getResource();
-	}
+	Resource listenForResourceRequest();
 
-	void sendResourceResponse( MessageResourceResponse::ResourceResponseValue responseValue ){
-		MessageResourceResponse response(responseValue);
-		serializeToBuffer(response);
-		sendBuffer();
-	};
+	void sendResourceResponse( MessageResourceResponse::ResourceResponseValue responseValue );;
 
-	MessageStartSendingRequest listenForStartSendingRequest(){
-		readToBuffer();
-		return deserializeFromBuffer<MessageStartSendingRequest >();
-	}
-	void sendSegmentResponse( SegmentInfo segmentInfo, uint8_t * payload){
-		SegmentResponse::writeSegmentResponseToBuffer( segmentInfo, payload, buffer);
-		sendBuffer();
-	}
+	MessageStartSendingRequest listenForStartSendingRequest();
 
-	TinAddress getClientAddress(){
-		return TinAddress(clientAddress);
-	}
+	void sendSegmentResponse( SegmentInfo segmentInfo, uint8_t * payload);
+
+	TinAddress getClientAddress();
 
 };
 

@@ -23,14 +23,7 @@ public:
 
 	Resource getResource();
 
-	json toJson(){
-		json j;
-		j["address"] = address.toString();
-		if( downloadedResource) {
-			j["downloadedResource"] = downloadedResource->toJson();
-		}
-		return j;
-	}
+	json toJson();
 
 	friend std::ostream &operator<<(std::ostream &os, const OutClientConnectionInfo &info);
 };

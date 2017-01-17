@@ -24,3 +24,12 @@ std::ostream &operator<<(std::ostream &os, const OutClientConnectionInfo &info) 
 	os << Help::Str("address: ",info.address," downloadedResource: ", info.downloadedResource);
 	return os;
 }
+
+json OutClientConnectionInfo::toJson() {
+	json j;
+	j["address"] = address.toString();
+	if( downloadedResource) {
+		j["downloadedResource"] = downloadedResource->toJson();
+	}
+	return j;
+}
