@@ -1,0 +1,452 @@
+main: setting configuration. ConfigurationPath /config.json
+ConfigLoader: Element metadataFileSuffix has value .metadata
+ConfigLoader: Element segmentSize has value 4096
+ConfigLoader: Element metadataFileReadingBlockSize has value 4000
+ In configuration file there is no element set of name metadataNameRegexp  Reverting to default (.*)\.[[:digit:]]+(\.metadata)$
+ConfigLoader: Element resourceNameRegexp has value (.*)\.([[:digit:]]+)$
+ConfigLoader: Element maxBroadcastMessageSize has value 4096
+ConfigLoader: Element broadcastPort has value 9999
+ConfigLoader: Element broadcastingAddress has value 172.17.255.255
+ConfigLoader: Element communicationPort has value 9998
+ConfigLoader: Element maxBadRecievedSegmentsBeforeDisconnect has value 3
+ConfigLoader: Element secondsBetweenWorkingDirectoryUpdated has value 15
+ConfigLoader: Element maxSegmentChunkSize has value 2
+ConfigLoader: Element secondsBetweenBroadcasts has value 20
+ConfigLoader: Element secondsBetweenStartingDownloads has value 10
+ConfigLoader: Element advancedLoggingActive has value 0
+ConfigLoader: Element serverBacklogSize has value 10
+ConfigLoader: Element guiActive has value 0
+ In configuration file there is no element set of name connectTimeout Reverting to default 8
+ In configuration file there is no element set of name automaticAnnouncement Reverting to default 1
+ In configuration file there is no element set of name automaticDownload Reverting to default 1
+ In configuration file there is no element set of name interfaceName Reverting to default eth0
+ConfigLoader: Loading configuration file /config.json OK
+Kernel: Kernel starts with workingDir: /tin
+Kernel: Starting logging
+Kernel: initialize working directory
+FileManagerThread:  initialCheck 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+Kernel: Found 0 files in workDir: 
+FileManagerThread:  startScheduledCheckings 
+Kernel: creating & starting threads
+Kernel:  init threadTinBroadcast 
+BroadcastThread: init start
+BroadcastThread: init OK
+Kernel:  broadcastThreadStartOk 
+Kernel:  init threadUdpListening 
+TinUdpListeningSocket:  init start 
+TinUdpListeningSocket:  init OK
+Kernel:  udpListeningSocketInitOk 
+Kernel:  init serverSocketThread 
+ServerSocketThread: init started 
+ServerSocketThread: init OK
+Kernel:  serverSocketInitOK 
+Kernel:  Told threads to listen for conenctions
+ServerSocketThread: listening for connections 
+TinUdpListeningSocket: . Starting listening for broadcasts 
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+Kernel:  tryToDownloadResources 
+Kernel: Broadcasting resources 
+Kernel:  tryToDownloadResources 
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.2 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.2 >
+Kernel:  Can I  start download of  {"Name":"a1_file","Size":10001}
+Kernel:  tryToDownloadResources 
+Kernel:  resource {"Name":"a1_file","Size":10001} can be obtained from addresses: [0] : sockaddr: 172.17.0.2
+
+Kernel:  will download segments min: 0 max: 2 by client sockaddr: 172.17.0.2
+TinClientThread of sockaddr: 172.17.0.2:  connect() 
+TinClientThread of sockaddr: 172.17.0.2:  done init
+TinClientThread of sockaddr: 172.17.0.2:  done connect
+TinClientThread of sockaddr: 172.17.0.2:  sending resource request: {"Name":"a1_file","Size":10001}
+TinClientThread of sockaddr: 172.17.0.2:  listening for response
+TinClientThread of sockaddr: 172.17.0.2:  got response Ok
+TinClientThread of sockaddr: 172.17.0.2:  start recieving segments:  min: 0 max: 2
+TinClientThread of sockaddr: 172.17.0.2:  sent segment request: 0 waiting for response
+TinClientThread of sockaddr: 172.17.0.2:  got response. Info: {"PayloadLength":4096,"SegmentIndex":0}
+TinClientThread of sockaddr: 172.17.0.2:  sent segment request: 1 waiting for response
+TinClientThread of sockaddr: 172.17.0.2:  got response. Info: {"PayloadLength":4096,"SegmentIndex":1}
+Kernel:  recievedSegments set: range: min: 0 max: 2 segments: [0] : segmentInfo: segmentIndex: 0 payloadLength: 4096 payload size 4096
+[1] : segmentInfo: segmentIndex: 1 payloadLength: 4096 payload size 4096
+
+Kernel:  telling sockaddr: 172.17.0.2 to download min: 2 max: 3
+FileManagerThread:  setSegments  resource: {"Name":"a1_file","Size":10001} segmentsSet range: min: 0 max: 2 segments: [0] : segmentInfo: segmentIndex: 0 payloadLength: 4096 payload size 4096
+[1] : segmentInfo: segmentIndex: 1 payloadLength: 4096 payload size 4096
+
+TinClientThread of sockaddr: 172.17.0.2:  start recieving segments:  min: 2 max: 3
+TinClientThread of sockaddr: 172.17.0.2:  sent segment request: 2 waiting for response
+TinClientThread of sockaddr: 172.17.0.2:  got response. Info: {"PayloadLength":1809,"SegmentIndex":2}
+Kernel:  recievedSegments set: range: min: 2 max: 3 segments: [0] : segmentInfo: segmentIndex: 2 payloadLength: 1809 payload size 1809
+
+Kernel:  no segments to download for client sockaddr: 172.17.0.2 will now close it
+FileManagerThread:  setSegments  resource: {"Name":"a1_file","Size":10001} segmentsSet range: min: 2 max: 3 segments: [0] : segmentInfo: segmentIndex: 2 payloadLength: 1809 payload size 1809
+
+TinClientThread of sockaddr: 172.17.0.2:  closing connection with reason Ok
+TinClientThread of sockaddr: 172.17.0.2:ActionQueue:  got kill yourself request
+TinClientThread of sockaddr: 172.17.0.2:ActionQueue:  terminates thread 
+Kernel: Download of resource {"Name":"a1_file","Size":10001} completed 
+TinClientThread of sockaddr: 172.17.0.2:ActionQueue:  Destructor called 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.3 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.3 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel: Broadcasting resources 
+BroadcastThread: sendAnnounceMessage with [0] : {"Name":"a1_file","Size":10001}
+
+BroadcastThread: sendAnnounceMessage ok
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.9 >
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.9 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.5 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.5 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.7 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.7 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.10 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.8 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.6 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.4 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.10 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.8 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.6 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.4 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.11 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.11 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name a1_file.10001.metadata type 
+WorkingDirectoryManager: : It is regular file, can process, size is 0
+WorkingDirectoryManager: : Found file of name a1_file.10001 type 
+WorkingDirectoryManager: : It is regular file, can process, size is 10001
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name a1_file.10001.metadata type 
+WorkingDirectoryManager: : It is regular file, can process, size is 0
+WorkingDirectoryManager: : Found file of name a1_file.10001 type 
+WorkingDirectoryManager: : It is regular file, can process, size is 10001
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: :: We see a1_file.10001.metadata as metadata file
+WorkingDirectoryManager: : There is resource file for it
+WorkingDirectoryManager: : We see a1_file.10001 as resource file
+WorkingDirectoryManager: : Found a1_file.10001.metadata as metadata file
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.2 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.2 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.3 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.3 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  tryToDownloadResources 
+Kernel: Broadcasting resources 
+BroadcastThread: sendAnnounceMessage with [0] : {"Name":"a1_file","Size":10001}
+
+BroadcastThread: sendAnnounceMessage ok
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.9 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.9 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.5 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.5 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.7 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.7 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.10 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.8 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.4 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.6 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.10 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.8 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.4 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.6 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.11 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Announce , sockaddr: 172.17.0.11 >
+Kernel:  resource  {"Name":"a1_file","Size":10001} is arleady downloaded
+Kernel:  tryToDownloadResources 
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name a1_file.10001.metadata type 
+WorkingDirectoryManager: : It is regular file, can process, size is 0
+WorkingDirectoryManager: : Found file of name a1_file.10001 type 
+WorkingDirectoryManager: : It is regular file, can process, size is 10001
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name a1_file.10001.metadata type 
+WorkingDirectoryManager: : It is regular file, can process, size is 0
+WorkingDirectoryManager: : Found file of name a1_file.10001 type 
+WorkingDirectoryManager: : It is regular file, can process, size is 10001
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: :: We see a1_file.10001.metadata as metadata file
+WorkingDirectoryManager: : There is resource file for it
+WorkingDirectoryManager: : We see a1_file.10001 as resource file
+WorkingDirectoryManager: : Found a1_file.10001.metadata as metadata file
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+FileManagerThread:  removeResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+Kernel: Broadcasting resources 
+BroadcastThread: sendRevertMessage with [0] : {"Name":"a1_file","Size":10001}
+
+BroadcastThread: sendRevertMessage ok
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  tryToDownloadResources 
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel: Broadcasting resources 
+BroadcastThread: sendRevertMessage with [0] : {"Name":"a1_file","Size":10001}
+
+BroadcastThread: sendRevertMessage ok
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+FileManagerThread:  checkChanges 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+WorkingDirectoryManager: : Found file of name .. type 
+WorkingDirectoryManager: : Found file of name . type 
+FileManagerThread:  updateInfo newFiles:  deletedFiles: 
+Kernel:  tryToDownloadResources 
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.2 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.3 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel: Broadcasting resources 
+BroadcastThread: sendRevertMessage with [0] : {"Name":"a1_file","Size":10001}
+
+BroadcastThread: sendRevertMessage ok
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel:  tryToDownloadResources 
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.9 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.5 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.7 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.10 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.6 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.4 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.8 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}
+TinUdpListeningSocket:  Got broadcastMessage <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+Kernel:  RecievedBroadcast of <resources: [0] : {"Name":"a1_file","Size":10001}
+ type: Revert , sockaddr: 172.17.0.11 >
+Kernel: Removing revertedResource {"Name":"a1_file","Size":10001}

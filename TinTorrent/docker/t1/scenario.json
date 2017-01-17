@@ -1,0 +1,4 @@
+[
+	{ "delay":100, "action": "getResourcesInOtherClients", "target":"/getResourcesInOtherClients.txt"  }
+]
+

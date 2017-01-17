@@ -1,0 +1,20 @@
+{
+   "metadataFileSuffix":			".metadata",
+   "segmentSize":				4096,
+   "metadataFileReadingBlockSize":		4000,
+   "metadataNameRegexp":			"(.*)\\.[[:digit:]]+(\\.metadata)$",
+   "resourceNameRegexp":			"(.*)\\.([[:digit:]]+)$",
+   "maxBroadcastMessageSize":			4096,
+   "broadcastPort":				9999,
+   "broadcastingAddress":			"172.17.255.255",
+   "communicationPort":				9998,
+   "maxBadRecievedSegmentsBeforeDisconnect":	3,
+   "secondsBetweenWorkingDirectoryUpdated":	15,
+   "maxSegmentChunkSize":			2,
+   "secondsBetweenBroadcasts":			20,
+   "advancedLoggingActive":			false,
+   "serverBacklogSize":				10,
+   "secondsBetweenStartingDownloads":		10,
+   "automaticDownload":				false,
+   "guiActive":					false
+}
